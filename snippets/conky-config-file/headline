@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: headline
+# key: hl
+# condition: (lua-string-p)
+# --
+\${color5}\${font ${1:Noto Sans}:size=${2:14}}$3\${color}${4:\${alignr}$5}\${font}

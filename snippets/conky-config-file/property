@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: property
+# key: pr
+# condition: (lua-string-p)
+# --
+\${color2}$1\${color}\${alignr}$0

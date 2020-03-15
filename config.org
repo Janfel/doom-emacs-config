@@ -1,0 +1,900 @@
+#+TITLE: Doom Emacs Configuration
+#+DESCRIPTION: Doom Emacs configuration of Jan Felix Langenbach
+#+AUTHOR: Jan Felix Langenbach
+#+EMAIL: o.hase3@gmail.com
+
+* Introduction
+These are some useful links to manuals and other peoples configs.
+
++ [[https://www.gnu.org/software/emacs/manual][Emacs Manual]]
++ [[https://github.com/seagle0128/.emacs.d][Centaur Emacs]]
++ [[https://github.com/hlissner/doom-emacs][Doom Emacs]]
++ [[https://github.com/MatthewZMD/.emacs.d][M-Emacs]]
++ [[https://github.com/poncie/.emacs.d][Poncie's Config]]
++ [[http://pages.sachachua.com/.emacs.d/Sacha.html][Sacha Chua's Config]]
+
+** Header
+This header comment ensures that everything in this file is lexically scoped.
+#+BEGIN_SRC emacs-lisp
+;;; doom/config.el -*- lexical-binding: t; -*-
+#+END_SRC
+
+** Requires
+We =require= some helper libraries.
+
+The =cl-macs= library is a subset of the built-in =cl= library and provides
+Macros in the style of Common Lisp. We don't need it currently.
+#+BEGIN_SRC emacs-lisp
+;; (require 'cl-macs)
+#+END_SRC
+
+[[https://github.com/magnars/dash.el][dash.el]] is a modern list library inspired by Clojure.
+#+BEGIN_SRC emacs-lisp
+(require 'dash)
+#+END_SRC
+
+* Definitions
+** Constants
+These constants allow me to use the correct directories everywhere,
+without lengthy invocation of =getenv=.
+#+BEGIN_SRC emacs-lisp
+(defconst XDG-CACHE-HOME
+  (-> (getenv "XDG_CACHE_HOME")
+      (or "~/.cache/")
+      (file-name-as-directory)
+      (expand-file-name))
+  "The value of $XDG_CACHE_HOME where programs place cache files.")
+
+(defconst XDG-CONFIG-HOME
+  (-> (getenv "XDG_CONFIG_HOME")
+      (or "~/.config/")
+      (file-name-as-directory)
+      (expand-file-name))
+  "The value of $XDG_CONFIG_HOME where programs place configuration files.")
+
+(defconst XDG-DATA-HOME
+  (-> (getenv "XDG_DATA_HOME")
+      (or "~/.local/share/")
+      (file-name-as-directory)
+      (expand-file-name))
+  "The value of $XDG_DATA_HOME where programs store data.")
+#+END_SRC
+
+I redefine the operating system constants of Doom Emacs to give them docstrings.
+#+BEGIN_SRC emacs-lisp
+(defconst IS-LINUX IS-LINUX
+  "Are we on a Linux system?")
+
+(defconst IS-MAC IS-MAC
+  "Are we on a Mac?")
+
+(defconst IS-WINDOWS IS-WINDOWS
+  "Are we on a Windows system?")
+
+(defconst IS-BSD IS-BSD
+  "Are we on a BSD system?")
+#+END_SRC
+
+** Macros
+#+BEGIN_SRC emacs-lisp :tangle no
+(defmacro buffer-local-let (buffer varlist &rest body)
+  "Binds all elements of VARLIST to the values their values in BUFFER.
+
+Each element of VARLIST can be a symbol or a list of two symbols.
+If it is a symbol, it is bound to the value it is bound to in BUFFER.
+If the element is a list of symbols, the first symbol will be bound to
+the value the second symbol is bound to in BUFFER.
+BUFFER is only evaluated once."
+  (let ((buffer (eval buffer)))
+    (append
+     '(let)
+     (list (--map
+            (let ((sym (if (listp it) (car it) it))
+                  (val (if (listp it) (cadr it) it)))
+              `(,sym (buffer-local-value (quote ,val) ,buffer)))
+            varlist))
+     body)))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(defmacro push! (place &rest values)
+  "Push VALUES into PLACE."
+  `(setf ,place (append (list ,@values) ,place)))
+#+END_SRC
+
+** Formatters
+#+BEGIN_SRC emacs-lisp
+(when (featurep! :editor fmt)
+  (require 'reformatter))
+#+END_SRC
+
+*** Prettier
+#+BEGIN_SRC emacs-lisp
+(when (featurep! :editor fmt)
+  (defvar prettier-fmt-indent standard-indent
+    "Indent level for `prettier-fmt'.")
+
+  (reformatter-define prettier-fmt
+    :program "prettier"
+    :mode nil
+    :args
+    `("--tab-width" ,(number-to-string prettier-fmt-indent)
+      ,@(when indent-tabs-mode '("--use-tabs")))))
+#+END_SRC
+
+* Emacs
+#+BEGIN_SRC emacs-lisp
+(setq backward-delete-char-untabify-method nil)
+(setq x-stretch-cursor t)
+#+END_SRC
+
+* Doom
+#+BEGIN_SRC emacs-lisp
+(remove-hook 'after-change-major-mode-hook #'doom-highlight-non-default-indentation-h)
+#+END_SRC
+
+** Fmt
+Here I replace the default formatting function with my own.
+#+BEGIN_SRC emacs-lisp
+(map! :when (featurep! :editor fmt)
+      :nv "g =" #'fmt:region
+      :map doom-leader-code-map
+      :desc "Format buffer/region" "f" #'fmt/dwim)
+#+END_SRC
+
+** Fold
+Map opening and closing all folds to Shift combinations.
+This frees up =z r= =z m=.
+#+BEGIN_SRC emacs-lisp
+(map! :when (and (featurep! :editor evil)
+                 (featurep! :editor fold))
+      :n "z O" #'+fold/open-all
+      :n "z C" #'+fold/close-all)
+#+END_SRC
+
+** Popup Manager
+#+BEGIN_SRC emacs-lisp
+(when (featurep! :ui popup)
+  (set-popup-rule! "^\\*info\\*$" :ignore))
+#+END_SRC
+
+* Packages
+** Emacs
+These packages are built into Emacs itself.
+
+*** HideShow
+#+BEGIN_SRC emacs-lisp
+(map! :after hideshow
+      :map 'hs-minor-mode-map
+      :leader :prefix ("c h" . "Hide code")
+      :desc "Toggle hiding"    "h" #'hs-toggle-hiding
+      :desc "Hide all"         "a" #'hs-hide-all
+      :desc "Show all"         "A" #'hs-show-all
+      :desc "Hide block"       "b" #'hs-hide-block
+      :desc "Show block"       "B" #'hs-show-block
+      :desc "Hide level"       "l" #'hs-hide-level
+      :desc "Hide top comment" "c" #'hs-hide-initial-comment-block)
+#+END_SRC
+
+*** Whitespace
+#+BEGIN_SRC emacs-lisp
+(after! whitespace
+  (setq whitespace-style
+        '(face
+          indentation
+          lines-tail
+          empty
+          tabs
+          tab-mark
+          space-before-tab
+          space-after-tab)))
+#+END_SRC
+
+** Doom
+These packages are used in the =:core= of Doom Emacs. That means we don't need =featurep!=.
+
+*** Undo Tree
+When =undo-tree= is allowed to automatically save the undo history, it somehow
+chokes on an empty undo list and interrupts us with constant errors.
+#+BEGIN_SRC emacs-lisp
+(after! undo-tree
+  (setq undo-tree-auto-save-history nil))
+#+END_SRC
+
+*** Which Key
+These are some default keybindings that are missing a description.
+#+BEGIN_SRC emacs-lisp
+(after! which-key
+  (which-key-add-key-based-replacements
+    "C-x"      '("global" . "Global commands")
+    "C-x RET"  "locale"
+    "C-x ESC"  "complex-repeat"
+    "C-x 4"    "other-window"
+    "C-x 5"    "other-frame"
+    "C-x 6"    "two-column"
+    "C-x 8"    '("unicode" . "Unicode symbols")
+    "C-x @"    '("apply-modifier" . "Add a modifier to the next event")
+    "C-x a"    "abbrev"
+    "C-x a i"  "inverse"
+    "C-x v"    "version-control"
+    "C-x n"    "narrow"
+    "C-x r"    "rectangle/register"
+    "C-c"      '("mode-specific" . "Mode specific commands")
+    "M-s"      "search"
+    "M-s h"    "highlight"
+    "M-g"      "goto")
+
+  (push! which-key-replacement-alist
+         '(("<up>"   . nil) . ("↑" . nil))
+         '(("<down>" . nil) . ("↓" . nil))))
+#+END_SRC
+
+*** WS Butler
+In =snippet-mode=, whitespace has significant meaning.
+#+BEGIN_SRC emacs-lisp
+(after! ws-butler
+  (push 'snippet-mode ws-butler-global-exempt-modes))
+#+END_SRC
+
+
+
+** Evil
+Evil uses Vims undo increments by default, which are too coarse for me.
+#+BEGIN_SRC emacs-lisp
+(when (featurep! :editor evil)
+  (after! evil
+    (setq evil-want-fine-undo t
+          ;; This seems to be broken.
+          evil-indent-convert-tabs nil)))
+#+END_SRC
+
+Map the arrow keys in Evils window map.
+#+BEGIN_SRC emacs-lisp
+(map! :when (featurep! :editor evil)
+      :after evil
+      :map evil-window-map
+      "<up>"      #'evil-window-up
+      "<down>"    #'evil-window-down
+      "<left>"    #'evil-window-left
+      "<right>"   #'evil-window-right
+      "S-<up>"    #'+evil/window-move-up
+      "S-<down>"  #'+evil/window-move-down
+      "S-<left>"  #'+evil/window-move-left
+      "S-<right>" #'+evil/window-move-right
+      "C-h"       nil
+      "C-j"       nil
+      "C-k"       nil
+      "C-l"       nil)
+#+END_SRC
+
+Put =evil-snipe-repeat= on Comma and Shift-Comma.
+#+BEGIN_SRC emacs-lisp
+(map! :when (featurep! :editor evil)
+      :after evil
+      :map evil-snipe-parent-transient-map
+      "," #'evil-snipe-repeat
+      "–" #'evil-snipe-repeat-reverse
+      ";" nil)
+#+END_SRC
+
+I don't like my games to use Vim keys.
+#+BEGIN_SRC emacs-lisp
+(when (featurep! :editor evil +everywhere)
+  (push! +evil-collection-disabled-list
+         'tetris '2084-game))
+#+END_SRC
+
+Remap the document scroll motions to something more sensible.
+#+BEGIN_SRC emacs-lisp
+(map! :when (featurep! :editor evil)
+      :after evil
+      :m "z+" nil
+      :m "z-" nil
+      :m "z^" nil
+      :m "z." nil
+      :m "zT" #'evil-scroll-bottom-line-to-top
+      :m "zB" #'evil-scroll-top-line-to-bottom
+      :m "z S-<right>" #'evil-scroll-right
+      :m "z S-<left>" #'evil-scroll-left)
+#+END_SRC
+
+*** Evil Numbers
+Remap the =inc-at-pt= functions, so =z == can be used for formatting.
+#+BEGIN_SRC emacs-lisp
+(map! :when (featurep! :editor evil)
+      :after evil-numbers
+      :nv "g +" #'evil-numbers/inc-at-pt
+      :nv "g -" #'evil-numbers/dec-at-pt
+      :v "z +" #'evil-numbers/inc-at-pt-incremental
+      :v "z -" #'evil-numbers/dec-at-pt-incremental)
+#+END_SRC
+
+*** Evil Org
+Doom Emacs changes =org-cycle= to skip the =subtree= stage by default when
+=(featurep! :editor evil +everywhere)=.
+#+BEGIN_SRC emacs-lisp
+(when (featurep! :editor evil +everywhere)
+  (after! evil-org
+    (remove-hook 'org-tab-first-hook #'+org-cycle-only-current-subtree-h)))
+#+END_SRC
+
+Add block jumping to =[= and =]=.
+#+BEGIN_SRC emacs-lisp
+(map! :when (featurep! :editor evil)
+      :after (evil-org)
+      :map evil-org-mode-map
+      :m "[ _" #'org-previous-block
+      :m "] _" #'org-next-block)
+#+END_SRC
+
+Remap =z r= and =z m= to =z O= and =z C=.
+#+BEGIN_SRC emacs-lisp
+(map! :when (featurep! :editor evil)
+      :after (evil-org)
+      :map evil-org-mode-map
+      :n "z r" nil
+      :n "z m" nil
+      :n "z O" #'+org/show-next-fold-level
+      :n "z C" #'+org/hide-next-fold-level)
+#+END_SRC
+
+** Flycheck
+#+BEGIN_SRC emacs-lisp
+(map! :when (featurep! :checkers syntax)
+      :after flycheck
+      (:map doom-leader-code-map
+        (:prefix ("!" . "flycheck") "" flycheck-command-map))
+      (:map flycheck-command-map
+        "!" #'flycheck-buffer))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(when (featurep! :checkers syntax)
+  (after! which-key
+    (which-key-add-key-based-replacements
+      "C-c !" "flycheck")))
+#+END_SRC
+
+** Ivy
+Ivy should recurse into directories when pressing =RET=.
+#+BEGIN_SRC emacs-lisp
+(map! :when (featurep! :completion ivy)
+      :after ivy
+      :map ivy-minibuffer-map
+      "RET"      #'ivy-alt-done
+      "C-RET"    #'ivy-immediate-done
+      "C-l"      #'ivy-done
+      "C-<up>"   #'ivy-previous-history-element
+      "C-<down>" #'ivy-next-history-element)
+#+END_SRC
+
+** LSP
+#+BEGIN_SRC emacs-lisp
+(when (and (featurep! :checkers syntax)
+           (featurep! :tools lsp))
+  (after! (flycheck lsp lsp-ui)
+    (setq lsp-prefer-flymake nil)))
+#+END_SRC
+
+** Neotree
+#+BEGIN_SRC emacs-lisp
+(map! :when (featurep! :ui neotree)
+      :after neotree
+      :map neotree-mode-map
+      :n "<tab>" #'neotree-quick-look)
+#+END_SRC
+
+** Smartparens
+I activate =show-smartparens-global-mode= to highlight matching parens.
+#+BEGIN_SRC emacs-lisp
+(when (featurep! :config default +smartparens)
+  (after! smartparens
+    (show-smartparens-global-mode +1)))
+#+END_SRC
+
+** Yasnippet
+#+BEGIN_SRC emacs-lisp
+(when (featurep! :editor snippets)
+  (after! which-key
+    (which-key-add-key-based-replacements
+      "C-c &" "snippet")))
+#+END_SRC
+
+
+
+** Misc
+These functions delete all whitespace up to the next non-whitespace character.
+#+BEGIN_SRC emacs-lisp
+(use-package! hungry-delete
+  :bind (("M-DEL"      . hungry-delete-backward)
+         ("M-<delete>" . hungry-delete-forward)))
+#+END_SRC
+
+This mode displays instances of =^L= (form feed) as horizontal lines.
+#+BEGIN_SRC emacs-lisp
+(use-package! form-feed
+  :hook ((prog-mode text-mode) . form-feed-mode))
+#+END_SRC
+
+* Languages
+** C/C++
+*** TODO Code Style
+The default is =doom=.
+I have yet to create my own style.
+#+BEGIN_SRC emacs-lisp :tangle no
+(after! cc-mode
+  (c-add-style "jfl"
+               '("linux"
+                 (indent-tabs-mode . t)
+                 (c-basic-offset   . 4)
+                 (tab-width        . 4)))
+  (setq c-default-style
+        '((java-mode . "java")
+          (awk-mode  . "awk")
+          ;; (other     . "k&r")
+          (other     . "jfl")
+          )))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp :tangle no
+(after! cc-mode
+  (c-add-style "jfl" '("linux"
+                       (indent-tabs-mode . t)
+                       (tab-width . 4)
+                       (c-basic-offset . 4)))
+  (if (listp c-default-style)
+      (setf (alist-get 'other c-default-style) "jfl")
+    (setq c-default-style "jfl")))
+#+END_SRC
+
+*** Arduino
+#+BEGIN_SRC emacs-lisp
+(use-package! arduino-mode
+  :mode "\\.ino\\'"
+  :mode "\\.pde\\'")
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(after! arduino-mode
+  (setq-default arduino-mode-home "~/src/arduino/"))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(map! :after arduino-mode
+      :map arduino-mode-map
+      :localleader
+      :desc "Upload Sketch"     "u" #'arduino-upload
+      :desc "CompileSketch"     "c" #'arduino-verify
+      :desc "Reset Arduino"     "r" #'arduino-reset
+      :desc "Create New Sketch" "n" #'arduino-sketch-new
+      :desc "Serial Monitor"    "s" #'arduino-serial-monitor)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(when (featurep! :checkers syntax)
+  (add-hook 'arduino-mode-hook #'flycheck-arduino-setup))
+#+END_SRC
+
+*** C
+#+BEGIN_SRC emacs-lisp
+(when (featurep! :checkers syntax)
+  (after! flycheck
+    (setq-hook! 'c-mode-hook
+      flycheck-gcc-language-standard   "gnu18"
+      flycheck-clang-language-standard "gnu18")))
+#+END_SRC
+
+*** C++
+#+BEGIN_SRC emacs-lisp
+(when (featurep! :checkers syntax)
+  (after! flycheck
+    (setq-hook! 'c++-mode-hook
+      flycheck-gcc-language-standard   "gnu++17"
+      flycheck-clang-language-standard "gnu++17")))
+#+END_SRC
+
+*** Meson
+Major mode for the [[https://mesonbuild.com][Meson Build System]].
+#+BEGIN_SRC emacs-lisp
+(use-package! meson-mode
+  :mode "/meson\\.build\\'")
+#+END_SRC
+
+** Haskell
+These bindings are used by many modes with an inferior REPL.
+#+BEGIN_SRC emacs-lisp
+(map! :after haskell-mode
+      :map haskell-mode-map
+      "C-c C-c" #'haskell-process-load-file
+      "C-c C-z" #'haskell-interactive-switch)
+#+END_SRC
+
+** Javascript
+The Javascript community widely uses two-space indentation,
+because JS can be deeply nested.
+#+BEGIN_SRC emacs-lisp
+(after! js
+  (setq js-indent-level 2))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(when (featurep! :editor fmt)
+  (setq-hook! 'js-mode-hook
+    fmt/formatter '(prettier-fmt-buffer . prettier-fmt-region)))
+#+END_SRC
+
+** TeX
+Using =dvipng= is faster than =png= and is even recommended
+in the [[info:preview-latex#Requirements][manual]] of =preview-latex=.
+#+BEGIN_SRC emacs-lisp
+(when (executable-find "dvipng")
+  (after! preview (setq preview-image-type 'dvipng)))
+#+END_SRC
+
+*** LaTeX
+Let Smartparens handle insertion of =$=.
+#+BEGIN_SRC emacs-lisp
+(map! :after tex-mode
+      :map LaTeX-mode-map
+      "$" nil)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(after! (tex-mode which-key)
+  (which-key-add-major-mode-key-based-replacements 'latex-mode
+    "C-c C-p"     '("preview" . "Inline formula preview")
+    "C-c C-p C-c" "clear"
+    "C-c C-o"     "fold"
+    "C-c C-q"     "fill"
+    "C-c C-t"     "toggle"))
+#+END_SRC
+
+This doesn't seem to work.
+#+BEGIN_SRC emacs-lisp :tangle no
+(add-hook 'LaTeX-mode-hook #'latex-electric-env-pair-mode)
+#+END_SRC
+
+Some Smartparens settings for LaTeX pairs.
+Letting Smartparens handle these works best in my experience.
+#+BEGIN_SRC emacs-lisp
+(after! (tex-mode smartparens)
+  (sp-with-modes '(tex-mode
+                   plain-tex-mode
+                   latex-mode
+                   LaTeX-mode)
+    (sp-local-pair "\"`" "\"'"          ; German quotes
+                   :unless '(sp-latex-point-after-backslash sp-in-math-p)
+                   :post-handlers '(sp-latex-skip-double-quote))
+    (sp-local-pair "\"<" "\">"          ; French quotes
+                   :unless '(sp-latex-point-after-backslash sp-in-math-p)
+                   :post-handlers '(sp-latex-skip-double-quote))
+    (sp-local-pair "\\(" "\\)" :post-handlers '(("||\n[i]" "RET") ("| " "SPC")))
+    (sp-local-pair "\\[" "\\]" :post-handlers '(("||\n[i]" "RET") ("| " "SPC")))))
+#+END_SRC
+
+** Lisp
+A common hook for all lisp modes.
+#+BEGIN_SRC emacs-lisp
+(defvar lisp-mode-common-hook nil
+  "Hook called by all Lisp modes for common initialization.")
+
+(defun lisp-mode-common-hook (&rest args)
+  "Run all functions in `lisp-mode-common-hook' with ARGS."
+  (apply #'run-hook-with-args 'lisp-mode-common-hook args))
+
+(add-hook!
+  (clojure-mode
+   lisp-mode
+   lisp-interaction-mode
+   emacs-lisp-mode
+   scheme-mode)
+  #'lisp-mode-common-hook)
+#+END_SRC
+
+Formatting for all Lisp modes.
+#+BEGIN_SRC emacs-lisp
+(when (featurep! :editor fmt)
+  (setq-hook! 'lisp-mode-common-hook
+    fmt/formatter #'indent-region))
+#+END_SRC
+
+*** Common Lisp
+The file extension =.cl= is sometimes used.
+#+BEGIN_SRC emacs-lisp
+(push '("\\.cl\\'" . lisp-mode) auto-mode-alist)
+#+END_SRC
+
+Configure some of the common Interpreters for =sly=.
+#+BEGIN_SRC emacs-lisp
+(after! sly
+  (setq sly-default-lisp 'sbcl)
+  (when (executable-find "cmucl")
+    (push '(cmucl ("cmucl")) sly-lisp-implementations))
+  (when (executable-find "clisp")
+    (push '(clisp ("clisp")) sly-lisp-implementations))
+  (when (executable-find "sbcl")
+    (push '(sbcl ("sbcl") :coding-system utf-8-unix) sly-lisp-implementations)))
+#+END_SRC
+
+*** Emacs Lisp
+#+BEGIN_SRC emacs-lisp
+(set-keymap-parent lisp-interaction-mode-map emacs-lisp-mode-map)
+#+END_SRC
+
+** Lua
+Doom advises =newline-and-indent= to continue comments using the value of
+=comment-line-break-function=. The standard value is =comment-indent-new-line=,
+which is broken in Lua's multiline comments.
+#+BEGIN_SRC emacs-lisp
+(after! lua-mode
+  (defun lua-comment-indent-new-line (&optional soft)
+    "Break line at point and indent, continuing a series of line comments."
+    (interactive)
+    (if (or (not (lua-comment-or-string-p))
+            (lua-string-p)
+            (not (save-excursion
+                   (goto-char (lua-comment-or-string-start-pos))
+                   (looking-at-p "--\\[=*\\["))))
+        (comment-indent-new-line soft)
+      (delete-horizontal-space t)
+      (newline nil t)
+      (indent-according-to-mode)))
+
+  (setq-hook! 'lua-mode-hook
+    comment-line-break-function #'lua-comment-indent-new-line))
+#+END_SRC
+
+The advice =+default--delete-backward-char-a= to =backward-delete-char= behaves
+weirdly when deleting line comments inside of a multiline comment. I have not
+yet found a fix for this.
+
+#+BEGIN_SRC emacs-lisp
+(when (featurep! :completion company)
+  (after! company-lua
+    (setq company-lua-interpreter 'lua53)))
+#+END_SRC
+
+** Moonscript
+Doom Emacs, annoyingly, sets =moonscript-indent-offset= to =tab-width= by default.
+#+BEGIN_SRC emacs-lisp
+(after! moonscript
+  (remove-hook 'moonscript-mode-hook #'doom--setq-moonscript-indent-offset-for-moonscript-mode-h))
+#+END_SRC
+
+** Org
+These values have to be set before =org-mode= is loaded.
+#+BEGIN_SRC emacs-lisp
+(use-package! org
+  :init
+  (setq org-directory "~/docs/org"
+        org-modules
+        '(;; ol-w3m
+          ;; ol-bbdb
+          ol-bibtex
+          ;; ol-docview
+          ;; ol-gnus
+          ol-info
+          ;; ol-irc
+          ;; ol-mhe
+          ;; ol-rmail
+          ;; ol-eww
+          )))
+#+END_SRC
+
+Tweaking =org-cycle=.
+#+BEGIN_SRC emacs-lisp
+(after! org
+  (setq org-cycle-global-at-bob t
+        org-cycle-include-plain-lists nil))
+#+END_SRC
+
+Add =which-key= descriptions.
+#+BEGIN_SRC emacs-lisp
+(after! (org which-key)
+  (which-key-add-major-mode-key-based-replacements 'org-mode
+    "C-c C-x" "more"
+    "C-c C-v" "babel"
+    "C-c \""  "plot"))
+#+END_SRC
+
+Add =company-capf= as a Company backend.
+#+BEGIN_SRC emacs-lisp
+(when (featurep! :completion company)
+  (after! (org company)
+    (set-company-backend! 'org-mode 'company-capf)))
+#+END_SRC
+
+Add =org-babel-map= to =:localleader=.
+#+BEGIN_SRC emacs-lisp
+(map! :after org
+      :map org-mode-map
+      :localleader
+      (:prefix ("v" . "babel") "" org-babel-map))
+#+END_SRC
+
+** Pascal
+Three spaces seems to be the standard in the Pascal world.
+#+BEGIN_SRC emacs-lisp
+(defconst DEFAULT-PASCAL-INDENT 3
+  "Default indent level for all Pascal modes.")
+
+(after! pascal
+  (setq pascal-indent-level DEFAULT-PASCAL-INDENT
+        pascal-case-indent  DEFAULT-PASCAL-INDENT))
+
+(after! opascal
+  (setq opascal-indent-level      DEFAULT-PASCAL-INDENT
+        opascal-case-label-indent DEFAULT-PASCAL-INDENT))
+#+END_SRC
+
+We have to remove ='company-capf= from =company-backends=, because completion
+would be unusable otherwise.
+#+BEGIN_SRC emacs-lisp
+(setq-hook! '(pascal-mode-hook opascal-mode-hook)
+  company-backends (remq 'company-capf company-backends))
+#+END_SRC
+
+*** ptop
+This is the variable where the PtoP configuration file is stored. This is
+important, because I have multiple configurations for multiple styles.
+#+BEGIN_SRC emacs-lisp
+(defvar ptop-fmt-config
+  (expand-file-name "pascal/ptop.cfg" XDG-CONFIG-HOME)
+  "The configuration file for `ptop-fmt'.")
+#+END_SRC
+
+Define =ptop-fmt= using =:editor fmt=.
+#+BEGIN_SRC emacs-lisp
+(when (featurep! :editor fmt)
+  (require 'reformatter)
+
+  (defvar ptop-fmt-indent DEFAULT-PASCAL-INDENT
+    "Indent level for `ptop-fmt'.")
+
+  (reformatter-define ptop-fmt
+    :program "ptop"
+    :mode nil
+    :args
+    `(,@(-some->> ptop-fmt-config (list "-c"))
+      "-i" ,(number-to-string (or ptop-fmt-indent standard-indent))
+      "/dev/stdin" "/dev/stdout"))
+
+  (setq-hook! '(pascal-mode-hook
+                opascal-mode-hook)
+    fmt/formatter '(ptop-fmt-buffer . ptop-fmt-region)))
+#+END_SRC
+
+** Perl
+Set indentation to 4 in both Perl modes.
+#+BEGIN_SRC emacs-lisp
+(defconst DEFAULT-PERL-INDENT 4
+  "Default indentation level for all Perl modes.")
+
+(after! perl-mode
+  (setq perl-indent-level DEFAULT-PERL-INDENT))
+
+(after! cperl-mode
+  (setq cperl-indent-level DEFAULT-PERL-INDENT))
+#+END_SRC
+
+*** Perl::Tidy
+Define =perltidy-fmt= using =:editor fmt=.
+#+BEGIN_SRC emacs-lisp
+(when (featurep! :editor fmt)
+  (require 'reformatter)
+
+  (defvar perltidy-fmt-indent DEFAULT-PERL-INDENT
+    "Indent level for `perltidy-fmt'.")
+
+  (reformatter-define perltidy-fmt
+    :program "perltidy"
+    :mode nil
+    :args
+    `("--indent-columns" ,(number-to-string perltidy-fmt-indent)
+     "--default-tabsize" ,(number-to-string tab-width)
+     ,(if indent-tabs-mode "--tabs" "--notabs")
+     "--standard-output" "--standard-error-output"))
+
+  (setq-hook! '(perl-mode-hook
+                cperl-mode-hook)
+    fmt/formatter '(perltidy-fmt-buffer . perltidy-fmt-region)))
+#+END_SRC
+
+** PHP
+This allows me to not load the entire =:lang php=.
+#+BEGIN_SRC emacs-lisp
+(unless (featurep! :lang php)
+  (use-package! php-mode))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(when (featurep! :editor fmt)
+  (setq-hook! 'php-mode-hook
+    fmt/formatter '(prettier-fmt-buffer . prettier-fmt-region)
+    prettier-fmt-indent c-basic-offset))
+#+END_SRC
+
+** Python
+#+BEGIN_SRC emacs-lisp
+(after! (python which-key)
+  (which-key-add-major-mode-key-based-replacements 'python-mode
+    "C-c C-p" "pipenv"
+    "C-c C-t" "skeleton"))
+#+END_SRC
+
+[[https://jedi.readthedocs.io/en/latest/][Jedi]] gives the best (non LSP) autocompletion for python.
+[[https://github.com/syohex/emacs-company-jedi][=company-jedi=]] is a backend for =company= that interfaces with Jedi.
+This adds ='company-jedi= to =company-backends= in Python buffers.
+The package will load when =company-jedi= is invoked by =company=.
+#+BEGIN_SRC emacs-lisp
+(when (and (featurep! :completion company)
+           (not (featurep! :lang python +lsp)))
+
+  (use-package! company-jedi
+    :after company
+    :commands company-jedi)
+
+  (set-company-backend! 'python-mode 'company-jedi))
+#+END_SRC
+
+* Keybindings
+Personal prefix map.
+#+BEGIN_SRC emacs-lisp :tangle no
+(map! :leader
+      (:prefix ("ß" . "user")
+        :desc "Test" "t" #'somefn))
+#+END_SRC
+
+This is my personal evil prefix, as =g= and =z= are already taken.
+#+BEGIN_SRC emacs-lisp
+(map! :n "z r" #'sp-raise-sexp)
+#+END_SRC
+
+Allows jumping from =^L= to =^L=.
+#+BEGIN_SRC emacs-lisp
+(map! "C-M-<next>"  #'forward-page
+      "C-M-<prior>" #'backward-page)
+#+END_SRC
+
+Bind the Ä/Ö/Ü keys to something useful.
+#+BEGIN_SRC emacs-lisp
+(map! "C-ü" #'execute-extended-command)
+(map! :map key-translation-map
+      "C-ö" (kbd "C-x")
+      "C-ä" (kbd "C-c"))
+#+END_SRC
+
+Use C-p to paste.
+#+BEGIN_SRC emacs-lisp
+(map! :i "C-p" #'yank
+      :i "M-p" #'yank-pop)
+#+END_SRC
+
+Some stuff I don't use anymore.
+#+BEGIN_SRC emacs-lisp :tangle no
+(map! :leader :desc "List buffers" "b L" #'list-buffers)
+(map! "<mouse-8>" #'backward-page
+      "<mouse-9>" #'forward-page)
+(map! :m "C-e" nil)
+#+END_SRC
+
+Bind keys for =redo=.
+#+BEGIN_SRC emacs-lisp
+(map! "<redo>" #'redo
+      :n "U" #'redo)
+#+END_SRC
+
+It is handy to have =negative-argument= on a binding
+similar to that of =universal-argument=.
+#+BEGIN_SRC emacs-lisp
+(map! :leader
+      :desc "Negative Argument" "-" #'negative-argument)
+#+END_SRC
+
+Bind =indent-region=.
+#+BEGIN_SRC emacs-lisp
+(map! :map doom-leader-code-map
+      :desc "Indent buffer/region" "i" #'indent-region
+      ;; We need to move this out of the way.
+      :desc "LSP Organize Imports" "I" #'lsp-organize-imports)
+#+END_SRC
