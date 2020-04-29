@@ -893,7 +893,7 @@ similar to that of =universal-argument=.
 
 Bind =indent-region=.
 #+BEGIN_SRC emacs-lisp
-(map! :map doom-leader-code-map
+(map! :leader :prefix "c"
       :desc "Indent buffer/region" "i" #'indent-region
       ;; We need to move this out of the way.
       :desc "LSP Organize Imports" "I" #'lsp-organize-imports)
