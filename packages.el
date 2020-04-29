@@ -35,3 +35,9 @@
 (when (and (featurep! :completion company)
            (not (featurep! :lang python +lsp)))
   (package! company-jedi))
+
+(package! company-quickhelp)
+
+;; Reformatter for use with +editor/fmt.
+(when (featurep! :editor fmt)
+  (package! reformatter))
