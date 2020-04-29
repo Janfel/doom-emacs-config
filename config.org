@@ -891,6 +891,12 @@ similar to that of =universal-argument=.
       :desc "Negative Argument" "-" #'negative-argument)
 #+END_SRC
 
+Bind =shell-command= in a similar way to =M-x= and =M-;=.
+#+BEGIN_SRC emacs-lisp
+(map! :leader
+      :desc "Shell command" "!" #'shell-command)
+#+END_SRC
+
 Bind =indent-region=.
 #+BEGIN_SRC emacs-lisp
 (map! :leader :prefix "c"
