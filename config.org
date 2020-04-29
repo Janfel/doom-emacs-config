@@ -838,14 +838,7 @@ The package will load when =company-jedi= is invoked by =company=.
 #+END_SRC
 
 * Keybindings
-Personal prefix map.
-#+BEGIN_SRC emacs-lisp :tangle no
-(map! :leader
-      (:prefix ("ß" . "user")
-        :desc "Test" "t" #'somefn))
-#+END_SRC
-
-This is my personal evil prefix, as =g= and =z= are already taken.
+Bind =sp-raise-sexp=, which I use quite often.
 #+BEGIN_SRC emacs-lisp
 (map! :n "z r" #'sp-raise-sexp)
 #+END_SRC
@@ -884,6 +877,7 @@ Bind keys for =redo=.
       :n "U" #'redo)
 #+END_SRC
 
+** Leader Extensions
 It is handy to have =negative-argument= on a binding
 similar to that of =universal-argument=.
 #+BEGIN_SRC emacs-lisp
