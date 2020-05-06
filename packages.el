@@ -32,8 +32,7 @@
 ;;; Miscellaneous:
 
 ;; Python completion using company and jedi.
-(when (and (featurep! :completion company)
-           (not (featurep! :lang python +lsp)))
+(when (featurep! :completion company)
   (package! company-jedi))
 
 (package! company-quickhelp)

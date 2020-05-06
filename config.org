@@ -125,6 +125,7 @@ BUFFER is only evaluated once."
 * Emacs
 #+BEGIN_SRC emacs-lisp
 (setq backward-delete-char-untabify-method nil)
+(setq tab-width 4)
 (setq x-stretch-cursor t)
 #+END_SRC
 
@@ -822,19 +823,43 @@ This allows me to not load the entire =:lang php=.
     "C-c C-t" "skeleton"))
 #+END_SRC
 
+Use system =mspyls= for =lsp-python-ms=.
+#+BEGIN_SRC emacs-lisp :tangle no
+(when (featurep! :lang python +lsp)
+  (after! lsp-python-ms
+    (setq lsp-python-ms-dir "/usr/lib/microsoft-python-language-server"
+          lsp-python-ms-executable "/usr/bin/mspyls")))
+#+END_SRC
+
 [[https://jedi.readthedocs.io/en/latest/][Jedi]] gives the best (non LSP) autocompletion for python.
 [[https://github.com/syohex/emacs-company-jedi][=company-jedi=]] is a backend for =company= that interfaces with Jedi.
 This adds ='company-jedi= to =company-backends= in Python buffers.
 The package will load when =company-jedi= is invoked by =company=.
 #+BEGIN_SRC emacs-lisp
-(when (and (featurep! :completion company)
-           (not (featurep! :lang python +lsp)))
-
+(when (featurep! :completion company)
   (use-package! company-jedi
     :after company
     :commands company-jedi)
-
   (set-company-backend! 'python-mode 'company-jedi))
+#+END_SRC
+
+This extends the =black= formatter with the ability to recognize =indent-tabs-mode=.
+*This only works with a patched black!*
+#+BEGIN_SRC emacs-lisp
+(when (featurep! :editor fmt)
+  (require 'reformatter)
+  (use-package format-all :commands (format-all--buffer-extension-p))
+
+  (reformatter-define black-fmt
+    :program "black"
+    :mode nil
+    :args
+    `(,@(when indent-tabs-mode (list "-T"))
+      ,@(when (format-all--buffer-extension-p "pyi") (list "--pyi"))
+      "-q" "-"))
+
+  (setq-hook! 'python-mode-hook
+    fmt/formatter '(black-fmt-buffer . black-fmt-region)))
 #+END_SRC
 
 * Keybindings
