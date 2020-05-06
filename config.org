@@ -111,14 +111,14 @@ BUFFER is only evaluated once."
 *** Prettier
 #+BEGIN_SRC emacs-lisp
 (when (featurep! :editor fmt)
-  (defvar prettier-fmt-indent standard-indent
+  (defvar fmt|prettier-indent standard-indent
     "Indent level for `prettier-fmt'.")
 
-  (reformatter-define prettier-fmt
+  (reformatter-define fmt|prettier
     :program "prettier"
     :mode nil
     :args
-    `("--tab-width" ,(number-to-string prettier-fmt-indent)
+    `("--tab-width" ,(number-to-string fmt|prettier-indent)
       ,@(when indent-tabs-mode '("--use-tabs")))))
 #+END_SRC
 
@@ -521,7 +521,7 @@ because JS can be deeply nested.
 #+BEGIN_SRC emacs-lisp
 (when (featurep! :editor fmt)
   (setq-hook! 'js-mode-hook
-    fmt/formatter '(prettier-fmt-buffer . prettier-fmt-region)))
+    fmt/formatter '(fmt|prettier-buffer . fmt|prettier-region)))
 #+END_SRC
 
 ** TeX
@@ -739,30 +739,30 @@ would be unusable otherwise.
 This is the variable where the PtoP configuration file is stored. This is
 important, because I have multiple configurations for multiple styles.
 #+BEGIN_SRC emacs-lisp
-(defvar ptop-fmt-config
+(defvar fmt|ptop-config
   (expand-file-name "pascal/ptop.cfg" XDG-CONFIG-HOME)
   "The configuration file for `ptop-fmt'.")
 #+END_SRC
 
-Define =ptop-fmt= using =:editor fmt=.
+Define =fmt|ptop= using =:editor fmt=.
 #+BEGIN_SRC emacs-lisp
 (when (featurep! :editor fmt)
   (require 'reformatter)
 
-  (defvar ptop-fmt-indent DEFAULT-PASCAL-INDENT
+  (defvar fmt|ptop-indent DEFAULT-PASCAL-INDENT
     "Indent level for `ptop-fmt'.")
 
-  (reformatter-define ptop-fmt
+  (reformatter-define fmt|ptop
     :program "ptop"
     :mode nil
     :args
-    `(,@(-some->> ptop-fmt-config (list "-c"))
-      "-i" ,(number-to-string (or ptop-fmt-indent standard-indent))
+    `(,@(-some->> fmt|ptop-config (list "-c"))
+      "-i" ,(number-to-string (or fmt|ptop-indent standard-indent))
       "/dev/stdin" "/dev/stdout"))
 
   (setq-hook! '(pascal-mode-hook
                 opascal-mode-hook)
-    fmt/formatter '(ptop-fmt-buffer . ptop-fmt-region)))
+    fmt/formatter '(fmt|ptop-buffer . fmt|ptop-region)))
 #+END_SRC
 
 ** Perl
@@ -779,26 +779,26 @@ Set indentation to 4 in both Perl modes.
 #+END_SRC
 
 *** Perl::Tidy
-Define =perltidy-fmt= using =:editor fmt=.
+Define =fmt|perltidy= using =:editor fmt=.
 #+BEGIN_SRC emacs-lisp
 (when (featurep! :editor fmt)
   (require 'reformatter)
 
-  (defvar perltidy-fmt-indent DEFAULT-PERL-INDENT
+  (defvar fmt|perltidy-indent DEFAULT-PERL-INDENT
     "Indent level for `perltidy-fmt'.")
 
-  (reformatter-define perltidy-fmt
+  (reformatter-define fmt|perltidy
     :program "perltidy"
     :mode nil
     :args
-    `("--indent-columns" ,(number-to-string perltidy-fmt-indent)
+    `("--indent-columns" ,(number-to-string fmt|perltidy-indent)
      "--default-tabsize" ,(number-to-string tab-width)
      ,(if indent-tabs-mode "--tabs" "--notabs")
      "--standard-output" "--standard-error-output"))
 
   (setq-hook! '(perl-mode-hook
                 cperl-mode-hook)
-    fmt/formatter '(perltidy-fmt-buffer . perltidy-fmt-region)))
+    fmt/formatter '(fmt|perltidy-buffer . fmt|perltidy-region)))
 #+END_SRC
 
 ** PHP
@@ -811,8 +811,8 @@ This allows me to not load the entire =:lang php=.
 #+BEGIN_SRC emacs-lisp
 (when (featurep! :editor fmt)
   (setq-hook! 'php-mode-hook
-    fmt/formatter '(prettier-fmt-buffer . prettier-fmt-region)
-    prettier-fmt-indent c-basic-offset))
+    fmt/formatter '(fmt|prettier-buffer . fmt|prettier-region)
+    fmt|prettier-indent c-basic-offset))
 #+END_SRC
 
 ** Python
@@ -850,7 +850,7 @@ This extends the =black= formatter with the ability to recognize =indent-tabs-mo
   (require 'reformatter)
   (use-package format-all :commands (format-all--buffer-extension-p))
 
-  (reformatter-define black-fmt
+  (reformatter-define fmt|black
     :program "black"
     :mode nil
     :args
@@ -859,7 +859,7 @@ This extends the =black= formatter with the ability to recognize =indent-tabs-mo
       "-q" "-"))
 
   (setq-hook! 'python-mode-hook
-    fmt/formatter '(black-fmt-buffer . black-fmt-region)))
+    fmt/formatter '(fmt|black-buffer . fmt|black-region)))
 #+END_SRC
 
 * Keybindings
