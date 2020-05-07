@@ -362,11 +362,11 @@ Ivy should recurse into directories when pressing =RET=.
 (map! :when (featurep! :completion ivy)
       :after ivy
       :map ivy-minibuffer-map
-      "RET"      #'ivy-alt-done
-      "C-RET"    #'ivy-immediate-done
-      "C-l"      #'ivy-done
-      "C-<up>"   #'ivy-previous-history-element
-      "C-<down>" #'ivy-next-history-element)
+      "<return>"   #'ivy-alt-done
+      "C-<return>" #'ivy-immediate-done
+      "C-l"        #'ivy-done
+      "C-<up>"     #'ivy-previous-history-element
+      "C-<down>"   #'ivy-next-history-element)
 #+END_SRC
 
 ** LSP
