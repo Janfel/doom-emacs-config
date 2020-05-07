@@ -921,7 +921,8 @@ Bind =indent-region=.
 (map! :leader :prefix "c"
       :desc "Indent buffer/region" "i" #'indent-region
       ;; We need to move this out of the way.
-      :desc "LSP Organize Imports" "I" #'lsp-organize-imports)
+      (:when (featurep! :tools lsp)
+       :desc "LSP Organize Imports" "I" #'lsp-organize-imports))
 #+END_SRC
 
 Bind mnemonics for =git add=.
