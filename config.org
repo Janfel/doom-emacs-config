@@ -143,6 +143,11 @@ Here I replace the default formatting function with my own.
       :desc "Format buffer/region" "f" #'fmt/dwim)
 #+END_SRC
 
+Change formatter to =lsp-format= if the language server supports formatting.
+#+BEGIN_SRC emacs-lisp
+(add-hook 'lsp-mode-hook #'+fmt-lsp-mode-maybe-set-formatter-h)
+#+END_SRC
+
 ** Fold
 Map opening and closing all folds to Shift combinations.
 This frees up =z r= =z m=.
