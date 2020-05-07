@@ -103,20 +103,14 @@ BUFFER is only evaluated once."
 #+END_SRC
 
 ** Formatters
-#+BEGIN_SRC emacs-lisp
-(when (featurep! :editor fmt)
-  (require 'reformatter))
-#+END_SRC
-
 *** Prettier
 #+BEGIN_SRC emacs-lisp
 (when (featurep! :editor fmt)
   (defvar fmt|prettier-indent standard-indent
-    "Indent level for `prettier-fmt'.")
+    "Indent level for `fmt|prettier'.")
 
-  (reformatter-define fmt|prettier
+  (fmt-define! prettier
     :program "prettier"
-    :mode nil
     :args
     `("--tab-width" ,(number-to-string fmt|prettier-indent)
       ,@(when indent-tabs-mode '("--use-tabs")))))
@@ -526,7 +520,7 @@ because JS can be deeply nested.
 #+BEGIN_SRC emacs-lisp
 (when (featurep! :editor fmt)
   (setq-hook! 'js-mode-hook
-    fmt/formatter '(fmt|prettier-buffer . fmt|prettier-region)))
+    fmt/formatter #'fmt|prettier))
 #+END_SRC
 
 ** TeX
@@ -744,30 +738,27 @@ would be unusable otherwise.
 This is the variable where the PtoP configuration file is stored. This is
 important, because I have multiple configurations for multiple styles.
 #+BEGIN_SRC emacs-lisp
-(defvar fmt|ptop-config
-  (expand-file-name "pascal/ptop.cfg" XDG-CONFIG-HOME)
-  "The configuration file for `ptop-fmt'.")
+(when (featurep! :editor fmt)
+  (defvar fmt|ptop-config
+    (expand-file-name "pascal/ptop.cfg" XDG-CONFIG-HOME)
+    "The configuration file for `ptop-fmt'."))
 #+END_SRC
 
 Define =fmt|ptop= using =:editor fmt=.
 #+BEGIN_SRC emacs-lisp
 (when (featurep! :editor fmt)
-  (require 'reformatter)
-
   (defvar fmt|ptop-indent DEFAULT-PASCAL-INDENT
     "Indent level for `ptop-fmt'.")
 
-  (reformatter-define fmt|ptop
+  (fmt-define! ptop
     :program "ptop"
-    :mode nil
     :args
     `(,@(-some->> fmt|ptop-config (list "-c"))
       "-i" ,(number-to-string (or fmt|ptop-indent standard-indent))
       "/dev/stdin" "/dev/stdout"))
 
-  (setq-hook! '(pascal-mode-hook
-                opascal-mode-hook)
-    fmt/formatter '(fmt|ptop-buffer . fmt|ptop-region)))
+  (setq-hook! '(pascal-mode-hook opascal-mode-hook)
+    fmt/formatter #'fmt|ptop))
 #+END_SRC
 
 ** Perl
@@ -787,23 +778,19 @@ Set indentation to 4 in both Perl modes.
 Define =fmt|perltidy= using =:editor fmt=.
 #+BEGIN_SRC emacs-lisp
 (when (featurep! :editor fmt)
-  (require 'reformatter)
-
   (defvar fmt|perltidy-indent DEFAULT-PERL-INDENT
     "Indent level for `perltidy-fmt'.")
 
-  (reformatter-define fmt|perltidy
+  (fmt-define! perltidy
     :program "perltidy"
-    :mode nil
     :args
     `("--indent-columns" ,(number-to-string fmt|perltidy-indent)
      "--default-tabsize" ,(number-to-string tab-width)
      ,(if indent-tabs-mode "--tabs" "--notabs")
      "--standard-output" "--standard-error-output"))
 
-  (setq-hook! '(perl-mode-hook
-                cperl-mode-hook)
-    fmt/formatter '(fmt|perltidy-buffer . fmt|perltidy-region)))
+  (setq-hook! '(perl-mode-hook cperl-mode-hook)
+    fmt/formatter #'fmt|perltidy))
 #+END_SRC
 
 ** PHP
@@ -852,19 +839,17 @@ This extends the =black= formatter with the ability to recognize =indent-tabs-mo
 *This only works with a patched black!*
 #+BEGIN_SRC emacs-lisp
 (when (featurep! :editor fmt)
-  (require 'reformatter)
   (use-package format-all :commands (format-all--buffer-extension-p))
 
-  (reformatter-define fmt|black
+  (fmt-define! black
     :program "black"
-    :mode nil
     :args
     `(,@(when indent-tabs-mode (list "-T"))
       ,@(when (format-all--buffer-extension-p "pyi") (list "--pyi"))
       "-q" "-"))
 
   (setq-hook! 'python-mode-hook
-    fmt/formatter '(fmt|black-buffer . fmt|black-region)))
+    fmt/formatter #'fmt|black))
 #+END_SRC
 
 * Keybindings
