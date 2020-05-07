@@ -33,6 +33,13 @@ Macros in the style of Common Lisp. We don't need it currently.
 (require 'dash)
 #+END_SRC
 
+Require =reformatter= so it can be used to define formatting functions.
+#+BEGIN_SRC emacs-lisp
+(when (featurep! :editor fmt)
+  (use-package! reformatter
+    :commands (reformatter-define)))
+#+END_SRC
+
 * Definitions
 ** Constants
 These constants allow me to use the correct directories everywhere,
@@ -102,17 +109,27 @@ BUFFER is only evaluated once."
   `(setf ,place (append (list ,@values) ,place)))
 #+END_SRC
 
+Define a convenience macro to wrap =reformatter-define=.
+#+BEGIN_SRC emacs-lisp
+(defmacro formatter-define! (name &rest body)
+  (declare (indent defun))
+  (let ((long-name (intern (format "%s-format"))))
+    `(progn
+       (reformatter-define ,long-name :mode nil ,@body)
+       (fmakunbound ',long-name))))
+#+END_SRC
+
 ** Formatters
 *** Prettier
 #+BEGIN_SRC emacs-lisp
 (when (featurep! :editor fmt)
-  (defvar fmt|prettier-indent standard-indent
-    "Indent level for `fmt|prettier'.")
+  (defvar prettier-formatter-indent standard-indent
+    "Indent level for `prettier-format-region'.")
 
-  (fmt-define! prettier
+  (formatter-define! prettier
     :program "prettier"
     :args
-    `("--tab-width" ,(number-to-string fmt|prettier-indent)
+    `("--tab-width" ,(number-to-string prettier-formatter-indent)
       ,@(when indent-tabs-mode '("--use-tabs")))))
 #+END_SRC
 
@@ -515,7 +532,7 @@ because JS can be deeply nested.
 #+BEGIN_SRC emacs-lisp
 (when (featurep! :editor fmt)
   (setq-hook! 'js-mode-hook
-    fmt/formatter #'fmt|prettier))
+    fmt/formatter #'prettier-format-region))
 #+END_SRC
 
 ** TeX
@@ -730,30 +747,30 @@ would be unusable otherwise.
 #+END_SRC
 
 *** ptop
-This is the variable where the PtoP configuration file is stored. This is
+This is the variable where the =ptop= configuration file is stored. This is
 important, because I have multiple configurations for multiple styles.
 #+BEGIN_SRC emacs-lisp
 (when (featurep! :editor fmt)
-  (defvar fmt|ptop-config
+  (defvar ptop-formatter-config
     (expand-file-name "pascal/ptop.cfg" XDG-CONFIG-HOME)
-    "The configuration file for `ptop-fmt'."))
+    "The configuration file for `ptop-format-region'."))
 #+END_SRC
 
-Define =fmt|ptop= using =:editor fmt=.
+Define =ptop-format-region= functions.
 #+BEGIN_SRC emacs-lisp
 (when (featurep! :editor fmt)
-  (defvar fmt|ptop-indent DEFAULT-PASCAL-INDENT
-    "Indent level for `ptop-fmt'.")
+  (defvar ptop-formatter-indent DEFAULT-PASCAL-INDENT
+    "Indent level for `ptop-format-region'.")
 
-  (fmt-define! ptop
+  (formatter-define! ptop
     :program "ptop"
     :args
-    `(,@(-some->> fmt|ptop-config (list "-c"))
-      "-i" ,(number-to-string (or fmt|ptop-indent standard-indent))
+    `(,@(-some->> ptop-formatter-config (list "-c"))
+      "-i" ,(number-to-string (or ptop-formatter-indent standard-indent))
       "/dev/stdin" "/dev/stdout"))
 
   (setq-hook! '(pascal-mode-hook opascal-mode-hook)
-    fmt/formatter #'fmt|ptop))
+    fmt/formatter #'ptop-format-region))
 #+END_SRC
 
 ** Perl
@@ -770,22 +787,22 @@ Set indentation to 4 in both Perl modes.
 #+END_SRC
 
 *** Perl::Tidy
-Define =fmt|perltidy= using =:editor fmt=.
+Define =perltidy-format-region= functions.
 #+BEGIN_SRC emacs-lisp
 (when (featurep! :editor fmt)
-  (defvar fmt|perltidy-indent DEFAULT-PERL-INDENT
-    "Indent level for `perltidy-fmt'.")
+  (defvar perltidy-formatter-indent DEFAULT-PERL-INDENT
+    "Indent level for `perltidy-format-region'.")
 
-  (fmt-define! perltidy
+  (formatter-define! perltidy
     :program "perltidy"
     :args
-    `("--indent-columns" ,(number-to-string fmt|perltidy-indent)
+    `("--indent-columns" ,(number-to-string perltidy-formatter-indent)
      "--default-tabsize" ,(number-to-string tab-width)
      ,(if indent-tabs-mode "--tabs" "--notabs")
      "--standard-output" "--standard-error-output"))
 
   (setq-hook! '(perl-mode-hook cperl-mode-hook)
-    fmt/formatter #'fmt|perltidy))
+    fmt/formatter #'perltidy-format-region))
 #+END_SRC
 
 ** PHP
@@ -798,8 +815,8 @@ This allows me to not load the entire =:lang php=.
 #+BEGIN_SRC emacs-lisp
 (when (featurep! :editor fmt)
   (setq-hook! 'php-mode-hook
-    fmt/formatter '(fmt|prettier-buffer . fmt|prettier-region)
-    fmt|prettier-indent c-basic-offset))
+    fmt/formatter #'prettier-format-region
+    prettier-formatter-indent c-basic-offset))
 #+END_SRC
 
 ** Python
@@ -836,7 +853,7 @@ This extends the =black= formatter with the ability to recognize =indent-tabs-mo
 (when (featurep! :editor fmt)
   (use-package format-all :commands (format-all--buffer-extension-p))
 
-  (fmt-define! black
+  (formatter-define! black
     :program "black"
     :args
     `(,@(when indent-tabs-mode (list "-T"))
@@ -844,7 +861,7 @@ This extends the =black= formatter with the ability to recognize =indent-tabs-mo
       "-q" "-"))
 
   (setq-hook! 'python-mode-hook
-    fmt/formatter #'fmt|black))
+    fmt/formatter #'black-format-region))
 #+END_SRC
 
 * Keybindings
