@@ -113,7 +113,7 @@ Define a convenience macro to wrap =reformatter-define=.
 #+BEGIN_SRC emacs-lisp
 (defmacro formatter-define! (name &rest body)
   (declare (indent defun))
-  (let ((long-name (intern (format "%s-format"))))
+  (let ((long-name (intern (format "%s-format" name))))
     `(progn
        (reformatter-define ,long-name :mode nil ,@body)
        (fmakunbound ',long-name))))
