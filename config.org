@@ -354,7 +354,7 @@ Remap =z r= and =z m= to =z O= and =z C=.
 #+BEGIN_SRC emacs-lisp
 (map! :when (featurep! :checkers syntax)
       :after flycheck
-      (:map doom-leader-code-map
+      (:leader :prefix "c"
         (:prefix ("!" . "flycheck") "" flycheck-command-map))
       (:map flycheck-command-map
         "!" #'flycheck-buffer))
