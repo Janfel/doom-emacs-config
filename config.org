@@ -149,9 +149,9 @@ Define a convenience macro to wrap =reformatter-define=.
 Here I replace the default formatting function with my own.
 #+BEGIN_SRC emacs-lisp
 (map! :when (featurep! :editor fmt)
-      :nv "g =" #'fmt:region
+      :nv "g =" #'+fmt:region
       :map doom-leader-code-map
-      :desc "Format buffer/region" "f" #'fmt/dwim)
+      :desc "Format buffer/region" "f" #'+fmt/dwim)
 #+END_SRC
 
 ** Fold
@@ -532,7 +532,7 @@ because JS can be deeply nested.
 #+BEGIN_SRC emacs-lisp
 (when (featurep! :editor fmt)
   (setq-hook! 'js-mode-hook
-    fmt/formatter #'prettier-format-region))
+    +fmt/formatter #'prettier-format-region))
 #+END_SRC
 
 ** TeX
@@ -607,7 +607,7 @@ Formatting for all Lisp modes.
 #+BEGIN_SRC emacs-lisp
 (when (featurep! :editor fmt)
   (setq-hook! 'lisp-mode-common-hook
-    fmt/formatter #'indent-region))
+    +fmt/formatter #'indent-region))
 #+END_SRC
 
 *** Common Lisp
@@ -770,7 +770,7 @@ Define =ptop-format-region= functions.
       "/dev/stdin" "/dev/stdout"))
 
   (setq-hook! '(pascal-mode-hook opascal-mode-hook)
-    fmt/formatter #'ptop-format-region))
+    +fmt/formatter #'ptop-format-region))
 #+END_SRC
 
 ** Perl
@@ -802,7 +802,7 @@ Define =perltidy-format-region= functions.
      "--standard-output" "--standard-error-output"))
 
   (setq-hook! '(perl-mode-hook cperl-mode-hook)
-    fmt/formatter #'perltidy-format-region))
+    +fmt/formatter #'perltidy-format-region))
 #+END_SRC
 
 ** PHP
@@ -815,7 +815,7 @@ This allows me to not load the entire =:lang php=.
 #+BEGIN_SRC emacs-lisp
 (when (featurep! :editor fmt)
   (setq-hook! 'php-mode-hook
-    fmt/formatter #'prettier-format-region
+    +fmt/formatter #'prettier-format-region
     prettier-formatter-indent c-basic-offset))
 #+END_SRC
 
@@ -861,7 +861,7 @@ This extends the =black= formatter with the ability to recognize =indent-tabs-mo
       "-q" "-"))
 
   (setq-hook! 'python-mode-hook
-    fmt/formatter #'black-format-region))
+    +fmt/formatter #'black-format-region))
 #+END_SRC
 
 * Keybindings
