@@ -867,7 +867,7 @@ This extends the =black= formatter with the ability to recognize =indent-tabs-mo
       "-q" "-"))
 
   (setq-hook! 'python-mode-hook
-    +fmt-formatter #'black-format-region))
+    +fmt-formatter #'black-format-buffer))
 #+END_SRC
 
 * Keybindings
