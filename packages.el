@@ -6,37 +6,25 @@
 ;; (package! another-package :recipe (:host github :repo "username/repo"))
 ;; (package! builtin-package :disable t)
 
-;;; Major Modes:
-
-;; Major-mode for Arduino sketches.
+;; Major mode for Arduino sketches.
 (package! arduino-mode)
-
-;; Major-mode for the Meson build system for C/C++.
+;; Major mode for the Meson build system for C/C++.
 (package! meson-mode)
-
-;; Major-mode for PHP for when (:lang php) is disabled.
-(unless (featurep! :lang php)
-  (package! php-mode))
-
-;;; Minor Modes:
+;; Major mode for simple PHP editing.
+(unless (featurep! :lang php) (package! php-mode))
 
 ;; Disable escaping insert state when typing too fast.
 (package! evil-escape :disable t)
-
 ;; Display ^L form-feed as horizontal line.
 (package! form-feed)
-
 ;; Delete all whitespace in front of point.
 (package! hungry-delete)
 
-;;; Miscellaneous:
-
-;; Python completion using company and jedi.
 (when (featurep! :completion company)
+  ;; Display function definitions in popup window.
+  (package! company-quickhelp)
+  ;; Python completion using company and jedi.
   (package! company-jedi))
 
-(package! company-quickhelp)
-
-;; Reformatter for use with +editor/fmt.
-(when (featurep! :editor fmt)
-  (package! reformatter))
+;; Reformatter for use with :editor/fmt.
+(when (featurep! :editor fmt) (package! reformatter))
