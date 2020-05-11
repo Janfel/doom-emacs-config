@@ -205,14 +205,6 @@ These packages are built into Emacs itself.
 ** Doom
 These packages are used in the =:core= of Doom Emacs. That means we don't need =featurep!=.
 
-*** Undo Tree
-When =undo-tree= is allowed to automatically save the undo history, it somehow
-chokes on an empty undo list and interrupts us with constant errors.
-#+BEGIN_SRC emacs-lisp
-(after! undo-tree
-  (setq undo-tree-auto-save-history nil))
-#+END_SRC
-
 *** Which Key
 These are some default keybindings that are missing a description.
 #+BEGIN_SRC emacs-lisp
@@ -408,6 +400,23 @@ I activate =show-smartparens-global-mode= to highlight matching parens.
 (when (featurep! :config default +smartparens)
   (after! smartparens
     (show-smartparens-global-mode +1)))
+#+END_SRC
+
+** Undo Fu
+#+BEGIN_SRC emacs-lisp
+(when (and (featurep! :emacs undo)
+           (not (featurep! :emacs undo +tree)))
+  ;; HACK: Automatic start is currently broken.
+  (require 'undo-fu))
+#+END_SRC
+
+** Undo Tree
+When =undo-tree= is allowed to automatically save the undo history, it somehow
+chokes on an empty undo list and interrupts us with constant errors.
+#+BEGIN_SRC emacs-lisp
+(when (featurep! :emacs undo +tree)
+  (after! undo-tree
+    (setq undo-tree-auto-save-history nil)))
 #+END_SRC
 
 ** Yasnippet
