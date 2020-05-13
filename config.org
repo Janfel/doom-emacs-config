@@ -402,14 +402,6 @@ I activate =show-smartparens-global-mode= to highlight matching parens.
     (show-smartparens-global-mode +1)))
 #+END_SRC
 
-** Undo Fu
-#+BEGIN_SRC emacs-lisp
-(when (and (featurep! :emacs undo)
-           (not (featurep! :emacs undo +tree)))
-  ;; HACK: Automatic start is currently broken.
-  (require 'undo-fu))
-#+END_SRC
-
 ** Undo Tree
 When =undo-tree= is allowed to automatically save the undo history, it somehow
 chokes on an empty undo list and interrupts us with constant errors.
