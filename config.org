@@ -649,6 +649,13 @@ Configure some of the common Interpreters for =sly=.
 (set-keymap-parent lisp-interaction-mode-map emacs-lisp-mode-map)
 #+END_SRC
 
+*** Scheme
+On Arch, the [[https://www.call-cc.org/][Chicken Scheme]] binaries are called =chicken-csi= and =chicken-csc=.
+#+BEGIN_SRC emacs-lisp
+(when! (executable-find "chicken-csi")
+  (setq geiser-chicken-binary "chicken-csi"))
+#+END_SRC
+
 ** Lua
 Doom advises =newline-and-indent= to continue comments using the value of
 =comment-line-break-function=. The standard value is =comment-indent-new-line=,
