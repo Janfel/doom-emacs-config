@@ -436,6 +436,15 @@ This mode displays instances of =^L= (form feed) as horizontal lines.
 #+END_SRC
 
 * Languages
+** Assembler
+#+BEGIN_SRC emacs-lisp
+(after! asm-mode
+  (define-advice asm-calculate-indentation
+      (:before-until (&rest _) indent-section)
+    (or
+     (and (looking-at "section") 0))))
+#+END_SRC
+
 ** C/C++
 *** TODO Code Style
 The default is =doom=.
