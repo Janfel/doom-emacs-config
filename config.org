@@ -35,7 +35,7 @@ Macros in the style of Common Lisp. We don't need it currently.
 
 Require =reformatter= so it can be used to define formatting functions.
 #+BEGIN_SRC emacs-lisp
-(when (featurep! :editor fmt)
+(when! (featurep! :editor fmt)
   (use-package! reformatter
     :commands (reformatter-define)))
 #+END_SRC
@@ -122,7 +122,7 @@ Define a convenience macro to wrap =reformatter-define=.
 ** Formatters
 *** Prettier
 #+BEGIN_SRC emacs-lisp
-(when (featurep! :editor fmt)
+(when! (featurep! :editor fmt)
   (defvar prettier-formatter-indent standard-indent
     "Indent level for `prettier-format-region'.")
 
@@ -166,7 +166,7 @@ This frees up =z r= =z m=.
 
 ** Popup Manager
 #+BEGIN_SRC emacs-lisp
-(when (featurep! :ui popup)
+(when! (featurep! :ui popup)
   (set-popup-rule! "^\\*info\\*$" :ignore))
 #+END_SRC
 
@@ -245,7 +245,7 @@ In =snippet-mode=, whitespace has significant meaning.
 ** Evil
 Evil uses Vims undo increments by default, which are too coarse for me.
 #+BEGIN_SRC emacs-lisp
-(when (featurep! :editor evil)
+(when! (featurep! :editor evil)
   (after! evil
     (setq evil-want-fine-undo t
           ;; This seems to be broken.
@@ -283,7 +283,7 @@ Put =evil-snipe-repeat= on Comma and Shift-Comma.
 
 I don't like my games to use Vim keys.
 #+BEGIN_SRC emacs-lisp
-(when (featurep! :editor evil +everywhere)
+(when! (featurep! :editor evil +everywhere)
   (push! +evil-collection-disabled-list
          'tetris '2084-game))
 #+END_SRC
@@ -317,7 +317,7 @@ Remap the =inc-at-pt= functions, so =z == can be used for formatting.
 Doom Emacs changes =org-cycle= to skip the =subtree= stage by default when
 =(featurep! :editor evil +everywhere)=.
 #+BEGIN_SRC emacs-lisp
-(when (featurep! :editor evil +everywhere)
+(when! (featurep! :editor evil +everywhere)
   (after! evil-org
     (remove-hook 'org-tab-first-hook #'+org-cycle-only-current-subtree-h)))
 #+END_SRC
@@ -325,7 +325,7 @@ Doom Emacs changes =org-cycle= to skip the =subtree= stage by default when
 Add block jumping to =[= and =]=.
 #+BEGIN_SRC emacs-lisp
 (map! :when (featurep! :editor evil)
-      :after (evil-org)
+      :after evil-org
       :map evil-org-mode-map
       :m "[ _" #'org-previous-block
       :m "] _" #'org-next-block)
@@ -334,7 +334,7 @@ Add block jumping to =[= and =]=.
 Remap =z r= and =z m= to =z O= and =z C=.
 #+BEGIN_SRC emacs-lisp
 (map! :when (featurep! :editor evil)
-      :after (evil-org)
+      :after evil-org
       :map evil-org-mode-map
       :n "z r" nil
       :n "z m" nil
@@ -353,7 +353,7 @@ Remap =z r= and =z m= to =z O= and =z C=.
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-(when (featurep! :checkers syntax)
+(when! (featurep! :checkers syntax)
   (after! which-key
     (which-key-add-key-based-replacements
       "C-c !" "flycheck")))
@@ -362,8 +362,9 @@ Remap =z r= and =z m= to =z O= and =z C=.
 ** Ivy
 Don't show =../= in file completion buffer.
 #+BEGIN_SRC emacs-lisp
-(when (featurep! :completion ivy)
-  (setq ivy-extra-directories '("./")))
+(when! (featurep! :completion ivy)
+  (after! ivy
+    (setq ivy-extra-directories '("./"))))
 #+END_SRC
 
 Ivy should recurse into directories when pressing =RET=.
@@ -380,8 +381,8 @@ Ivy should recurse into directories when pressing =RET=.
 
 ** LSP
 #+BEGIN_SRC emacs-lisp
-(when (and (featurep! :checkers syntax)
-           (featurep! :tools lsp))
+(when! (and (featurep! :checkers syntax)
+            (featurep! :tools lsp))
   (after! (flycheck lsp lsp-ui)
     (setq lsp-prefer-flymake nil)))
 #+END_SRC
@@ -397,7 +398,7 @@ Ivy should recurse into directories when pressing =RET=.
 ** Smartparens
 I activate =show-smartparens-global-mode= to highlight matching parens.
 #+BEGIN_SRC emacs-lisp
-(when (featurep! :config default +smartparens)
+(when! (featurep! :config default +smartparens)
   (after! smartparens
     (show-smartparens-global-mode +1)))
 #+END_SRC
@@ -406,14 +407,14 @@ I activate =show-smartparens-global-mode= to highlight matching parens.
 When =undo-tree= is allowed to automatically save the undo history, it somehow
 chokes on an empty undo list and interrupts us with constant errors.
 #+BEGIN_SRC emacs-lisp
-(when (featurep! :emacs undo +tree)
+(when! (featurep! :emacs undo +tree)
   (after! undo-tree
     (setq undo-tree-auto-save-history nil)))
 #+END_SRC
 
 ** Yasnippet
 #+BEGIN_SRC emacs-lisp
-(when (featurep! :editor snippets)
+(when! (featurep! :editor snippets)
   (after! which-key
     (which-key-add-key-based-replacements
       "C-c &" "snippet")))
@@ -490,7 +491,7 @@ I have yet to create my own style.
 
 *** C
 #+BEGIN_SRC emacs-lisp
-(when (featurep! :checkers syntax)
+(when! (featurep! :checkers syntax)
   (setq-hook! 'c-mode-hook
     flycheck-gcc-language-standard   "gnu18"
     flycheck-clang-language-standard "gnu18"))
@@ -498,7 +499,7 @@ I have yet to create my own style.
 
 *** C++
 #+BEGIN_SRC emacs-lisp
-(when (featurep! :checkers syntax)
+(when! (featurep! :checkers syntax)
   (setq-hook! 'c++-mode-hook
     flycheck-gcc-language-standard   "gnu++17"
     flycheck-clang-language-standard "gnu++17"))
@@ -524,12 +525,11 @@ These bindings are used by many modes with an inferior REPL.
 The Javascript community widely uses two-space indentation,
 because JS can be deeply nested.
 #+BEGIN_SRC emacs-lisp
-(after! js
-  (setq js-indent-level 2))
+(after! js (setq js-indent-level 2))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-(when (featurep! :editor fmt)
+(when! (featurep! :editor fmt)
   (setq-hook! 'js-mode-hook
     +fmt-formatter #'prettier-format-region))
 #+END_SRC
@@ -538,7 +538,7 @@ because JS can be deeply nested.
 Using =dvipng= is faster than =png= and is even recommended
 in the [[info:preview-latex#Requirements][manual]] of =preview-latex=.
 #+BEGIN_SRC emacs-lisp
-(when (executable-find "dvipng")
+(when! (executable-find "dvipng")
   (after! preview (setq preview-image-type 'dvipng)))
 #+END_SRC
 
@@ -604,7 +604,7 @@ A common hook for all lisp modes.
 
 Formatting for all Lisp modes.
 #+BEGIN_SRC emacs-lisp
-(when (featurep! :editor fmt)
+(when! (featurep! :editor fmt)
   (setq-hook! 'lisp-mode-common-hook
     +fmt-formatter #'indent-region))
 #+END_SRC
@@ -619,11 +619,11 @@ Configure some of the common Interpreters for =sly=.
 #+BEGIN_SRC emacs-lisp
 (after! sly
   (setq sly-default-lisp 'sbcl)
-  (when (executable-find "cmucl")
+  (when! (executable-find "cmucl")
     (push '(cmucl ("cmucl")) sly-lisp-implementations))
-  (when (executable-find "clisp")
+  (when! (executable-find "clisp")
     (push '(clisp ("clisp")) sly-lisp-implementations))
-  (when (executable-find "sbcl")
+  (when! (executable-find "sbcl")
     (push '(sbcl ("sbcl") :coding-system utf-8-unix) sly-lisp-implementations)))
 #+END_SRC
 
@@ -636,7 +636,8 @@ Configure some of the common Interpreters for =sly=.
 On Arch, the [[https://www.call-cc.org/][Chicken Scheme]] binaries are called =chicken-csi= and =chicken-csc=.
 #+BEGIN_SRC emacs-lisp
 (when! (executable-find "chicken-csi")
-  (setq geiser-chicken-binary "chicken-csi"))
+  (after! geiser-chicken
+    (setq geiser-chicken-binary "chicken-csi")))
 #+END_SRC
 
 ** Lua
@@ -667,7 +668,7 @@ weirdly when deleting line comments inside of a multiline comment. I have not
 yet found a fix for this.
 
 #+BEGIN_SRC emacs-lisp
-(when (featurep! :completion company)
+(when! (featurep! :completion company)
   (after! company-lua
     (setq company-lua-interpreter 'lua53)))
 #+END_SRC
@@ -717,7 +718,7 @@ Add =which-key= descriptions.
 
 Add =company-capf= as a Company backend.
 #+BEGIN_SRC emacs-lisp
-(when (featurep! :completion company)
+(when! (featurep! :completion company)
   (after! (org company)
     (set-company-backend! 'org-mode 'company-capf)))
 #+END_SRC
@@ -756,7 +757,7 @@ would be unusable otherwise.
 This is the variable where the =ptop= configuration file is stored. This is
 important, because I have multiple configurations for multiple styles.
 #+BEGIN_SRC emacs-lisp
-(when (featurep! :editor fmt)
+(when! (featurep! :editor fmt)
   (defvar ptop-formatter-config
     (expand-file-name "pascal/ptop.cfg" XDG-CONFIG-HOME)
     "The configuration file for `ptop-format-region'."))
@@ -764,7 +765,7 @@ important, because I have multiple configurations for multiple styles.
 
 Define =ptop-format-region= functions.
 #+BEGIN_SRC emacs-lisp
-(when (featurep! :editor fmt)
+(when! (featurep! :editor fmt)
   (defvar ptop-formatter-indent DEFAULT-PASCAL-INDENT
     "Indent level for `ptop-format-region'.")
 
@@ -795,7 +796,7 @@ Set indentation to 4 in both Perl modes.
 *** Perl::Tidy
 Define =perltidy-format-region= functions.
 #+BEGIN_SRC emacs-lisp
-(when (featurep! :editor fmt)
+(when! (featurep! :editor fmt)
   (defvar perltidy-formatter-indent DEFAULT-PERL-INDENT
     "Indent level for `perltidy-format-region'.")
 
@@ -814,12 +815,12 @@ Define =perltidy-format-region= functions.
 ** PHP
 This allows me to not load the entire =:lang php=.
 #+BEGIN_SRC emacs-lisp
-(unless (featurep! :lang php)
+(when! (not (featurep! :lang php))
   (use-package! php-mode))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-(when (featurep! :editor fmt)
+(when! (featurep! :editor fmt)
   (setq-hook! 'php-mode-hook
     +fmt-formatter #'prettier-format-region
     prettier-formatter-indent c-basic-offset))
@@ -835,7 +836,7 @@ This allows me to not load the entire =:lang php=.
 
 Use system =mspyls= for =lsp-python-ms=.
 #+BEGIN_SRC emacs-lisp :tangle no
-(when (featurep! :lang python +lsp)
+(when! (featurep! :lang python +lsp)
   (after! lsp-python-ms
     (setq lsp-python-ms-dir "/usr/lib/microsoft-python-language-server"
           lsp-python-ms-executable "/usr/bin/mspyls")))
@@ -846,7 +847,7 @@ Use system =mspyls= for =lsp-python-ms=.
 This adds ='company-jedi= to =company-backends= in Python buffers.
 The package will load when =company-jedi= is invoked by =company=.
 #+BEGIN_SRC emacs-lisp
-(when (featurep! :completion company)
+(when! (featurep! :completion company)
   (use-package! company-jedi
     :after company
     :commands company-jedi)
@@ -856,8 +857,8 @@ The package will load when =company-jedi= is invoked by =company=.
 This extends the =black= formatter with the ability to recognize =indent-tabs-mode=.
 *This only works with a patched black!*
 #+BEGIN_SRC emacs-lisp
-(when (featurep! :editor fmt)
-  (use-package format-all :commands (format-all--buffer-extension-p))
+(when! (featurep! :editor fmt)
+  (use-package! format-all :commands (format-all--buffer-extension-p))
 
   (formatter-define! black
     :program "black"
