@@ -477,30 +477,16 @@ I have yet to create my own style.
 
 *** Arduino
 #+BEGIN_SRC emacs-lisp
-(use-package! arduino-mode
-  :mode "\\.ino\\'"
-  :mode "\\.pde\\'")
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
 (after! arduino-mode
-  (setq-default arduino-mode-home "~/src/arduino/"))
+  (setq arduino-mode-home (expand-file-name "~/src/arduino/")))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-(map! :after arduino-mode
-      :map arduino-mode-map
-      :localleader
-      :desc "Upload Sketch"     "u" #'arduino-upload
-      :desc "CompileSketch"     "c" #'arduino-verify
-      :desc "Reset Arduino"     "r" #'arduino-reset
-      :desc "Create New Sketch" "n" #'arduino-sketch-new
-      :desc "Serial Monitor"    "s" #'arduino-serial-monitor)
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-(when (featurep! :checkers syntax)
-  (add-hook 'arduino-mode-hook #'flycheck-arduino-setup))
+(after! ede-arduino
+  (let ((arduino-dir (expand-file-name "arduino/" XDG-DATA-HOME)))
+    (when (file-directory-p arduino-dir)
+      (setq ede-arduino-preferences-file
+            (expand-file-name "preferences.txt" arduino-dir)))))
 #+END_SRC
 
 *** C

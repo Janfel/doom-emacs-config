@@ -6,8 +6,6 @@
 ;; (package! another-package :recipe (:host github :repo "username/repo"))
 ;; (package! builtin-package :disable t)
 
-;; Major mode for Arduino sketches.
-(package! arduino-mode)
 ;; Major mode for the Meson build system for C/C++.
 (package! meson-mode)
 ;; Major mode for simple PHP editing.
