@@ -36,8 +36,7 @@ Macros in the style of Common Lisp. We don't need it currently.
 Require =reformatter= so it can be used to define formatting functions.
 #+BEGIN_SRC emacs-lisp
 (when! (featurep! :editor fmt)
-  (use-package! reformatter
-    :commands (reformatter-define)))
+  (use-package! reformatter :defer t))
 #+END_SRC
 
 * Definitions
@@ -508,8 +507,7 @@ I have yet to create my own style.
 *** Meson
 Major mode for the [[https://mesonbuild.com][Meson Build System]].
 #+BEGIN_SRC emacs-lisp
-(use-package! meson-mode
-  :mode "/meson\\.build\\'")
+(use-package! meson-mode :defer t)
 #+END_SRC
 
 ** Haskell
@@ -816,7 +814,7 @@ Define =perltidy-format-region= functions.
 This allows me to not load the entire =:lang php=.
 #+BEGIN_SRC emacs-lisp
 (when! (not (featurep! :lang php))
-  (use-package! php-mode))
+  (use-package! php-mode :defer t))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -848,9 +846,7 @@ This adds ='company-jedi= to =company-backends= in Python buffers.
 The package will load when =company-jedi= is invoked by =company=.
 #+BEGIN_SRC emacs-lisp
 (when! (featurep! :completion company)
-  (use-package! company-jedi
-    :after company
-    :commands company-jedi)
+  (use-package! company-jedi :after company)
   (set-company-backend! 'python-mode 'company-jedi))
 #+END_SRC
 
