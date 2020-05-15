@@ -492,7 +492,7 @@ I have yet to create my own style.
 *** C
 #+BEGIN_SRC emacs-lisp
 (when (featurep! :checkers syntax)
-  (setq-hook! c-mode
+  (setq-hook! 'c-mode-hook
     flycheck-gcc-language-standard   "gnu18"
     flycheck-clang-language-standard "gnu18"))
 #+END_SRC
@@ -500,7 +500,7 @@ I have yet to create my own style.
 *** C++
 #+BEGIN_SRC emacs-lisp
 (when (featurep! :checkers syntax)
-  (setq-hook! c++-mode
+  (setq-hook! 'c++-mode-hook
     flycheck-gcc-language-standard   "gnu++17"
     flycheck-clang-language-standard "gnu++17"))
 #+END_SRC
