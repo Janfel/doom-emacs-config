@@ -506,19 +506,17 @@ I have yet to create my own style.
 *** C
 #+BEGIN_SRC emacs-lisp
 (when (featurep! :checkers syntax)
-  (after! flycheck
-    (setq-hook! 'c-mode-hook
-      flycheck-gcc-language-standard   "gnu18"
-      flycheck-clang-language-standard "gnu18")))
+  (setq-hook! c-mode
+    flycheck-gcc-language-standard   "gnu18"
+    flycheck-clang-language-standard "gnu18"))
 #+END_SRC
 
 *** C++
 #+BEGIN_SRC emacs-lisp
 (when (featurep! :checkers syntax)
-  (after! flycheck
-    (setq-hook! 'c++-mode-hook
-      flycheck-gcc-language-standard   "gnu++17"
-      flycheck-clang-language-standard "gnu++17")))
+  (setq-hook! c++-mode
+    flycheck-gcc-language-standard   "gnu++17"
+    flycheck-clang-language-standard "gnu++17"))
 #+END_SRC
 
 *** Meson
