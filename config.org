@@ -306,7 +306,9 @@ That means we don't need =featurep!=.
 Some function definitions contain tab character that are
 assumed to be eight spaces wide.
 #+BEGIN_SRC emacs-lisp
-(setq-hook! 'helpful-mode-hook tab-width 8)
+(setq-hook! helpful-mode
+  tab-width 8
+  x-stretch-cursor nil)
 #+END_SRC
 
 *** Which Key
