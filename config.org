@@ -426,6 +426,14 @@ Ivy should recurse into directories when pressing =RET=.
 #+END_SRC
 
 ** Smartparens
+This is currently broken, in that two closing
+delimiters are deleted instead of one.
+#+BEGIN_SRC emacs-lisp
+(when! (featurep! :config default +smartparens)
+  (after! smartparens
+    (setq sp-autodelete-pair nil)))
+#+END_SRC
+
 I activate =show-smartparens-global-mode= to highlight matching parens.
 #+BEGIN_SRC emacs-lisp
 (when! (featurep! :config default +smartparens)
