@@ -308,8 +308,12 @@ Put =evil-snipe-repeat= on Comma and Shift-Comma.
 I don't like my games to use Vim keys.
 #+BEGIN_SRC emacs-lisp
 (when! (featurep! :editor evil +everywhere)
-  (push! +evil-collection-disabled-list
-         'tetris '2084-game))
+  (setq +evil-collection-disabled-list
+        '(anaconda-mode buff-menu comint company custom eldoc elisp-mode ert
+          free-keys help helm image kotlin-mode occur package-menu ruby-mode
+          simple slime lispy
+          ;; Personal additions
+          tetris 2084-game)))
 #+END_SRC
 
 Remap the document scroll motions to something more sensible.
@@ -706,8 +710,7 @@ Doom Emacs, annoyingly, sets =moonscript-indent-offset= to =tab-width= by defaul
 ** Org
 These values have to be set before =org-mode= is loaded.
 #+BEGIN_SRC emacs-lisp
-(use-package! org
-  :init
+(use-package! org :init
   (setq org-directory "~/docs/org"
         org-modules
         '(;; ol-w3m
