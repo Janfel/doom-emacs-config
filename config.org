@@ -66,6 +66,20 @@ without lengthy invocation of =getenv=.
   "The value of $XDG_DATA_HOME where programs store data.")
 #+END_SRC
 
+These constants describe the features each of my systems has.
+#+BEGIN_SRC emacs-lisp
+(defconst SYSTEM
+  (let ((sysname (system-name)))
+    (cond ((string= sysname "PhantomJFL") 'Phantom)
+          ((string= sysname "TeslaJFL")   'Tesla)
+          (t 'other)))
+  "Which system are we running on?")
+
+(defconst BLACK-FORMATTER-IS-PATCHED
+  (eq SYSTEM 'Phantom)
+  "Does this system have a patched Black?")
+#+END_SRC
+
 I redefine the operating system constants of Doom Emacs to give them docstrings.
 #+BEGIN_SRC emacs-lisp
 (defconst IS-LINUX IS-LINUX
@@ -121,7 +135,7 @@ Define a convenience macro to wrap =reformatter-define=.
 ** Formatters
 *** Black
 #+BEGIN_SRC emacs-lisp
-(when! (and nil (featurep! :editor fmt))
+(when (and (not BLACK-FORMATTER-IS-PATCHED) (featurep! :editor fmt))
   (use-package! format-all :commands (format-all--buffer-extension-p))
 
   (formatter-define! black
@@ -135,7 +149,7 @@ Define a convenience macro to wrap =reformatter-define=.
 This extends the =black= formatter with the ability to recognize =indent-tabs-mode=.
 *This only works with a patched black!*
 #+BEGIN_SRC emacs-lisp
-(when! (and t (featurep! :editor fmt))
+(when (and BLACK-FORMATTER-IS-PATCHED (featurep! :editor fmt))
   (use-package! format-all :commands (format-all--buffer-extension-p))
 
   (formatter-define! black
