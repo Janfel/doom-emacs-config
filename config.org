@@ -202,7 +202,15 @@ These packages are built into Emacs itself.
 #+END_SRC
 
 ** Doom
-These packages are used in the =:core= of Doom Emacs. That means we don't need =featurep!=.
+These packages are used in the =:core= of Doom Emacs.
+That means we don't need =featurep!=.
+
+*** Helpful
+Some function definitions contain tab character that are
+assumed to be eight spaces wide.
+#+BEGIN_SRC emacs-lisp
+(setq-hook! 'helpful-mode-hook tab-width 8)
+#+END_SRC
 
 *** Which Key
 These are some default keybindings that are missing a description.
