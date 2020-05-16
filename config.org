@@ -472,6 +472,7 @@ This mode displays instances of =^L= (form feed) as horizontal lines.
 (after! asm-mode
   (define-advice asm-calculate-indentation
       (:before-until (&rest _) indent-section)
+    "Indent the section keyword correctly."
     (and (looking-at "section") 0)))
 #+END_SRC
 
