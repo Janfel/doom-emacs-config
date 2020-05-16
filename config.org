@@ -153,6 +153,15 @@ Control the width of a tab character.
 (setq-default tab-width 4)
 #+END_SRC
 
+Indentation in Emacs is a mess currently. Each mode defines its own variables.
+This consolidates indentation into one single variable.
+#+BEGIN_SRC emacs-lisp
+(defvar-local indent-level 4
+  "Indentation level for all major-modes.")
+
+(defvaralias 'standard-indent 'indent-level)
+#+END_SRC
+
 * Doom
 ** Core
 Don’t turn on =whitespace-mode= automatically.
@@ -274,6 +283,12 @@ Evil uses Vims undo increments by default, which are too coarse for me.
     (setq evil-want-fine-undo t
           ;; This seems to be broken.
           evil-indent-convert-tabs nil)))
+#+END_SRC
+
+Consolidate indentation.
+#+BEGIN_SRC emacs-lisp :tangle no
+(when! (featurep! :editor evil)
+  (defvaralias 'evil-shift-width 'indent-level))
 #+END_SRC
 
 Map the arrow keys in Evils window map.
@@ -484,6 +499,8 @@ This mode displays instances of =^L= (form feed) as horizontal lines.
     (and (looking-at "section") 0)))
 #+END_SRC
 
+*** TODO Indentation.
+
 ** C/C++
 *** TODO Code Style
 The default is =doom=.
@@ -560,10 +577,13 @@ These bindings are used by many modes with an inferior REPL.
 #+END_SRC
 
 ** Javascript
-The Javascript community widely uses two-space indentation,
-because JS can be deeply nested.
 #+BEGIN_SRC emacs-lisp
-(after! js (setq js-indent-level 2))
+(after! js
+  (defvaralias 'js-indent-level 'indent-level)
+  (setq-hook! 'js-mode-hook
+    indent-level 2
+    tab-width 2
+    indent-tabs-mode t))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -679,6 +699,15 @@ On Arch, the [[https://www.call-cc.org/][Chicken Scheme]] binaries are called =c
 #+END_SRC
 
 ** Lua
+#+BEGIN_SRC emacs-lisp
+(after! lua-mode
+  (defvaralias 'lua-indent-level 'indent-level)
+  (setq-hook! 'lua-mode-hook
+    indent-level 2
+    tab-width 2
+    indent-tabs-mode t))
+#+END_SRC
+
 Doom advises =newline-and-indent= to continue comments using the value of
 =comment-line-break-function=. The standard value is =comment-indent-new-line=,
 which is broken in Lua's multiline comments.
@@ -712,6 +741,15 @@ yet found a fix for this.
 #+END_SRC
 
 ** Moonscript
+#+BEGIN_SRC emacs-lisp
+(after! moonscript
+  (defvaralias 'moonscript-indent-offset 'indent-level)
+  (setq-hook! 'moonscript-mode-hook
+    indent-level 2
+    tab-width 2
+    indent-tabs-mode t))
+#+END_SRC
+
 Doom Emacs, annoyingly, sets =moonscript-indent-offset= to =tab-width= by default.
 #+BEGIN_SRC emacs-lisp
 (after! moonscript
@@ -775,25 +813,32 @@ Add =org-babel-map= to =:localleader=.
 #+END_SRC
 
 ** Pascal
-Three spaces seems to be the standard in the Pascal world.
 #+BEGIN_SRC emacs-lisp
-(defconst DEFAULT-PASCAL-INDENT 3
-  "Default indent level for all Pascal modes.")
-
 (after! pascal
-  (setq pascal-indent-level DEFAULT-PASCAL-INDENT
-        pascal-case-indent  DEFAULT-PASCAL-INDENT))
+  (defvaralias 'pascal-indent-level 'indent-level)
+  (defvaralias 'pascal-case-indent  'indent-level)
+  (setq-hook! 'pascal-mode-hook
+    indent-level 3
+    tab-width 3
+    indent-tabs-mode t))
+#+END_SRC
 
+#+BEGIN_SRC emacs-lisp
 (after! opascal
-  (setq opascal-indent-level      DEFAULT-PASCAL-INDENT
-        opascal-case-label-indent DEFAULT-PASCAL-INDENT))
+  (defvaralias 'opascal-indent-level 'indent-level)
+  (defvaralias 'opascal-case-indent  'indent-level)
+  (setq-hook! 'opascal-mode-hook
+    indent-level 3
+    tab-width 3
+    indent-tabs-mode t))
 #+END_SRC
 
 We have to remove ='company-capf= from =company-backends=, because completion
 would be unusable otherwise.
 #+BEGIN_SRC emacs-lisp
-(setq-hook! '(pascal-mode-hook opascal-mode-hook)
-  company-backends (remq 'company-capf company-backends))
+(after! (:or pascal opascal)
+  (setq-hook! '(pascal-mode-hook opascal-mode-hook)
+    company-backends (remq 'company-capf company-backends)))
 #+END_SRC
 
 *** ptop
@@ -809,14 +854,11 @@ important, because I have multiple configurations for multiple styles.
 Define =ptop-format-region= functions.
 #+BEGIN_SRC emacs-lisp
 (when! (featurep! :editor fmt)
-  (defvar ptop-formatter-indent DEFAULT-PASCAL-INDENT
-    "Indent level for `ptop-format-region'.")
-
   (formatter-define! ptop
     :program "ptop"
     :args
     `(,@(-some->> ptop-formatter-config (list "-c"))
-      "-i" ,(number-to-string (or ptop-formatter-indent standard-indent))
+      "-i" ,(number-to-string indent-level)
       "/dev/stdin" "/dev/stdout"))
 
   (setq-hook! '(pascal-mode-hook opascal-mode-hook)
@@ -826,27 +868,29 @@ Define =ptop-format-region= functions.
 ** Perl
 Set indentation to 4 in both Perl modes.
 #+BEGIN_SRC emacs-lisp
-(defconst DEFAULT-PERL-INDENT 4
-  "Default indentation level for all Perl modes.")
-
 (after! perl-mode
-  (setq perl-indent-level DEFAULT-PERL-INDENT))
+  (defvaralias 'perl-indent-level 'indent-level)
+  (setq-hook! 'perl-mode-hook
+    indent-level 4
+    tab-width 4
+    indent-tabs-mode t))
 
 (after! cperl-mode
-  (setq cperl-indent-level DEFAULT-PERL-INDENT))
+  (defvaralias 'cperl-indent-level 'indent-level)
+  (setq-hook! 'cperl-mode-hook
+    indent-level 4
+    tab-width 4
+    indent-tabs-mode t))
 #+END_SRC
 
 *** Perl::Tidy
 Define =perltidy-format-region= functions.
 #+BEGIN_SRC emacs-lisp
 (when! (featurep! :editor fmt)
-  (defvar perltidy-formatter-indent DEFAULT-PERL-INDENT
-    "Indent level for `perltidy-format-region'.")
-
   (formatter-define! perltidy
     :program "perltidy"
     :args
-    `("--indent-columns" ,(number-to-string perltidy-formatter-indent)
+    `("--indent-columns" ,(number-to-string indent-level)
      "--default-tabsize" ,(number-to-string tab-width)
      ,(if indent-tabs-mode "--tabs" "--notabs")
      "--standard-output" "--standard-error-output"))
@@ -864,12 +908,21 @@ This allows me to not load the entire =:lang php=.
 
 #+BEGIN_SRC emacs-lisp
 (when! (featurep! :editor fmt)
-  (setq-hook! 'php-mode-hook
-    +fmt-formatter #'prettier-format-region
-    prettier-formatter-indent c-basic-offset))
+  (after! php-mode
+    (setq-hook! 'php-mode-hook
+      +fmt-formatter #'prettier-format-region)))
 #+END_SRC
 
 ** Python
+#+BEGIN_SRC emacs-lisp
+(after! python
+  (defvaralias 'python-indent-offset 'indent-level)
+  (setq-hook! 'python-mode-hook
+    indent-level 4
+    tab-width 4
+    indent-tabs-mode nil))
+#+END_SRC
+
 #+BEGIN_SRC emacs-lisp
 (after! (python which-key)
   (which-key-add-major-mode-key-based-replacements 'python-mode
@@ -972,7 +1025,7 @@ Bind =indent-region=.
       :desc "Indent buffer/region" "i" #'indent-region
       ;; We need to move this out of the way.
       (:when (featurep! :tools lsp)
-       :desc "LSP Organize Imports" "I" #'lsp-organize-imports))
+       :desc "LSP Organize imports" "I" #'lsp-organize-imports))
 #+END_SRC
 
 Bind mnemonics for =git add=.
@@ -982,4 +1035,11 @@ Bind mnemonics for =git add=.
        :desc "Git add hunk" "a" #'git-gutter:stage-hunk)
       (:when (featurep! :tools magit)
        :desc "Git add file" "A" #'magit-stage-file))
+#+END_SRC
+
+
+Bind =auto-fill-mode=.
+#+BEGIN_SRC emacs-lisp
+(map! :leader :prefix "t"
+      :desc "Hard line wrapping" "W" #'auto-fill-mode)
 #+END_SRC
