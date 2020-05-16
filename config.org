@@ -295,27 +295,6 @@ Map the arrow keys in Evils window map.
       "C-l"       nil)
 #+END_SRC
 
-Put =evil-snipe-repeat= on Comma and Shift-Comma.
-#+BEGIN_SRC emacs-lisp
-(map! :when (featurep! :editor evil)
-      :after evil
-      :map evil-snipe-parent-transient-map
-      "," #'evil-snipe-repeat
-      "–" #'evil-snipe-repeat-reverse
-      ";" nil)
-#+END_SRC
-
-I don't like my games to use Vim keys.
-#+BEGIN_SRC emacs-lisp
-(when! (featurep! :editor evil +everywhere)
-  (setq +evil-collection-disabled-list
-        '(anaconda-mode buff-menu comint company custom eldoc elisp-mode ert
-          free-keys help helm image kotlin-mode occur package-menu ruby-mode
-          simple slime lispy
-          ;; Personal additions
-          tetris 2084-game)))
-#+END_SRC
-
 Remap the document scroll motions to something more sensible.
 #+BEGIN_SRC emacs-lisp
 (map! :when (featurep! :editor evil)
@@ -330,7 +309,19 @@ Remap the document scroll motions to something more sensible.
       :m "z S-<left>" #'evil-scroll-left)
 #+END_SRC
 
-*** Evil Numbers
+*** Collection
+I don't like my games to use Vim keys.
+#+BEGIN_SRC emacs-lisp
+(when! (featurep! :editor evil +everywhere)
+  (setq +evil-collection-disabled-list
+        '(anaconda-mode buff-menu comint company custom eldoc elisp-mode ert
+          free-keys help helm image kotlin-mode occur package-menu ruby-mode
+          simple slime lispy
+          ;; Personal additions
+          tetris 2084-game)))
+#+END_SRC
+
+*** Numbers
 Remap the =inc-at-pt= functions, so =z == can be used for formatting.
 #+BEGIN_SRC emacs-lisp
 (map! :when (featurep! :editor evil)
@@ -341,7 +332,18 @@ Remap the =inc-at-pt= functions, so =z == can be used for formatting.
       :v "z -" #'evil-numbers/dec-at-pt-incremental)
 #+END_SRC
 
-*** Evil Org
+*** Snipe
+Put =evil-snipe-repeat= on Comma and Shift-Comma.
+#+BEGIN_SRC emacs-lisp
+(map! :when (featurep! :editor evil)
+      :after evil
+      :map evil-snipe-parent-transient-map
+      "," #'evil-snipe-repeat
+      "–" #'evil-snipe-repeat-reverse
+      ";" nil)
+#+END_SRC
+
+*** Org
 Doom Emacs changes =org-cycle= to skip the =subtree= stage by default when
 =(featurep! :editor evil +everywhere)=.
 #+BEGIN_SRC emacs-lisp
