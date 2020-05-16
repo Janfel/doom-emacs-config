@@ -214,6 +214,7 @@ Make the =block= cursor stretch to highlight tab characters.
 (setq x-stretch-cursor t)
 #+END_SRC
 
+** Indentation
 Disable tab insertion by default.
 #+BEGIN_SRC emacs-lisp
 (setq-default indent-tabs-mode nil)
@@ -231,6 +232,19 @@ This consolidates indentation into one single variable.
   "Indentation level for all major-modes.")
 
 (defvaralias 'standard-indent 'indent-level)
+#+END_SRC
+
+These functions have a tendency to insert tabs where they don’t belong.
+#+BEGIN_SRC emacs-lisp
+(defun disable-indent-tabs-mode-a (func &rest args)
+  "Call FUNC with ARGS with `indent-tabs-mode' bound to nil."
+  (let (indent-tabs-mode)
+    (apply func args)))
+
+(cl-dolist (fn '(align-areas
+                 indent-relative
+                 comment-indent))
+  (advice-add fn :around #'disable-indent-tabs-mode-a))
 #+END_SRC
 
 * Doom
