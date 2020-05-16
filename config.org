@@ -586,6 +586,13 @@ This mode displays instances of =^L= (form feed) as horizontal lines.
     (and (looking-at "section") 0)))
 #+END_SRC
 
+#+BEGIN_SRC emacs-lisp
+(after! asm-mode
+  (setq-hook! asm-mode
+    tab-width 8
+    indent-tabs-mode t))
+#+END_SRC
+
 *** TODO Indentation
 Define tabstops in =tab-stop-list= using =setq-hook!=.
 
