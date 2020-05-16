@@ -698,11 +698,17 @@ These values have to be set before =org-mode= is loaded.
           )))
 #+END_SRC
 
-Tweaking =org-cycle=.
+Tweak the behavior of =org-cycle=.
 #+BEGIN_SRC emacs-lisp
 (after! org
   (setq org-cycle-global-at-bob t
         org-cycle-include-plain-lists nil))
+#+END_SRC
+
+Hard wrap lines that go over =fill-column=.
+#+BEGIN_SRC emacs-lisp
+(add-hook! 'org-mode-hook #'auto-fill-mode)
+(add-hook! 'org-mode-hook (visual-line-mode -1))
 #+END_SRC
 
 Add =which-key= descriptions.
