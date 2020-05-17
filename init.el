@@ -50,7 +50,7 @@
        fold              ; (nigh) universal code folding
        ;;format            ;
        ;;(format +onsave)  ; automated prettiness
-       fmt               ; simple formatting framework by JFL
+       (fmt +define)     ; simple formatting framework by JFL
        ;;fmt
        ;;god               ; run Emacs commands without modifier keys
        ;;lispy             ; vim for lisp, for people who don't like vim
