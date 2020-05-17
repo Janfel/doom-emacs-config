@@ -1,8 +1,10 @@
 ;;; ~/.config/doom-emacs/autoload/fmt-prettier.el -*- lexical-binding: t; -*-
 ;;;###if (featurep! :editor fmt +define)
-;;; TODO: Rewrite to use custom functions.
 
-(defvar prettier-format-parser-alist
+(defvar-local prettier-format-parser nil
+  "The parser that Prettier should use.")
+
+(defvar prettier-format--parser-alist
   '((js-mode         . "babel")
     (js2-mode        . "babel")
     (js3-mode        . "babel")
@@ -26,9 +28,6 @@
       ;; TODO: Use --cursor-offset --range-start --range-end.
       ,@(-some->> buffer-file-name (list "--stdin-filepath"))
       ,@(when indent-tabs-mode '("--use-tabs"))
-      ,@(-some->> prettier-format-parser (list "--parser"))
-      ,@(when (and (not prettier-format-parser)
-                   (not buffer-file-name))
-          (-some->> (or (alist-get major-mode prettier-format-parser-alist)
-                        "babel")
-            (list "--parser")))))
+      ,@(-some->> (or prettier-format-parser
+                      (alist-get major-mode prettier-format--parser-alist))
+          (list "--parser"))))
