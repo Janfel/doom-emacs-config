@@ -23,6 +23,3 @@
   (package! company-quickhelp)
   ;; Python completion using company and jedi.
   (package! company-jedi))
-
-;; Reformatter for use with :editor/fmt.
-(when (featurep! :editor fmt) (package! reformatter))

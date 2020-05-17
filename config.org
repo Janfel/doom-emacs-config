@@ -66,7 +66,6 @@ without lengthy invocation of =getenv=.
   "The value of $XDG_DATA_HOME where programs store data.")
 #+END_SRC
 
-These constants describe the features each of my systems has.
 #+BEGIN_SRC emacs-lisp
 (defconst SYSTEM
   (let ((sysname (system-name)))
@@ -74,10 +73,6 @@ These constants describe the features each of my systems has.
           ((string= sysname "TeslaJFL")   'Tesla)
           (t 'other)))
   "Which system are we running on?")
-
-(defconst BLACK-FORMATTER-IS-PATCHED
-  (eq SYSTEM 'Phantom)
-  "Does this system have a patched Black?")
 #+END_SRC
 
 I redefine the operating system constants of Doom Emacs to give them docstrings.
@@ -120,77 +115,6 @@ BUFFER is only evaluated once."
 (defmacro push! (place &rest values)
   "Push VALUES into PLACE."
   `(setf ,place (append (list ,@values) ,place)))
-#+END_SRC
-
-** Formatters
-*** Black
-#+BEGIN_SRC emacs-lisp
-(when (and (not BLACK-FORMATTER-IS-PATCHED) (featurep! :editor fmt))
-  (use-package! format-all :commands (format-all--buffer-extension-p))
-
-  (formatter-define! black
-    :program "black"
-    :args
-    `(,@(when (format-all--buffer-extension-p "pyi") (list "--pyi"))
-      "-q" "-")))
-#+END_SRC
-
-*** Black (Patched)
-This extends the =black= formatter with the ability to recognize =indent-tabs-mode=.
-*This only works with a patched black!*
-#+BEGIN_SRC emacs-lisp
-(when (and BLACK-FORMATTER-IS-PATCHED (featurep! :editor fmt))
-  (use-package! format-all :commands (format-all--buffer-extension-p))
-
-  (formatter-define! black
-    :program "black"
-    :args
-    `(,@(when indent-tabs-mode (list "-T"))
-      ,@(when (format-all--buffer-extension-p "pyi") (list "--pyi"))
-      "-q" "-")))
-#+END_SRC
-
-*** Perl::Tidy
-#+BEGIN_SRC emacs-lisp
-(when! (featurep! :editor fmt)
-  (formatter-define! perltidy
-    :program "perltidy"
-    :args
-    `("--indent-columns" ,(number-to-string indent-level)
-     "--default-tabsize" ,(number-to-string tab-width)
-     ,(if indent-tabs-mode "--tabs" "--notabs")
-     "--standard-output" "--standard-error-output")))
-#+END_SRC
-
-*** Prettier
-#+BEGIN_SRC emacs-lisp
-(when! (featurep! :editor fmt)
-  (defvar prettier-formatter-indent standard-indent
-    "Indent level for `prettier-format-region'.")
-
-  (formatter-define! prettier
-    :program "prettier"
-    :args
-    `("--tab-width" ,(number-to-string prettier-formatter-indent)
-      ,@(when indent-tabs-mode '("--use-tabs")))))
-#+END_SRC
-
-*** PTOP
-The variable =ptop-formatter-config= describes where the =ptop= configuration
-file is stored. This is important, because I have multiple configurations for
-multiple styles.
-#+BEGIN_SRC emacs-lisp
-(when! (featurep! :editor fmt)
-  (defvar ptop-formatter-config
-    (expand-file-name "pascal/ptop.cfg" XDG-CONFIG-HOME)
-    "The configuration file for `ptop-format-region'.")
-
-  (formatter-define! ptop
-    :program "ptop"
-    :args
-    `(,@(-some->> ptop-formatter-config (list "-c"))
-      "-i" ,(number-to-string indent-level)
-      "/dev/stdin" "/dev/stdout")))
 #+END_SRC
 
 * Emacs
