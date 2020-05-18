@@ -663,6 +663,13 @@ A common hook for all lisp modes.
   #'lisp-mode-common-hook)
 #+END_SRC
 
+Improve the comment insertion of =comment-dwim=.
+#+BEGIN_SRC emacs-lisp
+(setq-hook! 'lisp-mode-common-hook
+  comment-start "; "
+  comment-start-skip ";+\\s-*")
+#+END_SRC
+
 Formatting for all Lisp modes.
 #+BEGIN_SRC emacs-lisp
 (when! (featurep! :editor fmt)
