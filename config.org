@@ -150,15 +150,10 @@ This consolidates indentation into one single variable.
 
 These functions have a tendency to insert tabs where they don’t belong.
 #+BEGIN_SRC emacs-lisp
-(defun disable-indent-tabs-mode-a (func &rest args)
-  "Call FUNC with ARGS with `indent-tabs-mode' bound to nil."
-  (let (indent-tabs-mode)
-    (apply func args)))
-
-(cl-dolist (fn '(align-areas
-                 indent-relative
-                 comment-indent))
-  (advice-add fn :around #'disable-indent-tabs-mode-a))
+(defadvice! config--disable-indent-tabs-mode-a (orig-fn &rest args)
+  "Let `indent-tabs-mode' be bound to nil."
+  :around '(align-areas indent-relative comment-indent)
+  (let (indent-tabs-mode) (apply orig-fn args)))
 #+END_SRC
 
 * Doom
@@ -494,9 +489,9 @@ This mode displays instances of =^L= (form feed) as horizontal lines.
 ** Assembler
 #+BEGIN_SRC emacs-lisp
 (after! asm-mode
-  (define-advice asm-calculate-indentation
-      (:before-until (&rest _) indent-section)
-    "Indent the section keyword correctly."
+  (defadvice! config--add-asm-mode-indentation-rules-a (&rest _)
+    "Add rule clauses to `asm-calculate-indentation'."
+    :before-until #'asm-calculate-indentation
     (and (looking-at "section") 0)))
 #+END_SRC
 
