@@ -750,6 +750,11 @@ yet found a fix for this.
     (setq company-lua-interpreter 'lua53)))
 #+END_SRC
 
+#+BEGIN_SRC emacs-lisp
+(when! (featurep! :editor fmt)
+  (setq-hook! 'lua-mode-hook +fmt-formatter #'luaformatter-format-region))
+#+END_SRC
+
 ** Moonscript
 #+BEGIN_SRC emacs-lisp
 (after! moonscript
