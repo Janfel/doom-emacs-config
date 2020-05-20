@@ -755,6 +755,8 @@ yet found a fix for this.
   (setq-hook! 'lua-mode-hook +fmt-formatter #'luaformatter-format-region))
 #+END_SRC
 
+*** TODO Make Emacs not ignore =.lua-format= files.
+
 ** Moonscript
 We are currently limited by =moonscript-indent-line=, which doesn’t
 respect =indent-tabs-mode=.
