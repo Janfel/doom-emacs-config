@@ -756,13 +756,15 @@ yet found a fix for this.
 #+END_SRC
 
 ** Moonscript
+We are currently limited by =moonscript-indent-line=, which doesn’t
+respect =indent-tabs-mode=.
 #+BEGIN_SRC emacs-lisp
 (after! moonscript
   (defvaralias 'moonscript-indent-offset 'indent-level)
   (setq-hook! 'moonscript-mode-hook
     indent-level 2
-    tab-width 2
-    indent-tabs-mode t))
+    tab-width 8
+    indent-tabs-mode nil))
 #+END_SRC
 
 Doom Emacs, annoyingly, sets =moonscript-indent-offset= to =tab-width= by default.
