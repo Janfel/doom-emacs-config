@@ -345,7 +345,8 @@ Remap the =inc-at-pt= functions, so =z == can be used for formatting.
 
 *** Snipe
 Put =evil-snipe-repeat= on Comma and Shift-Comma.
-#+BEGIN_SRC emacs-lisp
+Doesn't seem to work due to keymap precedences.
+#+BEGIN_SRC emacs-lisp :tangle no
 (map! :when (featurep! :editor evil)
       :after evil
       :map evil-snipe-parent-transient-map
