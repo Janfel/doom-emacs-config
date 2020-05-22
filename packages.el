@@ -8,6 +8,9 @@
 
 ;; Major mode for the Meson build system for C/C++.
 (package! meson-mode)
+;; My own verson of `moonscript-mode'.
+(package! moonscript :recipe (:host github :repo "Janfel/moonscript-mode"))
+;;(package! moonscript :recipe (:local-repo "/home/janfel/src/elisp/moonscript-mode"))
 ;; Major mode for simple PHP editing.
 (unless (featurep! :lang php) (package! php-mode))
 
