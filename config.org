@@ -664,6 +664,7 @@ A common hook for all lisp modes.
    lisp-mode-hook
    lisp-interaction-mode-hook
    emacs-lisp-mode-hook
+   fennel-mode-hook
    scheme-mode-hook)
  #'lisp-mode-common-hook)
 #+END_SRC
