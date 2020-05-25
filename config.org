@@ -160,7 +160,11 @@ These functions have a tendency to insert tabs where they don’t belong.
 ** Core
 Don’t turn on =whitespace-mode= automatically.
 #+BEGIN_SRC emacs-lisp
-(remove-hook 'after-change-major-mode-hook #'doom-highlight-non-default-indentation-h)
+(defadvice! doom--disable-automatic-whitespace-mode-a (&rest _)
+  "Don’t turn on `whitespace-mode' on startup."
+  :after #'doom-init-ui-h
+  (remove-hook 'after-change-major-mode-hook
+               #'doom-highlight-non-default-indentation-h))
 #+END_SRC
 
 
