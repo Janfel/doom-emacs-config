@@ -477,6 +477,18 @@ chokes on an empty undo list and interrupts us with constant errors.
 
 
 ** Misc
+The package [[https://github.com/DarthFennec/highlight-indent-guides][highlight-indent-guides]] draws a line for each indentation level.
+#+BEGIN_SRC emacs-lisp
+(use-package! highlight-indent-guides
+  ;; Maybe change this to mode-by-mode basis.
+  :hook (prog-mode . highlight-indent-guides-mode)
+  :config
+  (setq highlight-indent-guides-method 'bitmap
+        highlight-indent-guides-bitmap-function
+        #'highlight-indent-guides--bitmap-line
+        highlight-indent-guides-responsive 'top))
+#+END_SRC
+
 These functions delete all whitespace up to the next non-whitespace character.
 #+BEGIN_SRC emacs-lisp
 (use-package! hungry-delete

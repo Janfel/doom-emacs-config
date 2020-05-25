@@ -18,6 +18,8 @@
 (package! evil-escape :disable t)
 ;; Display ^L form-feed as horizontal line.
 (package! form-feed)
+;; Display each indentation level.
+(package! highlight-indent-guides)
 ;; Delete all whitespace in front of point.
 (package! hungry-delete)
 
