@@ -160,7 +160,7 @@ These functions have a tendency to insert tabs where they don’t belong.
 ** Core
 Don’t turn on =whitespace-mode= automatically.
 #+BEGIN_SRC emacs-lisp
-(defadvice! doom--disable-automatic-whitespace-mode-a (&rest _)
+(defadvice! config--disable-automatic-whitespace-mode-a (&rest _)
   "Don’t turn on `whitespace-mode' on startup."
   :after #'doom-init-ui-h
   (remove-hook 'after-change-major-mode-hook
@@ -799,11 +799,11 @@ These values have to be set before =org-mode= is loaded.
           )))
 #+END_SRC
 
-Tweak the behavior of =org-cycle=.
 #+BEGIN_SRC emacs-lisp
 (after! org
   (setq org-cycle-global-at-bob t
-        org-cycle-include-plain-lists nil))
+        org-cycle-include-plain-lists nil
+        org-startup-folded t))
 #+END_SRC
 
 Hard wrap lines that go over =fill-column=.
