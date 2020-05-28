@@ -40,27 +40,42 @@ Require =reformatter= so it can be used to define formatting functions.
 #+END_SRC
 
 * Definitions
+
+#+BEGIN_SRC emacs-lisp
+(defun string-or (&rest strings)
+  "Return the first non-nil and non-empty string in STRINGS."
+  (cl-dolist (s strings)
+    (when (and s (not (string-empty-p s)))
+      (cl-return s))))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(defmacro push! (place &rest values)
+  "Push VALUES into PLACE."
+  `(setf ,place (append (list ,@values) ,place)))
+#+END_SRC
+
 ** Constants
 These constants allow me to use the correct directories everywhere,
 without lengthy invocation of =getenv=.
 #+BEGIN_SRC emacs-lisp
 (defconst XDG-CACHE-HOME
   (-> (getenv "XDG_CACHE_HOME")
-      (or "~/.cache/")
+      (string-or "~/.cache/")
       (file-name-as-directory)
       (expand-file-name))
   "The value of $XDG_CACHE_HOME where programs place cache files.")
 
 (defconst XDG-CONFIG-HOME
   (-> (getenv "XDG_CONFIG_HOME")
-      (or "~/.config/")
+      (string-or "~/.config/")
       (file-name-as-directory)
       (expand-file-name))
   "The value of $XDG_CONFIG_HOME where programs place configuration files.")
 
 (defconst XDG-DATA-HOME
   (-> (getenv "XDG_DATA_HOME")
-      (or "~/.local/share/")
+      (string-or "~/.local/share/")
       (file-name-as-directory)
       (expand-file-name))
   "The value of $XDG_DATA_HOME where programs store data.")
@@ -109,12 +124,6 @@ BUFFER is only evaluated once."
               `(,sym (buffer-local-value (quote ,val) ,buffer)))
             varlist))
      body)))
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-(defmacro push! (place &rest values)
-  "Push VALUES into PLACE."
-  `(setf ,place (append (list ,@values) ,place)))
 #+END_SRC
 
 * Emacs
