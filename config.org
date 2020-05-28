@@ -452,6 +452,27 @@ This hack removes a problematic popup rule.
   (after! vterm (alist-get "^vterm" +popup--display-buffer-alist nil 'remove)))
 #+END_SRC
 
+VTerm doesn’t recognize any keypad keys for some reason. This advice translates
+the keypad keycodes into the corresponding keyboard keycodes.
+#+BEGIN_SRC emacs-lisp
+(when (featurep! :term vterm)
+  (defadvice! config--vterm-add-keypad-keys-a (args)
+    "Make `vterm' recognize `<kp-*>' sequences by translating them."
+    :filter-args #'vterm-send-key
+    (let ((key (car args)))
+      (when (string-prefix-p "<kp-" key)
+        (setq key (substring key 4 -1))
+        (when (> (length key) 1)
+          (setq key (cond ((string= key "add"      ) "+")
+                          ((string= key "subtract" ) "-")
+                          ((string= key "multiply" ) "*")
+                          ((string= key "divide"   ) "/")
+                          ((string= key "separator") ",")
+                          (t key))))
+        (setf (car args) key))
+      args)))
+#+END_SRC
+
 ** Yasnippet
 #+BEGIN_SRC emacs-lisp
 (when! (featurep! :editor snippets)
