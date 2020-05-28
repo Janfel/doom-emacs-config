@@ -333,7 +333,7 @@ I don't like my games to use Vim keys.
           free-keys help helm image kotlin-mode occur package-menu ruby-mode
           simple slime lispy
           ;; Personal additions
-          tetris 2084-game)))
+          tetris 2084-game haskell-error-mode)))
 #+END_SRC
 
 *** Numbers

@@ -16,6 +16,8 @@
 
 ;; Disable escaping insert state when typing too fast.
 (package! evil-escape :disable t)
+;; Unpin flycheck. The version Doom currently ships is broken for HLint.
+(package! flycheck :pin nil)
 ;; Display ^L form-feed as horizontal line.
 (package! form-feed)
 ;; Display each indentation level.
