@@ -481,7 +481,7 @@ The package [[https://github.com/DarthFennec/highlight-indent-guides][highlight-
 #+BEGIN_SRC emacs-lisp
 (use-package! highlight-indent-guides
   ;; Maybe change this to mode-by-mode basis.
-  :hook (prog-mode . highlight-indent-guides-mode)
+  :commands (highlight-indent-guides-mode)
   :config
   (setq highlight-indent-guides-method 'bitmap
         highlight-indent-guides-bitmap-function
