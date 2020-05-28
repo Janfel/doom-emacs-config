@@ -445,6 +445,13 @@ chokes on an empty undo list and interrupts us with constant errors.
   (setq undo-tree-auto-save-history nil))
 #+END_SRC
 
+** VTerm
+This hack removes a problematic popup rule.
+#+BEGIN_SRC emacs-lisp
+(when (featurep! :term vterm)
+  (after! vterm (alist-get "^vterm" +popup--display-buffer-alist nil 'remove)))
+#+END_SRC
+
 ** Yasnippet
 #+BEGIN_SRC emacs-lisp
 (when! (featurep! :editor snippets)
