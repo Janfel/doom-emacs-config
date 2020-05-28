@@ -597,6 +597,30 @@ These bindings are used by many modes with an inferior REPL.
       "C-c C-z" #'haskell-interactive-switch)
 #+END_SRC
 
+#+BEGIN_SRC emacs-lisp
+(when! (featurep! :checkers syntax)
+  (add-hook 'haskell-mode-hook #'flycheck-mode))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(when! (featurep! :lang haskell +dante)
+  (add-hook 'haskell-mode-hook #'dante-mode))
+#+END_SRC
+
+Flycheck raises a "Suspicious State" error when the linter exits with a nonzero
+error code. Using =--no-exit-code= prevents this.
+#+BEGIN_SRC emacs-lisp
+(when! (featurep! :checkers syntax)
+  (setq flycheck-hlint-args '("--no-exit-code")))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(when! (and (featurep! :checkers syntax)
+            (featurep! :lang haskell +dante))
+  (after! (dante flycheck)
+    (flycheck-add-next-checker 'haskell-dante '(warning . haskell-hlint))))
+#+END_SRC
+
 ** Javascript
 #+BEGIN_SRC emacs-lisp
 (after! js
