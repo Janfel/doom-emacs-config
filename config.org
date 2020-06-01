@@ -960,6 +960,26 @@ The package will load when =company-jedi= is invoked by =company=.
   :config (set-company-backend! 'python-mode 'company-jedi))
 #+END_SRC
 
+** Rust
+#+BEGIN_SRC emacs-lisp
+(after! rustic
+  (defvaralias 'rustic-indent-offset 'indent-level)
+  (setq-hook! '(rustic-mode-hook rustic-macro-expansion-mode-hook)
+    indent-level 4
+    tab-width 4
+    ;; Change this when `rustic-format-buffer' becomes configurable.
+    indent-tabs-mode nil
+    +fmt-formatter #'rustic-format-buffer))
+#+END_SRC
+
+The [[https://github.com/rust-analyzer/rust-analyzer][rust-analyzer]] is an experimental language server and is to become
+the successor to RLS.
+#+BEGIN_SRC emacs-lisp
+(after! rustic
+  (when (executable-find "rust-analyzer")
+    (setq rustic-lsp-server 'rust-analyzer)))
+#+END_SRC
+
 * Keybindings
 Bind ~sp-raise-sexp~, which I use quite often.
 #+BEGIN_SRC emacs-lisp
