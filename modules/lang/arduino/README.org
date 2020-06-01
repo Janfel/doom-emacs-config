@@ -1,0 +1,49 @@
+#+TITLE:   lang/arduino
+#+DATE:    Juni 1, 2020
+#+SINCE:   v2.0.10
+#+STARTUP: inlineimages nofold
+
+* Table of Contents :TOC_3:noexport:
+- [[#description][Description]]
+  - [[#maintainers][Maintainers]]
+  - [[#module-flags][Module Flags]]
+  - [[#plugins][Plugins]]
+- [[#prerequisites][Prerequisites]]
+- [[#features][Features]]
+  - [[#keybindings][Keybindings]]
+
+* Description
+This module adds support for Arduino programming.
+
++ If possible, include a brief list of feature highlights here
++ Like code completion, syntax checking or available snippets
++ Include links to packages & external things where possible
+
++ Syntax Highlighting
++ Interactive Uploading
+
+** Maintainers
++ [[https://github.com/Janfel][@Janfel]] (Author)
+
+** Module Flags
+This module provides no flags.
+
+** Plugins
++ [[https://github.com/stardiviner/arduino-mode][arduino-mode]]
+
+* Prerequisites
+You need to install the [[https://www.arduino.cc][Arduino SDK]] to compile and upload sketches.
+
+* Features
+# An in-depth list of features, how to use them, and their dependencies.
+
+** Keybindings
+
+| Binding           | Description         |
+|-------------------+---------------------|
+| ~<localleader> n~ | Create New Sketch   |
+| ~<localleader> c~ | Compile Sketch      |
+| ~<localleader> u~ | Upload Sketch       |
+| ~<localleader> s~ | Open Serial Monitor |
+| ~<localleader> r~ | Reset Arduino       |
+
