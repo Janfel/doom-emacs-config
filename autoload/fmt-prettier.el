@@ -29,5 +29,5 @@
       ,@(-some->> buffer-file-name (list "--stdin-filepath"))
       ,@(when indent-tabs-mode '("--use-tabs"))
       ,@(-some->> (or prettier-format-parser
-                      (alist-get major-mode prettier-format--parser-alist))
+                      (assq major-mode prettier-format--parser-alist))
           (list "--parser"))))
