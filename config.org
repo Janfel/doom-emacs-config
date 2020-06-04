@@ -161,14 +161,28 @@ Here I replace the default formatting function with my own.
 #+END_SRC
 
 ** Fold
-Map opening and closing all folds to Shift combinations.
+Completely remap the ~+fold~ commands, making use of =h= as a prefix.
 This frees up =z r= =z m=.
 #+BEGIN_SRC emacs-lisp
 (map! :when (and (featurep! :editor evil)
                  (featurep! :editor fold))
-      :n "z O" #'+fold/open-all
-      :n "z C" #'+fold/close-all)
+      :n "z O"  #'+fold/open-all
+      :n "z C"  #'+fold/close-all
+
+      :mn "h" nil
+      :n "h h"  #'+fold/toggle
+      :n "h t"  #'+fold/toggle
+      :n "h a"  #'+fold/toggle
+      :n "h o"  #'+fold/open
+      :n "h O"  #'+fold/open-all
+      :n "h c"  #'+fold/close
+      :n "h C"  #'+fold/close-all
+      :m "h n" #'+fold/next
+      :m "h p" #'+fold/previous)
 #+END_SRC
+
+#+RESULTS:
+
 ** Popup
 #+BEGIN_SRC emacs-lisp
 (set-popup-rule! "^\\*Shell Command Output\\*$" :quit t)
