@@ -1002,12 +1002,14 @@ Make the indentation inside of comments respect ~nxml-child-indent~.
   (defadvice! +nxml--indent-correctly-inside-comments-a
     (orig-fn pos open-delim close-delim)
     :around #'nxml-compute-indent-in-delimited-token
-    (let ((old-indent (funcall orig-fn pos open-delim close-delim))
-          (delims (concat open-delim " " close-delim)))
-      (if (not (string= "<!-- -->" delims))
-          old-indent
+    (let ((indent (funcall orig-fn pos open-delim close-delim)))
+      (when (and (string= "<!--" open-delim) (string= "-->" close-delim)
+                 (progn (goto-char pos)
+                        (back-to-indentation)
+                        (not (looking-at-p "-->"))))
         (goto-char xmltok-start)
-        (+ (current-column) nxml-child-indent)))))
+        (setq indent (+ (current-column) nxml-child-indent)))
+      indent)))
 #+END_SRC
 
 Replace the original ~nxml-mode~ rules with ones that aren’t broken.
