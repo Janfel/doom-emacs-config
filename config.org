@@ -467,7 +467,8 @@ chokes on an empty undo list and interrupts us with constant errors.
 This hack removes a problematic popup rule.
 #+BEGIN_SRC emacs-lisp
 (when (featurep! :term vterm)
-  (after! vterm (assoc-delete-all "^vterm")))
+  (after! vterm
+    (setq display-buffer-alist (assoc-delete-all "^vterm" display-buffer-alist))))
 #+END_SRC
 
 VTerm doesn’t recognize any keypad keys for some reason. This advice translates
