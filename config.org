@@ -853,6 +853,12 @@ These values have to be set before =org-mode= is loaded.
   (add-hook! 'org-mode-hook (show-smartparens-mode -1)))
 #+END_SRC
 
+#+BEGIN_SRC emacs-lisp
+(after! (org smartparens)
+  (sp-with-modes '(org-mode)
+    (sp-local-pair "~" "~")))
+#+END_SRC
+
 Add =which-key= descriptions.
 #+BEGIN_SRC emacs-lisp
 (after! (org which-key)
