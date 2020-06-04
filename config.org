@@ -820,7 +820,7 @@ Doom Emacs, annoyingly, sets =moonscript-indent-offset= to =tab-width= by defaul
 These values have to be set before =org-mode= is loaded.
 #+BEGIN_SRC emacs-lisp
 (unless (memq 'org doom-disabled-packages)
-  (setq org-directory (expand-file-name "~/docs/org")
+  (setq org-directory (expand-file-name "~/text/org/")
         org-modules
         '(;; ol-w3m
           ;; ol-bbdb
