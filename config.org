@@ -169,6 +169,10 @@ This frees up =z r= =z m=.
       :n "z O" #'+fold/open-all
       :n "z C" #'+fold/close-all)
 #+END_SRC
+** Popup
+#+BEGIN_SRC emacs-lisp
+(set-popup-rule! "^\\*Shell Command Output\\*$" :quit t)
+#+END_SRC
 
 * Packages
 ** Emacs
