@@ -990,6 +990,39 @@ the successor to RLS.
     (setq rustic-lsp-server 'rust-analyzer)))
 #+END_SRC
 
+** XML
+Disable ~smartparens-mode~ because it it kind of useless in ~nxml-mode~.
+#+BEGIN_SRC emacs-lisp
+(after! nxml-mode (add-hook! 'nxml-mode-hook (smartparens-mode -1)))
+#+END_SRC
+
+Make the indentation inside of comments respect ~nxml-child-indent~.
+#+BEGIN_SRC emacs-lisp
+(after! nxml-mode
+  (defadvice! +nxml--indent-correctly-inside-comments-a
+    (orig-fn pos open-delim close-delim)
+    :around #'nxml-compute-indent-in-delimited-token
+    (let ((old-indent (funcall orig-fn pos open-delim close-delim))
+          (delims (concat open-delim " " close-delim)))
+      (if (not (string= "<!-- -->" delims))
+          old-indent
+        (goto-char xmltok-start)
+        (+ (current-column) nxml-child-indent)))))
+#+END_SRC
+
+Replace the original ~nxml-mode~ rules with ones that aren’t broken.
+#+BEGIN_SRC emacs-lisp
+(after! (nxml-mode hideshow)
+  (assq-delete-all 'nxml-mode hs-special-modes-alist)
+  (push! hs-special-modes-alist
+         '(nxml-mode
+           "<!--\\|<[^/>?][^>]*[^/]>"
+           "-->\\|</[^>]*[^/]>"
+           "<!--"
+           sgml-skip-tag-forward
+           nil)))
+#+END_SRC
+
 * Keybindings
 Bind ~sp-raise-sexp~, which I use quite often.
 #+BEGIN_SRC emacs-lisp
