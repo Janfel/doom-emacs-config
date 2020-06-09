@@ -1005,6 +1005,17 @@ the successor to RLS.
     (setq rustic-lsp-server 'rust-analyzer)))
 #+END_SRC
 
+#+BEGIN_SRC emacs-lisp
+(after! rustic
+  (defadvice! +rust--rustfmt-respect-indent-tabs-mode-a (orig-fn &rest args)
+    "Make `rustic-format-buffer' respect `indent-tabs-mode'."
+    :around #'rustic-format-buffer
+    (let ((rustic-rustfmt-config-alist
+           (cons (cons 'hard_tabs indent-tabs-mode)
+                 rustic-rustfmt-config-alist)))
+      (apply orig-fn args))))
+#+END_SRC
+
 ** XML
 Disable ~smartparens-mode~ because it it kind of useless in ~nxml-mode~.
 #+BEGIN_SRC emacs-lisp
