@@ -300,6 +300,17 @@ In =snippet-mode=, whitespace has significant meaning.
 
 
 
+** Company
+
+*** Quickhelp
+#+BEGIN_SRC emacs-lisp
+(use-package! company-quickhelp
+  :when (featurep! :completion company)
+  :after company
+  :hook (company-mode-hook . company-quickhelp-local-mode)
+  :config (setq company-quickhelp-use-propertized-text nil))
+#+END_SRC
+
 ** Evil
 Evil uses Vims undo increments by default, which are too coarse for me.
 #+BEGIN_SRC emacs-lisp
