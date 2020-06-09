@@ -37,6 +37,31 @@ A modern list library inspired by Clojure.
 * Definitions
 ** Functions and Macros
 #+BEGIN_SRC emacs-lisp
+(defun comments-to-column (&optional column)
+  "Move any end-of-line comments to COLUMN or `comment-column'."
+  (interactive "*")
+  (let ((beg (if (doom-region-active-p)
+                 (doom-region-beginning)
+               (line-beginning-position)))
+        (end (if (doom-region-active-p)
+                 (doom-region-end)
+               (line-end-position)))
+        (column (or column comment-column)))
+    (save-excursion
+      (goto-char beg)
+      (beginning-of-line)
+      (while (< (point) end)
+        (when (looking-at ".*?\\s-\\(\\s<\\)\\(\\s-\\|$\\)")
+          (goto-char (match-beginning 1))
+          ;; Are we inside a string?
+          (unless (eq (get-char-property (1- (point)) 'face)
+                      'font-lock-string-face)
+            (indent-to column)))
+        (forward-line 1)
+        (beginning-of-line)))))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
 (defun string-or (&rest strings)
   "Return the first non-nil and non-empty string in STRINGS."
   (cl-dolist (s strings)
