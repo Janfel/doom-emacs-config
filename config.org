@@ -131,6 +131,11 @@ Don’t untabify when deleting a tab character.
 (setq backward-delete-char-untabify-method nil)
 #+END_SRC
 
+Move the ~customize~ blocks into =custom.el=.
+#+BEGIN_SRC emacs-lisp
+(setq custom-file (expand-file-name "custom.el" doom-private-dir))
+#+END_SRC
+
 Make the block cursor stretch to highlight tab characters.
 #+BEGIN_SRC emacs-lisp
 (setq x-stretch-cursor t)
