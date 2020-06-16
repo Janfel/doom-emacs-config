@@ -907,6 +907,7 @@ These values have to be set before =org-mode= is loaded.
 #+BEGIN_SRC emacs-lisp
 (after! (org smartparens)
   (sp-with-modes '(org-mode)
+    (sp-local-pair "=" "=")
     (sp-local-pair "~" "~")))
 #+END_SRC
 
