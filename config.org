@@ -212,6 +212,17 @@ This frees up =z r= =z m=.
 #+END_SRC
 
 #+RESULTS:
+** Literate
+#+BEGIN_SRC emacs-lisp
+(when (featurep! :config literate)
+  (defadvice! config--literate-async-compilation-a (&rest _)
+    "Compile config.org in a separate “doom tangle” process."
+    :override #'+literate-recompile-maybe-h
+    (when (and (eq major-mode 'org-mode)
+               (file-in-directory-p buffer-file-name doom-private-dir))
+      (message "Compiling your literate config...")
+      (start-process "proc" nil (expand-file-name "doom" doom-bin-dir) "tangle"))))
+#+END_SRC
 
 ** Popup
 #+BEGIN_SRC emacs-lisp
