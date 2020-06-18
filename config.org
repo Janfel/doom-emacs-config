@@ -670,6 +670,7 @@ These bindings are used by many modes with an inferior REPL.
 (map! :after haskell-mode
       :map haskell-mode-map
       "C-c C-c" #'haskell-process-load-file
+      "C-c C-k" #'haskell-process-load-file
       "C-c C-z" #'haskell-interactive-switch)
 #+END_SRC
 
