@@ -29,7 +29,7 @@ A modern list library inspired by Clojure.
 
 *** [[https://github.com/purcell/reformatter.el][reformatter.el
 ]]A library for creating formatting functions.
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
 (when (featurep! :editor fmt)
   (require 'reformatter))
 #+END_SRC
@@ -266,8 +266,8 @@ Treat ~info~ buffers as real buffers.
 #+END_SRC
 
 ** Doom
-These packages are used in the =:core= of Doom Emacs.
-That means we don't need =featurep!=.
+These packages are used in the ~:core~ of Doom Emacs.
+That means we don't need ~featurep!~.
 
 *** Helpful
 Some function definitions contain tab character that are
@@ -308,7 +308,7 @@ These are some default keybindings that are missing a description.
 #+END_SRC
 
 *** WS Butler
-In =snippet-mode=, whitespace has significant meaning.
+In ~snippet-mode~, whitespace has significant meaning.
 #+BEGIN_SRC emacs-lisp
 (after! ws-butler
   (push 'snippet-mode ws-butler-global-exempt-modes))
@@ -317,7 +317,6 @@ In =snippet-mode=, whitespace has significant meaning.
 
 
 ** Company
-
 *** Quickhelp
 #+BEGIN_SRC emacs-lisp
 (use-package! company-quickhelp
@@ -774,7 +773,7 @@ A common hook for all lisp modes.
  #'lisp-mode-common-hook)
 #+END_SRC
 
-Improve the comment insertion of =comment-dwim=.
+Improve the comment insertion of ~comment-dwim~.
 #+BEGIN_SRC emacs-lisp
 (setq-hook! 'lisp-mode-common-hook
   comment-start "; "
@@ -830,8 +829,8 @@ On Arch, the [[https://www.call-cc.org/][Chicken Scheme]] binaries are called =c
     +fmt-formatter #'luaformatter-format-region))
 #+END_SRC
 
-Doom advises =newline-and-indent= to continue comments using the value of
-=comment-line-break-function=. The standard value is =comment-indent-new-line=,
+Doom advises ~newline-and-indent~ to continue comments using the value of
+~comment-line-break-function~. The standard value is ~comment-indent-new-line~,
 which is broken in Lua's multiline comments.
 #+BEGIN_SRC emacs-lisp
 (after! lua-mode
@@ -852,20 +851,19 @@ which is broken in Lua's multiline comments.
     comment-line-break-function #'lua-comment-indent-new-line))
 #+END_SRC
 
-The advice =+default--delete-backward-char-a= to =backward-delete-char= behaves
-weirdly when deleting line comments inside of a multiline comment. I have not
-yet found a fix for this.
-
 #+BEGIN_SRC emacs-lisp
 (when (featurep! :completion company)
   (after! company-lua (setq company-lua-interpreter 'lua53)))
 #+END_SRC
 
-*** TODO Make Emacs not ignore =.lua-format= files.
+*** NOTE Comment deletion broken
+The advice ~+default--delete-backward-char-a~ to ~backward-delete-char~ behaves
+weirdly when deleting line comments inside of a multiline comment. I have not
+yet found a fix for this.
 
 ** Moonscript
-We are currently limited by =moonscript-indent-line=, which doesn’t
-respect =indent-tabs-mode=.
+We are currently limited by ~moonscript-indent-line~, which doesn’t
+respect ~indent-tabs-mode~.
 #+BEGIN_SRC emacs-lisp
 (after! moonscript
   (defvaralias 'moonscript-indent-offset 'indent-level)
@@ -875,7 +873,7 @@ respect =indent-tabs-mode=.
     indent-tabs-mode nil))
 #+END_SRC
 
-Doom Emacs, annoyingly, sets =moonscript-indent-offset= to =tab-width= by default.
+Doom Emacs, annoyingly, sets ~moonscript-indent-offset~ to ~tab-width~ by default.
 #+BEGIN_SRC emacs-lisp
 (after! moonscript
   (remove-hook
