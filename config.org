@@ -989,14 +989,19 @@ Set indentation to 4 in both Perl modes.
 #+END_SRC
 
 ** PHP
-This allows me to not load the entire =:lang php=.
+This allows me to not load the entire =:lang/php= module.
 #+BEGIN_SRC emacs-lisp
 (unless (featurep! :lang php) (use-package! php-mode :defer t))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
 (after! php-mode
-  (setq-hook! 'php-mode-hook +fmt-formatter #'prettier-format-region))
+  (defvaralias 'c-basic-offset 'indent-level)
+  (setq-hook! 'php-mode-hook
+    indent-level 4
+    tab-width 4
+    indent-tabs-mode t
+    +fmt-formatter #'prettier-format-region))
 #+END_SRC
 
 ** Python
