@@ -1043,8 +1043,7 @@ The package will load when =company-jedi= is invoked by =company=.
   (setq-hook! '(rustic-mode-hook rustic-macro-expansion-mode-hook)
     indent-level 4
     tab-width 4
-    ;; Change this when `rustic-format-buffer' becomes configurable.
-    indent-tabs-mode nil
+    indent-tabs-mode t
     +fmt-formatter #'rustic-format-buffer))
 #+END_SRC
 
