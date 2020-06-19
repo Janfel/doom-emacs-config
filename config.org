@@ -596,6 +596,17 @@ This mode displays instances of =^L= (form feed) as horizontal lines.
     indent-tabs-mode t))
 #+END_SRC
 
+** Basic
+#+BEGIN_SRC emacs-lisp
+(after! basic-mode
+  (defvaralias 'basic-indent-offset 'indent-level)
+  (setq-hook! 'basic-mode-hook
+    indent-level 4
+    tab-width 4
+    indent-tabs-mode t
+    +fmt-formatter #'basic-format-code))
+#+END_SRC
+
 ** C/C++
 *** TODO Code Style
 The default is =doom=.
