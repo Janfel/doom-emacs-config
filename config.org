@@ -493,17 +493,17 @@ Ivy should recurse into directories when pressing =RET=.
 #+END_SRC
 
 ** Smartparens
-This is currently broken, in that two closing
-delimiters are deleted instead of one.
-#+BEGIN_SRC emacs-lisp
-(when (featurep! :config default +smartparens)
-  (setq sp-autodelete-pair nil))
-#+END_SRC
-
-I activate ~show-smartparens-global-mode~ to highlight matching parens.
 #+BEGIN_SRC emacs-lisp
 (when (featurep! :config default +smartparens)
   (after! smartparens (show-smartparens-global-mode +1)))
+#+END_SRC
+
+*** WAIT Closing paren deleted twice ([[https://github.com/hlissner/doom-emacs/issues/3268][#3268]])
+This is currently broken, in that two closing delimiters are deleted instead of
+one. When the linked issue is resolved, this fix can be removed.
+#+BEGIN_SRC emacs-lisp
+(when (featurep! :config default +smartparens)
+  (setq sp-autodelete-pair nil))
 #+END_SRC
 
 ** Undo Tree
