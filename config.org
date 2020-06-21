@@ -733,6 +733,7 @@ error code. Using =--no-exit-code= prevents this.
 #+END_SRC
 
 ** TeX
+*** Preview
 Using =dvipng= is faster than =png= and is even recommended
 in the [[info:preview-latex#Requirements][manual]] of =preview-latex=.
 #+BEGIN_SRC emacs-lisp
@@ -740,14 +741,15 @@ in the [[info:preview-latex#Requirements][manual]] of =preview-latex=.
   (when (executable-find "dvipng") (setq preview-image-type 'dvipng)))
 #+END_SRC
 
+
 *** LaTeX
-Let Smartparens handle insertion of =$=.
-#+BEGIN_SRC emacs-lisp
-(map! :after tex-mode
-      :map LaTeX-mode-map
-      "$" nil)
+This doesn't seem to work.
+#+BEGIN_SRC emacs-lisp :tangle no
+(after! tex-mode
+  (add-hook 'LaTeX-mode-hook #'latex-electric-env-pair-mode))
 #+END_SRC
 
+**** Which Key
 #+BEGIN_SRC emacs-lisp
 (after! (tex-mode which-key)
   (which-key-add-major-mode-key-based-replacements 'latex-mode
@@ -758,10 +760,12 @@ Let Smartparens handle insertion of =$=.
     "C-c C-t"     "toggle"))
 #+END_SRC
 
-This doesn't seem to work.
-#+BEGIN_SRC emacs-lisp :tangle no
-(after! tex-mode
-  (add-hook 'LaTeX-mode-hook #'latex-electric-env-pair-mode))
+**** Smartparens
+Let Smartparens handle insertion of =$=.
+#+BEGIN_SRC emacs-lisp
+(map! :after tex-mode
+      :map LaTeX-mode-map
+      "$" nil)
 #+END_SRC
 
 Some Smartparens settings for LaTeX pairs.
