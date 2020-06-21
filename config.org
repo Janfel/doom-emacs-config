@@ -692,6 +692,16 @@ Major mode for the [[https://mesonbuild.com][Meson Build System]].
 #+END_SRC
 
 ** Haskell
+*** Dante
+#+BEGIN_SRC emacs-lisp
+(when (featurep! :lang haskell +dante)
+  (add-hook 'haskell-mode-hook #'dante-mode)
+  (when (featurep! :checkers syntax)
+    (after! (dante flycheck)
+      (flycheck-add-next-checker 'haskell-dante '(warning . haskell-hlint)))))
+#+END_SRC
+
+*** Keybindings
 These bindings are used by many modes with an inferior REPL.
 #+BEGIN_SRC emacs-lisp
 (map! :after haskell-mode
@@ -709,15 +719,6 @@ error code. Using =--no-exit-code= prevents this.
   (after! haskell-mode
     (add-hook 'haskell-mode-hook #'flycheck-mode)
     (setq flycheck-hlint-args '("--no-exit-code"))))
-#+END_SRC
-
-*** Dante
-#+BEGIN_SRC emacs-lisp
-(when (featurep! :lang haskell +dante)
-  (add-hook 'haskell-mode-hook #'dante-mode)
-  (when (featurep! :checkers syntax)
-    (after! (dante flycheck)
-      (flycheck-add-next-checker 'haskell-dante '(warning . haskell-hlint)))))
 #+END_SRC
 
 ** Javascript
