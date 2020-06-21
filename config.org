@@ -21,7 +21,6 @@ This header comment ensures that everything in this file is lexically scoped.
 #+END_SRC
 
 ** Requires
-
 *** [[https://github.com/magnars/dash.el][dash.el]]
 A modern list library inspired by Clojure.
 #+BEGIN_SRC emacs-lisp
@@ -378,14 +377,14 @@ Remap the document scroll motions to something more sensible.
 
 *** Collection
 I don't like my games to use Vim keys. This has to be so complicated because
-Doom loads =evil-collection= manually. The ~push!~ is executed right before
-~+evil-collection-init~ is first called.
+Doom loads =evil-collection= manually.
 #+BEGIN_SRC emacs-lisp
 (when (and (featurep! :editor evil +everywhere)
            doom-interactive-p
            (not doom-reloading-p)
            (not (memq 'evil-collection doom-disabled-packages)))
   (add-transient-hook! #'+evil-collection-init
+    ;; This runs right after `+evil-collection-init' is first called.
     (push! +evil-collection-disabled-list
            'tetris '2084-game 'haskell-error-mode)))
 #+END_SRC
@@ -397,8 +396,8 @@ Remap the ~inc-at-pt~ functions, so =z == can be used for formatting.
       :after evil-numbers
       :nv "g +" #'evil-numbers/inc-at-pt
       :nv "g -" #'evil-numbers/dec-at-pt
-      :v "z +" #'evil-numbers/inc-at-pt-incremental
-      :v "z -" #'evil-numbers/dec-at-pt-incremental)
+      :v  "z +" #'evil-numbers/inc-at-pt-incremental
+      :v  "z -" #'evil-numbers/dec-at-pt-incremental)
 #+END_SRC
 
 *** Snipe
@@ -414,7 +413,7 @@ Doesn’t seem to work due to keymap precedences.
 #+END_SRC
 
 *** Org
-Doom Emacs changes ~org-cycle~ to skip the ~'subtree~ stage by default when
+Doom Emacs changes ~org-cycle~ to skip the =subtree= stage by default when
 ~(featurep! :editor evil +everywhere)~.
 #+BEGIN_SRC emacs-lisp
 (when! (featurep! :editor evil +everywhere)
@@ -460,12 +459,13 @@ Remap =z r= and =z m= to =z O= and =z C=.
 #+END_SRC
 
 ** Ivy
-Don't show =../= in file completion buffer.
+Don’t show =../= in file completion buffer.
 #+BEGIN_SRC emacs-lisp
 (when (featurep! :completion ivy)
   (setq ivy-extra-directories '("./")))
 #+END_SRC
 
+*** Keybindings
 Ivy should recurse into directories when pressing =RET=.
 #+BEGIN_SRC emacs-lisp
 (map! :when (featurep! :completion ivy)
@@ -597,7 +597,7 @@ This mode displays instances of =^L= (form feed) as horizontal lines.
     indent-tabs-mode t))
 #+END_SRC
 
-** Basic
+** BASIC
 #+BEGIN_SRC emacs-lisp
 (after! basic-mode
   (defvaralias 'basic-indent-offset 'indent-level)
@@ -864,6 +864,7 @@ which is broken in Lua's multiline comments.
     comment-line-break-function #'lua-comment-indent-new-line))
 #+END_SRC
 
+*** Company
 #+BEGIN_SRC emacs-lisp
 (when (featurep! :completion company)
   (after! company-lua (setq company-lua-interpreter 'lua53)))
@@ -978,6 +979,7 @@ Add ~org-babel-map~ to ~:localleader~.
     +fmt-formatter #'ptop-format-region))
 #+END_SRC
 
+*** Company
 We have to remove ~company-capf~ from ~company-backends~, because completion
 would be unusable otherwise.
 #+BEGIN_SRC emacs-lisp
@@ -1106,6 +1108,7 @@ Make the indentation inside of comments respect ~nxml-child-indent~.
       indent)))
 #+END_SRC
 
+*** Hideshow
 Replace the original ~nxml-mode~ rules with ones that aren’t broken.
 #+BEGIN_SRC emacs-lisp
 (after! (nxml-mode hideshow)
