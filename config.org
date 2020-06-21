@@ -916,11 +916,29 @@ Doom Emacs, annoyingly, sets ~moonscript-indent-offset~ to ~tab-width~ by defaul
 #+END_SRC
 
 ** Org
-These values have to be set before =org-mode= is loaded.
+#+BEGIN_SRC emacs-lisp
+(after! org
+  (setq org-cycle-global-at-bob t
+        org-cycle-include-plain-lists nil
+        org-directory (expand-file-name "~/text/org/"))
+        org-startup-folded t)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(after! org
+  ;; For some reason, `show-smartparens-mode' causes visual glitches.
+  (add-hook 'org-mode-hook #'turn-off-show-smartparens-mode)
+  ;; Use hard line wrapping to keep all columns shorter than `fill-column'.
+  (add-hook! 'org-mode-hook #'turn-off-visual-line-mode #'auto-fill-mode)
+  ;; Don’t start `flyspell-mode' automatically.
+  (remove-hook 'org-mode-hook #'flyspell-mode))
+#+END_SRC
+
+*** Modules
+These values have to be set before ~org-mode~ is loaded.
 #+BEGIN_SRC emacs-lisp
 (unless (memq 'org doom-disabled-packages)
-  (setq org-directory (expand-file-name "~/text/org/")
-        org-modules
+  (setq org-modules
         '(;; ol-w3m
           ;; ol-bbdb
           ol-bibtex
@@ -934,43 +952,23 @@ These values have to be set before =org-mode= is loaded.
           )))
 #+END_SRC
 
+*** Languages
 #+BEGIN_SRC emacs-lisp
-(after! org
-  (setq org-cycle-global-at-bob t
-        org-cycle-include-plain-lists nil
-        org-startup-folded t))
+(after! org-src
+  (push! org-src-lang-modes
+         '("dash" . sh)
+         '("zsh"  . sh)))
 #+END_SRC
 
+*** Keybindings
+Bind shortcuts for navigating headings with the arrow keys.
 #+BEGIN_SRC emacs-lisp
-(after! org
-  ;; Disable soft line wrapping.
-  (add-hook! 'org-mode-hook (visual-line-mode -1))
-  ;; Hard wrap lines that go over `fill-column'.
-  (add-hook  'org-mode-hook #'auto-fill-mode)
-  ;; Disable `show-smartparens-mode' as it
-  ;; causes visual glitches in `org-mode'.
-  (add-hook! 'org-mode-hook (show-smartparens-mode -1)))
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-(after! (org smartparens)
-  (sp-with-modes '(org-mode)
-    (sp-local-pair "=" "=")
-    (sp-local-pair "~" "~")))
-#+END_SRC
-
-Add =which-key= descriptions.
-#+BEGIN_SRC emacs-lisp
-(after! (org which-key)
-  (which-key-add-major-mode-key-based-replacements 'org-mode
-    "C-c C-x" "more"
-    "C-c C-v" "babel"
-    "C-c \""  "plot"))
-#+END_SRC
-
-Add ~company-capf~ as a Company backend.
-#+BEGIN_SRC emacs-lisp
-(after! org (set-company-backend! 'org-mode 'company-capf))
+(map! :after org
+      :map org-mode-map
+      "C-M-<left>"  #'org-up-element
+      "C-M-<right>" #'org-down-element
+      "C-M-<up>"    #'org-previous-visible-heading
+      "C-M-<down>"  #'org-next-visible-heading)
 #+END_SRC
 
 Add ~org-babel-map~ to ~:localleader~.
@@ -979,6 +977,30 @@ Add ~org-babel-map~ to ~:localleader~.
       :map org-mode-map
       :localleader
       :prefix ("v" . "babel") "" org-babel-map)
+#+END_SRC
+
+
+*** Company
+Add ~company-capf~ as a Company backend.
+#+BEGIN_SRC emacs-lisp
+(after! org (set-company-backend! 'org-mode 'company-capf))
+#+END_SRC
+
+*** Smartparens
+#+BEGIN_SRC emacs-lisp
+(after! (org smartparens)
+  (sp-with-modes '(org-mode)
+    (sp-local-pair "=" "=")
+    (sp-local-pair "~" "~")))
+#+END_SRC
+
+*** Which Key
+#+BEGIN_SRC emacs-lisp
+(after! (org which-key)
+  (which-key-add-major-mode-key-based-replacements 'org-mode
+    "C-c C-x" "more"
+    "C-c C-v" "babel"
+    "C-c \""  "plot"))
 #+END_SRC
 
 ** Pascal
