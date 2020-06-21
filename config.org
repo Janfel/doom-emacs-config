@@ -1087,9 +1087,13 @@ the successor to RLS.
 #+END_SRC
 
 ** XML
-Disable ~smartparens-mode~ because it it kind of useless in ~nxml-mode~.
 #+BEGIN_SRC emacs-lisp
-(after! nxml-mode (add-hook! 'nxml-mode-hook (smartparens-mode -1)))
+(after! nxml-mode
+  (setq-hook! 'nxml-mode-hook
+    indent-level 2
+    tab-width 8
+    indent-tabs-mode nil
+    +fmt-formatter #'tidy-format-region))
 #+END_SRC
 
 Make the indentation inside of comments respect ~nxml-child-indent~.
@@ -1106,6 +1110,11 @@ Make the indentation inside of comments respect ~nxml-child-indent~.
         (goto-char xmltok-start)
         (setq indent (+ (current-column) nxml-child-indent)))
       indent)))
+#+END_SRC
+
+Disable ~smartparens-mode~ because it it kind of useless in ~nxml-mode~.
+#+BEGIN_SRC emacs-lisp
+(after! nxml-mode (add-hook 'nxml-mode-hook #'turn-off-smartparens-mode))
 #+END_SRC
 
 *** Hideshow
