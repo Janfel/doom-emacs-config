@@ -1,21 +1,21 @@
 ;;; ~/.config/doom-emacs/autoload/fmt-luaformatter.el -*- lexical-binding: t; -*-
 ;;;###if (featurep! :editor fmt)
 
-(defvar luaformatter-config-file
-  (expand-file-name "luaformatter/config.yaml" XDG-CONFIG-HOME)
+(defvar luaformatter-config-file nil
   "The configuration file for `luaformatter-format-region'.")
 
 (defun luaformatter-compute-args ()
   "Compute arguments for `luaformatter-format-region'."
   (let ((indent      (if indent-tabs-mode 1 indent-level))
         (cont-indent (if indent-tabs-mode 1 indent-level)))
-    (list
-     (if indent-tabs-mode "--use-tab" "--no-use-tab")
-     (format "--indent-width=%d" indent)
-     (format "--continuation-indent-width=%d" cont-indent)
-     (format "--tab-width=%d" tab-width)
+    (nconc
      (when (file-readable-p luaformatter-config-file)
-       (format "--config=%s" luaformatter-config-file)))))
+       (list "--config" luaformatter-config-file))
+     (list
+      (if indent-tabs-mode "--use-tab" "--no-use-tab")
+      "--indent-width"               (number-to-string indent)
+      "--continuation-indent-width"  (number-to-string cont-indent)
+      "--tab-width"                  (number-to-string tab-width)))))
 
 ;;;###autoload (autoload 'luaformatter-format-buffer "autoload/fmt-luaformatter" nil t)
 ;;;###autoload (autoload 'luaformatter-format-region "autoload/fmt-luaformatter" nil t)

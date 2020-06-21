@@ -1,26 +1,18 @@
 ;;; ~/.config/doom-emacs/autoload/fmt-black.el -*- lexical-binding: t; -*-
 ;;;###if (featurep! :editor fmt +define)
 
-;;;###autoload
-(autoload 'black-format-buffer "autoload/fmt-black" nil t)
-;;;###autoload
-(autoload 'black-format-region "autoload/fmt-black" nil t)
-
+;; Autoload `format-all--buffer-extension-p'.
 (use-package! format-all :commands (format-all--buffer-extension-p))
 
-;; Vanilla Black
-(when! (not (eq SYSTEM 'Phantom))
-  (formatter-define! black
-    :program "black"
-    :args
-    `(,@(when (format-all--buffer-extension-p "pyi") (list "--pyi"))
-      "-q" "-")))
+(defun black-compute-args ()
+  "Compute arguments for `black-format-region'."
+  (nconc
+   (when (and (eq SYSTEM 'Phantom) indent-tabs-mode) '("--use-tabs"))
+   (when (format-all--buffer-extension-p "pyi") '("--pyi"))
+   '("--quiet" "-")))
 
-;; Patched Black
-(when! (eq SYSTEM 'Phantom)
-  (formatter-define! black
-    :program "black"
-    :args
-    `(,@(when indent-tabs-mode (list "-T"))
-      ,@(when (format-all--buffer-extension-p "pyi") (list "--pyi"))
-      "-q" "-")))
+;;;###autoload (autoload 'black-format-buffer "autoload/fmt-black" nil t)
+;;;###autoload (autoload 'black-format-region "autoload/fmt-black" nil t)
+(formatter-define! black
+  :program "black"
+  :args (black-compute-args))
