@@ -362,21 +362,19 @@ Make ~+literate-recompile-maybe-h~ compile in non-blocking subprocess.
 #+END_SRC
 
 ** Evil
-Evil uses Vims undo increments by default, which are too coarse for me.
+*** Core
+Evil uses Vim’s undo increments by default, which are too coarse for me.
 #+BEGIN_SRC emacs-lisp
 (when (featurep! :editor evil)
+  ;; We can’t use `defvaralias' here, because `evil-mode' is already
+  ;; running and `evil-shift-width' therefore a localized variable.
+  ;;(defvaralias 'evil-shift-width 'indent-level)
   (setq evil-want-fine-undo t
         ;; This seems to be broken.
         evil-indent-convert-tabs nil))
 #+END_SRC
 
-Consolidate indentation.
-#+BEGIN_SRC emacs-lisp :tangle no
-(when (featurep! :editor evil)
-  (defvaralias 'evil-shift-width 'indent-level))
-#+END_SRC
-
-*** Bindings
+**** Keybindings
 Map the arrow keys in Evils window map.
 #+BEGIN_SRC emacs-lisp
 (map! :when (featurep! :editor evil)
