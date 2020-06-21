@@ -732,7 +732,7 @@ error code. Using =--no-exit-code= prevents this.
     +fmt-formatter #'prettier-format-region))
 #+END_SRC
 
-** TeX
+** LaTeX
 *** Preview
 Using =dvipng= is faster than =png= and is even recommended
 in the [[info:preview-latex#Requirements][manual]] of =preview-latex=.
@@ -742,6 +742,7 @@ in the [[info:preview-latex#Requirements][manual]] of =preview-latex=.
 #+END_SRC
 
 
+*** TeX
 *** LaTeX
 This doesn't seem to work.
 #+BEGIN_SRC emacs-lisp :tangle no
