@@ -99,6 +99,11 @@ without lengthy invocation of =getenv=.
       (file-name-as-directory)
       (expand-file-name))
   "The value of $XDG_CACHE_HOME where programs place cache files.")
+
+(defconst PATCHED-PACKAGES
+  (mapcar #'intern (-> (getenv "PATCHED_PACKAGES")
+                       (or "") (split-string ":")))
+  "A list of symbols which represent system packages that have been patched.")
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
