@@ -1180,6 +1180,11 @@ Bind ~shell-command~ in a similar way to =M-x= and =M-;=.
       :desc "Shell command" "!" #'shell-command)
 #+END_SRC
 
+#+BEGIN_SRC emacs-lisp
+(map! :leader :prefix "b"
+      :desc "Rename buffer" "R" #'rename-buffer)
+#+END_SRC
+
 Bind ~indent-region~.
 #+BEGIN_SRC emacs-lisp
 (map! :leader :prefix "c"
