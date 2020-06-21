@@ -79,12 +79,12 @@ A modern list library inspired by Clojure.
 These constants allow me to use the correct directories everywhere,
 without lengthy invocation of =getenv=.
 #+BEGIN_SRC emacs-lisp
-(defconst XDG-CACHE-HOME
-  (-> (getenv "XDG_CACHE_HOME")
-      (string-or "~/.cache/")
+(defconst XDG-DATA-HOME
+  (-> (getenv "XDG_DATA_HOME")
+      (string-or "~/.local/share/")
       (file-name-as-directory)
       (expand-file-name))
-  "The value of $XDG_CACHE_HOME where programs place cache files.")
+  "The value of $XDG_DATA_HOME where programs store data.")
 
 (defconst XDG-CONFIG-HOME
   (-> (getenv "XDG_CONFIG_HOME")
@@ -93,12 +93,12 @@ without lengthy invocation of =getenv=.
       (expand-file-name))
   "The value of $XDG_CONFIG_HOME where programs place configuration files.")
 
-(defconst XDG-DATA-HOME
-  (-> (getenv "XDG_DATA_HOME")
-      (string-or "~/.local/share/")
+(defconst XDG-CACHE-HOME
+  (-> (getenv "XDG_CACHE_HOME")
+      (string-or "~/.cache/")
       (file-name-as-directory)
       (expand-file-name))
-  "The value of $XDG_DATA_HOME where programs store data.")
+  "The value of $XDG_CACHE_HOME where programs place cache files.")
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
