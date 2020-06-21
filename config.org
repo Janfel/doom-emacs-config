@@ -659,6 +659,7 @@ I have yet to create my own style.
   (setq arduino-mode-home (expand-file-name "~/src/arduino/")))
 #+END_SRC
 
+This only works with a *patched* Arduino runtime.
 #+BEGIN_SRC emacs-lisp
 (after! ede-arduino
   (let ((arduino-dir (expand-file-name "arduino/" XDG-DATA-HOME)))
@@ -692,6 +693,12 @@ Major mode for the [[https://mesonbuild.com][Meson Build System]].
 #+END_SRC
 
 ** Haskell
+#+BEGIN_SRC emacs-lisp
+(after! haskell-mode
+  (setq-hook! 'haskell-mode-hook
+    indent-level 2))
+#+END_SRC
+
 *** Dante
 #+BEGIN_SRC emacs-lisp
 (when (featurep! :lang haskell +dante)
@@ -811,14 +818,8 @@ Improve the comment insertion of ~comment-dwim~.
 #+BEGIN_SRC emacs-lisp
 (setq-hook! 'lisp-mode-common-hook
   comment-start "; "
-  comment-start-skip ";+\\s-*")
-#+END_SRC
-
-Formatting for all Lisp modes.
-#+BEGIN_SRC emacs-lisp
-(when (featurep! :editor fmt)
-  (setq-hook! 'lisp-mode-common-hook
-    +fmt-formatter #'indent-region))
+  comment-start-skip ";+\\s-*"
+  +fmt-formatter #'indent-region)
 #+END_SRC
 
 *** Common Lisp
