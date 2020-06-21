@@ -126,14 +126,10 @@ I redefine the operating system constants of Doom Emacs to give them docstrings.
 #+END_SRC
 
 * Emacs
+** Core
 Don’t untabify when deleting a tab character.
 #+BEGIN_SRC emacs-lisp
 (setq backward-delete-char-untabify-method nil)
-#+END_SRC
-
-Move the ~customize~ blocks into =custom.el=.
-#+BEGIN_SRC emacs-lisp
-(setq custom-file (expand-file-name "custom.el" doom-private-dir))
 #+END_SRC
 
 Make the block cursor stretch to highlight tab characters.
@@ -141,101 +137,21 @@ Make the block cursor stretch to highlight tab characters.
 (setq x-stretch-cursor t)
 #+END_SRC
 
-** Indentation
-Disable tab insertion by default.
-#+BEGIN_SRC emacs-lisp
-(setq-default indent-tabs-mode nil)
-#+END_SRC
-
-Control the width of a tab character.
-#+BEGIN_SRC emacs-lisp
-(setq-default tab-width 4)
-#+END_SRC
-
-Indentation in Emacs is a mess currently. Each mode defines its own variables.
-This consolidates indentation into one single variable.
-#+BEGIN_SRC emacs-lisp
-(defvar-local indent-level 4
-  "Indentation level for all major-modes.")
-
-(defvaralias 'standard-indent 'indent-level)
-#+END_SRC
-
-These functions have a tendency to insert tabs where they don’t belong.
-#+BEGIN_SRC emacs-lisp
-(defadvice! config--disable-indent-tabs-mode-a (orig-fn &rest args)
-  "Let `indent-tabs-mode' be bound to nil."
-  :around '(align-areas indent-relative comment-indent)
-  (let (indent-tabs-mode) (apply orig-fn args)))
-#+END_SRC
-
-* Doom
-** Core
-Don’t turn on ~whitespace-mode~ automatically.
-#+BEGIN_SRC emacs-lisp
-(defadvice! config--disable-automatic-whitespace-mode-a (&rest _)
-  "Don’t turn on `whitespace-mode' on startup."
-  :after #'doom-init-ui-h
-  (remove-hook 'after-change-major-mode-hook
-               #'doom-highlight-non-default-indentation-h))
-#+END_SRC
-
-
-** Fmt
-Here I replace the default formatting function with my own.
-#+BEGIN_SRC emacs-lisp
-(map! :when (featurep! :editor fmt)
-      :nv "g =" #'+fmt:region
-      :map doom-leader-code-map
-      :desc "Format buffer/region" "f" #'+fmt/dwim)
-#+END_SRC
-
-** Fold
-Completely remap the ~+fold~ commands, making use of =h= as a prefix.
-This frees up =z r= =z m=.
-#+BEGIN_SRC emacs-lisp
-(map! :when (and (featurep! :editor evil)
-                 (featurep! :editor fold))
-      :n "z O"  #'+fold/open-all
-      :n "z C"  #'+fold/close-all
-
-      :mn "h" nil
-      :n "h h"  #'+fold/toggle
-      :n "h t"  #'+fold/toggle
-      :n "h a"  #'+fold/toggle
-      :n "h o"  #'+fold/open
-      :n "h O"  #'+fold/open-all
-      :n "h c"  #'+fold/close
-      :n "h C"  #'+fold/close-all
-      :m "h n" #'+fold/next
-      :m "h p" #'+fold/previous)
-#+END_SRC
-
-#+RESULTS:
-** Literate
-#+BEGIN_SRC emacs-lisp
-(when (featurep! :config literate)
-  (defadvice! config--literate-async-compilation-a (&rest _)
-    "Compile config.org in a separate “doom tangle” process."
-    :override #'+literate-recompile-maybe-h
-    (when (and (eq major-mode 'org-mode)
-               (file-in-directory-p buffer-file-name doom-private-dir))
-      (message "Compiling your literate config...")
-      (start-process "proc" nil (expand-file-name "doom" doom-bin-dir) "tangle"))))
-#+END_SRC
-
-** Popup
+Make the output buffer of ~shell-command~ a popup buffer.
 #+BEGIN_SRC emacs-lisp
 (set-popup-rule! "^\\*Shell Command Output\\*$" :quit t)
 #+END_SRC
 
-* Packages
-** Emacs
-These packages are built into Emacs itself.
-
-*** HideShow
+** Custom.el
+Move the ~customize~ blocks into =custom.el=.
 #+BEGIN_SRC emacs-lisp
-(map! :map 'hs-minor-mode-map
+(setq custom-file (expand-file-name "custom.el" doom-private-dir))
+#+END_SRC
+
+** Hideshow
+#+BEGIN_SRC emacs-lisp
+(map! :after hideshow
+      :map hs-minor-mode-map
       :leader :prefix ("c h" . "Hide code")
       :desc "Toggle hiding"    "h" #'hs-toggle-hiding
       :desc "Hide all"         "a" #'hs-hide-all
@@ -246,30 +162,54 @@ These packages are built into Emacs itself.
       :desc "Hide top comment" "c" #'hs-hide-initial-comment-block)
 #+END_SRC
 
-*** Info
+** Info
 Treat ~info~ buffers as real buffers.
 #+BEGIN_SRC emacs-lisp
 (after! info (set-popup-rule! "^\\*info\\*$" :ignore))
 #+END_SRC
 
-*** Whitespace
+** Visual Line Mode
 #+BEGIN_SRC emacs-lisp
-(setq whitespace-style
-      '(face
-        indentation
-        lines-tail
-        empty
-        tabs
-        tab-mark
-        space-before-tab
-        space-after-tab))
+(defun turn-off-visual-line-mode ()
+  (interactive)
+  (visual-line-mode -1))
 #+END_SRC
 
-** Doom
+** Whitespace Mode
+#+BEGIN_SRC emacs-lisp
+(after! whitespace
+  (setq whitespace-style
+        '(face
+          indentation
+          lines-tail
+          empty
+          tabs
+          tab-mark
+          space-before-tab
+          space-after-tab)))
+#+END_SRC
+
+* Doom
 These packages are used in the ~:core~ of Doom Emacs.
 That means we don't need ~featurep!~.
 
-*** Helpful
+** Core
+Don’t turn on ~whitespace-mode~ automatically.
+#+BEGIN_SRC emacs-lisp
+(defadvice! config--disable-automatic-whitespace-mode-a (&rest _)
+  "Don’t turn on `whitespace-mode' on startup."
+  :after #'doom-init-ui-h
+  (remove-hook 'after-change-major-mode-hook
+               #'doom-highlight-non-default-indentation-h))
+#+END_SRC
+
+Define these variables from =core/autoload/config.el=.
+#+BEGIN_SRC emacs-lisp
+(setq doom-bin-dir (concat doom-emacs-dir "bin/")
+      doom-bin     (concat doom-bin-dir   "doom"))
+#+END_SRC
+
+** Helpful
 Some function definitions contain tab character that are
 assumed to be eight spaces wide.
 #+BEGIN_SRC emacs-lisp
@@ -279,7 +219,27 @@ assumed to be eight spaces wide.
     x-stretch-cursor nil))
 #+END_SRC
 
-*** Which Key
+** Smartparens
+#+BEGIN_SRC emacs-lisp
+(when (featurep! :config default +smartparens)
+  (after! smartparens (show-smartparens-global-mode +1)))
+#+END_SRC
+
+*** Keybindings
+Bind ~sp-raise-sexp~, which I use quite often.
+#+BEGIN_SRC emacs-lisp
+(map! :n "z r" #'sp-raise-sexp)
+#+END_SRC
+
+*** WAIT Closing paren deleted twice ([[https://github.com/hlissner/doom-emacs/issues/3268][#3268]])
+This is currently broken, in that two closing delimiters are deleted instead of
+one. When the linked issue is resolved, this fix can be removed.
+#+BEGIN_SRC emacs-lisp
+(when (featurep! :config default +smartparens)
+  (setq sp-autodelete-pair nil))
+#+END_SRC
+
+** Which Key
 These are some default keybindings that are missing a description.
 #+BEGIN_SRC emacs-lisp
 (after! which-key
@@ -307,15 +267,90 @@ These are some default keybindings that are missing a description.
          '(("<down>" . nil) . ("↓" . nil))))
 #+END_SRC
 
-*** WS Butler
+** WS Butler
 In ~snippet-mode~, whitespace has significant meaning.
 #+BEGIN_SRC emacs-lisp
 (after! ws-butler
   (push 'snippet-mode ws-butler-global-exempt-modes))
 #+END_SRC
 
+* Features
+** Formatting
+I replace the default formatting function with my own.
+#+BEGIN_SRC emacs-lisp
+(map! :when (featurep! :editor fmt)
+      :nv "g =" #'+fmt:region
+      :map doom-leader-code-map
+      :desc "Format buffer/region" "f" #'+fmt/dwim)
+#+END_SRC
 
+** Form Feed
+This mode displays instances of =^L= (form feed) as horizontal lines.
+#+BEGIN_SRC emacs-lisp
+(use-package! form-feed
+  :hook ((prog-mode text-mode) . form-feed-mode))
+#+END_SRC
 
+*** Keybindings
+Allows jumping from =^L= to =^L=.
+#+BEGIN_SRC emacs-lisp
+(map! "C-M-<next>"  #'forward-page
+      "C-M-<prior>" #'backward-page)
+#+END_SRC
+
+** Indentation
+*** Indent Guides
+The package [[https://github.com/DarthFennec/highlight-indent-guides][highlight-indent-guides]] draws a line for each indentation level.
+#+BEGIN_SRC emacs-lisp
+(use-package! highlight-indent-guides
+  ;; Maybe change this to mode-by-mode basis.
+  :commands (highlight-indent-guides-mode)
+  :config
+  (setq highlight-indent-guides-method 'bitmap
+        highlight-indent-guides-bitmap-function
+        #'highlight-indent-guides--bitmap-line
+        highlight-indent-guides-responsive 'top))
+#+END_SRC
+
+*** Indent Level
+Indentation in Emacs is a mess currently. Each mode defines its own variables.
+This consolidates indentation into one single variable.
+#+BEGIN_SRC emacs-lisp
+(defvar-local indent-level 4
+  "Indentation level for all major-modes.")
+
+(defvaralias 'standard-indent 'indent-level)
+#+END_SRC
+
+*** Tabs for Indentation
+Disable tab insertion by default. It will be enabled manually for each mode.
+#+BEGIN_SRC emacs-lisp
+(setq-default tab-width 4)
+(setq-default indent-tabs-mode nil)
+#+END_SRC
+
+These functions have a tendency to insert tabs where they don’t belong.
+#+BEGIN_SRC emacs-lisp
+(defadvice! config--disable-indent-tabs-mode-a (orig-fn &rest args)
+  "Let `indent-tabs-mode' be bound to nil."
+  :around '(align-areas comment-indent indent-relative)
+  (let (indent-tabs-mode) (apply orig-fn args)))
+#+END_SRC
+
+** Literate Configuration
+Make ~+literate-recompile-maybe-h~ compile in non-blocking subprocess.
+#+BEGIN_SRC emacs-lisp
+(when (featurep! :config literate)
+  (defadvice! config--literate-async-compilation-a (&rest _)
+    "Compile config.org in a separate “doom tangle” process."
+    :override #'+literate-recompile-maybe-h
+    (when (and (eq major-mode 'org-mode)
+               (file-in-directory-p buffer-file-name doom-private-dir))
+      (message "Compiling your literate config...")
+      (start-process "proc" nil (expand-file-name "doom" doom-bin-dir) "tangle"))))
+#+END_SRC
+
+* Packages
 ** Company
 *** Quickhelp
 #+BEGIN_SRC emacs-lisp
@@ -552,27 +587,6 @@ the keypad keycodes into the corresponding keyboard keycodes.
       "C-c &" "snippet")))
 #+END_SRC
 
-
-
-** Misc
-The package [[https://github.com/DarthFennec/highlight-indent-guides][highlight-indent-guides]] draws a line for each indentation level.
-#+BEGIN_SRC emacs-lisp
-(use-package! highlight-indent-guides
-  ;; Maybe change this to mode-by-mode basis.
-  :commands (highlight-indent-guides-mode)
-  :config
-  (setq highlight-indent-guides-method 'bitmap
-        highlight-indent-guides-bitmap-function
-        #'highlight-indent-guides--bitmap-line
-        highlight-indent-guides-responsive 'top))
-#+END_SRC
-
-These functions delete all whitespace up to the next non-whitespace character.
-#+BEGIN_SRC emacs-lisp
-(use-package! hungry-delete
-  :bind (("M-DEL"      . hungry-delete-backward)
-         ("M-<delete>" . hungry-delete-forward)))
-#+END_SRC
 
 This mode displays instances of =^L= (form feed) as horizontal lines.
 #+BEGIN_SRC emacs-lisp
