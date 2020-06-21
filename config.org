@@ -491,6 +491,14 @@ Remap =z r= and =z m= to =z O= and =z C=.
       "C-c !" "flycheck")))
 #+END_SRC
 
+** Hungry Delete
+These functions delete all whitespace up to the next non-whitespace character.
+#+BEGIN_SRC emacs-lisp
+(use-package! hungry-delete
+  :bind (("M-DEL"      . hungry-delete-backward)
+         ("M-<delete>" . hungry-delete-forward)))
+#+END_SRC
+
 ** Ivy
 Don’t show =../= in file completion buffer.
 #+BEGIN_SRC emacs-lisp
@@ -518,7 +526,21 @@ Ivy should recurse into directories when pressing =RET=.
   (setq lsp-prefer-flymake nil))
 #+END_SRC
 
-** Neotree
+** Spelling
+*** Ispell
+#+BEGIN_SRC emacs-lisp
+(after! ispell
+  (setq ispell-dictionary "en_US"))
+#+END_SRC
+
+*** Flyspell
+#+BEGIN_SRC emacs-lisp
+(when (featurep! :checkers spell)
+  (remove-hook 'prog-mode-hook #'flyspell-mode))
+#+END_SRC
+
+** Tree View
+*** Neotree
 #+BEGIN_SRC emacs-lisp
 (map! :when (featurep! :ui neotree)
       :after neotree
@@ -526,20 +548,7 @@ Ivy should recurse into directories when pressing =RET=.
       :n "<tab>" #'neotree-quick-look)
 #+END_SRC
 
-** Smartparens
-#+BEGIN_SRC emacs-lisp
-(when (featurep! :config default +smartparens)
-  (after! smartparens (show-smartparens-global-mode +1)))
-#+END_SRC
-
-*** WAIT Closing paren deleted twice ([[https://github.com/hlissner/doom-emacs/issues/3268][#3268]])
-This is currently broken, in that two closing delimiters are deleted instead of
-one. When the linked issue is resolved, this fix can be removed.
-#+BEGIN_SRC emacs-lisp
-(when (featurep! :config default +smartparens)
-  (setq sp-autodelete-pair nil))
-#+END_SRC
-
+*** Treemacs
 ** Undo Tree
 When =undo-tree= is allowed to automatically save the undo history, it somehow
 chokes on an empty undo list and interrupts us with constant errors.
@@ -585,28 +594,21 @@ the keypad keycodes into the corresponding keyboard keycodes.
       "C-c &" "snippet")))
 #+END_SRC
 
-
-This mode displays instances of =^L= (form feed) as horizontal lines.
-#+BEGIN_SRC emacs-lisp
-(use-package! form-feed
-  :hook ((prog-mode text-mode) . form-feed-mode))
-#+END_SRC
-
 * Languages
 ** Assembler
+#+BEGIN_SRC emacs-lisp
+(after! asm-mode
+  (setq-hook! 'asm-mode-hook
+    tab-width 8
+    indent-tabs-mode t))
+#+END_SRC
+
 #+BEGIN_SRC emacs-lisp
 (after! asm-mode
   (defadvice! config--add-asm-mode-indentation-rules-a (&rest _)
     "Add rule clauses to `asm-calculate-indentation'."
     :before-until #'asm-calculate-indentation
     (and (looking-at "section") 0)))
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-(after! asm-mode
-  (setq-hook! 'asm-mode-hook
-    tab-width 8
-    indent-tabs-mode t))
 #+END_SRC
 
 ** BASIC
@@ -649,6 +651,7 @@ I have yet to create my own style.
       (setf (alist-get 'other c-default-style) "jfl")
     (setq c-default-style "jfl")))
 #+END_SRC
+
 
 *** Arduino
 #+BEGIN_SRC emacs-lisp
