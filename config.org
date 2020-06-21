@@ -1123,18 +1123,7 @@ Replace the original ~nxml-mode~ rules with ones that aren’t broken.
 #+END_SRC
 
 * Keybindings
-Bind ~sp-raise-sexp~, which I use quite often.
-#+BEGIN_SRC emacs-lisp
-(map! :n "z r" #'sp-raise-sexp)
-#+END_SRC
-
-Allows jumping from =^L= to =^L=.
-#+BEGIN_SRC emacs-lisp
-(map! "C-M-<next>"  #'forward-page
-      "C-M-<prior>" #'backward-page)
-#+END_SRC
-
-Bind the Ä/Ö/Ü keys to something useful.
+** Ä/Ö/Ü
 #+BEGIN_SRC emacs-lisp
 (map! "C-ü" #'execute-extended-command)
 (map! :map key-translation-map
@@ -1142,24 +1131,39 @@ Bind the Ä/Ö/Ü keys to something useful.
       "C-ä" (kbd "C-c"))
 #+END_SRC
 
+** Copy/Paste
 Use C-p to paste.
 #+BEGIN_SRC emacs-lisp
 (map! :i "C-p" #'yank
       :i "M-p" #'yank-pop)
 #+END_SRC
 
-Some stuff I don't use anymore.
-#+BEGIN_SRC emacs-lisp :tangle no
-(map! :leader :desc "List buffers" "b L" #'list-buffers)
-(map! "<mouse-8>" #'backward-page
-      "<mouse-9>" #'forward-page)
-(map! :m "C-e" nil)
-#+END_SRC
-
+** Undo/Redo
 Bind keys for ~redo~.
 #+BEGIN_SRC emacs-lisp
 (map! "<redo>" #'redo
       :n "U" #'redo)
+#+END_SRC
+
+** Folding
+Completely remap the ~+fold~ commands, making use of =h= as a prefix.
+This frees up =z r= =z m=.
+#+BEGIN_SRC emacs-lisp
+(map! :when (and (featurep! :editor evil)
+                 (featurep! :editor fold))
+      :n "z O" #'+fold/open-all
+      :n "z C" #'+fold/close-all
+
+      :mn "h" nil
+      :n "h h" #'+fold/toggle
+      :n "h t" #'+fold/toggle
+      :n "h a" #'+fold/toggle
+      :n "h o" #'+fold/open
+      :n "h O" #'+fold/open-all
+      :n "h c" #'+fold/close
+      :n "h C" #'+fold/close-all
+      :m "h n" #'+fold/next
+      :m "h p" #'+fold/previous)
 #+END_SRC
 
 ** Leader Extensions
@@ -1198,4 +1202,17 @@ Bind ~auto-fill-mode~.
 #+BEGIN_SRC emacs-lisp
 (map! :leader :prefix "t"
       :desc "Hard line wrapping" "W" #'auto-fill-mode)
+#+END_SRC
+
+** _Backup
+:PROPERTIES:
+:header-args:emacs-lisp: :tangle no
+:END:
+
+Some stuff I don't use anymore.
+#+BEGIN_SRC emacs-lisp
+(map! :leader :desc "List buffers" "b L" #'list-buffers)
+(map! "<mouse-8>" #'backward-page
+      "<mouse-9>" #'forward-page)
+(map! :m "C-e" nil)
 #+END_SRC
