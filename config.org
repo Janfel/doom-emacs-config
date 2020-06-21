@@ -38,6 +38,21 @@ A modern list library inspired by Clojure.
 * Definitions
 ** Functions and Macros
 #+BEGIN_SRC emacs-lisp
+(defun string-or (&rest strings)
+  "Return the first non-nil and non-empty string in STRINGS."
+  (cl-dolist (s strings)
+    (when (and s (not (string-empty-p s)))
+      (cl-return s))))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(defmacro push! (place &rest values)
+  "Push VALUES into PLACE."
+  `(setf ,place (nconc (list ,@values) ,place)))
+#+END_SRC
+
+** Commands
+#+BEGIN_SRC emacs-lisp
 (defun comments-to-column (&optional column)
   "Move any end-of-line comments to COLUMN or `comment-column'."
   (interactive "*")
@@ -50,30 +65,15 @@ A modern list library inspired by Clojure.
         (column (or column comment-column)))
     (save-excursion
       (goto-char beg)
-      (beginning-of-line)
       (while (< (point) end)
-        (when (looking-at ".*?\\s-\\(\\s<\\)\\(\\s-\\|$\\)")
+        (beginning-of-line)
+        (when (looking-at ".*\\s-\\(\\s<\\)")
+          ;; Go to the last comment starter preceded by whitespace.
           (goto-char (match-beginning 1))
-          ;; Are we inside a string?
-          (unless (eq (get-char-property (1- (point)) 'face)
-                      'font-lock-string-face)
-            (indent-to column)))
-        (forward-line 1)
-        (beginning-of-line)))))
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-(defun string-or (&rest strings)
-  "Return the first non-nil and non-empty string in STRINGS."
-  (cl-dolist (s strings)
-    (when (and s (not (string-empty-p s)))
-      (cl-return s))))
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-(defmacro push! (place &rest values)
-  "Push VALUES into PLACE."
-  `(setf ,place (append (list ,@values) ,place)))
+          ;; Delete all whitespace before point.
+          (delete-char (abs (skip-syntax-backward "\\s-")))
+          (indent-to column 1))
+        (forward-line 1)))))
 #+END_SRC
 
 ** Constants
