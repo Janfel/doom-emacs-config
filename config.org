@@ -552,6 +552,13 @@ Ivy should recurse into directories when pressing =RET=.
   (setq lsp-prefer-flymake nil))
 #+END_SRC
 
+** Magit
+#+BEGIN_SRC emacs-lisp
+(after! magit
+  (add-hook 'git-commit-setup-hook #'turn-off-flyspell)
+  (setq-hook! 'git-commit-setup-hook fill-column 50))
+#+END_SRC
+
 ** Spelling
 *** Ispell
 #+BEGIN_SRC emacs-lisp
@@ -619,7 +626,6 @@ the keypad keycodes into the corresponding keyboard keycodes.
     (which-key-add-key-based-replacements
       "C-c &" "snippet")))
 #+END_SRC
-
 * Languages
 ** Assembler
 #+BEGIN_SRC emacs-lisp
