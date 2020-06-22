@@ -35,6 +35,23 @@ A library for creating formatting functions.
   (require 'reformatter))
 #+END_SRC
 
+** Snippets
+:PROPERTIES:
+:header-args:emacs-lisp: :tangle no :lexical yes
+:END:
+
+This snippet returns the status of ~lexical-binding~.
+#+BEGIN_SRC emacs-lisp
+(defun lex-p ()
+  "Return t if lexical binding is in effect."
+  (let (lex _lex-p)
+    (let ((lex t))
+      (setq _lex-p (lambda () lex)))
+    (funcall _lex-p)))
+
+(if (lex-p) "Yes" "No")
+#+END_SRC
+
 * Definitions
 ** Functions and Macros
 #+BEGIN_SRC emacs-lisp
