@@ -1281,7 +1281,8 @@ Bind mnemonics for =git add=.
 #+BEGIN_SRC emacs-lisp
 (map! :leader :prefix "g"
       (:when (featurep! :ui vc-gutter)
-       :desc "Git add hunk" "a" #'git-gutter:stage-hunk)
+       :desc "Git add hunk" "a" #'git-gutter:stage-hunk
+       :desc "Diff hunk"    "d" #'git-gutter:popup-hunk)
       (:when (featurep! :tools magit)
        :desc "Git add file" "A" #'magit-stage-file))
 #+END_SRC
