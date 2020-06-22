@@ -2,7 +2,7 @@
 #+DESCRIPTION: Doom Emacs configuration of Jan Felix Langenbach
 #+AUTHOR: Jan Felix Langenbach
 #+EMAIL: o.hase3@gmail.com
-#+PROPERTY: header-args:emacs-lisp :tangle config.el :lexical yes
+#+PROPERTY: header-args:emacs-lisp :tangle yes :lexical yes
 
 * Introduction
 These are some useful links to manuals and other peoples configs.
