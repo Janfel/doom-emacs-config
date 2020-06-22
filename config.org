@@ -4,6 +4,7 @@
 #+DESCRIPTION: Doom Emacs configuration of Jan Felix Langenbach
 #+LANGUAGE: en
 #+STARTUP: fold
+#+PROPERTY: header-args :results silent
 #+PROPERTY: header-args:emacs-lisp :tangle yes :lexical yes
 
 * Introduction
