@@ -45,6 +45,11 @@ A modern list library inspired by Clojure.
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
+(defun sys-featurep (sym)
+  (memq sym SYS-FEATURES))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
 (defmacro push! (place &rest values)
   "Push VALUES into PLACE."
   `(setf ,place (nconc (list ,@values) ,place)))
@@ -100,10 +105,10 @@ without lengthy invocation of =getenv=.
       (expand-file-name))
   "The value of $XDG_CACHE_HOME where programs place cache files.")
 
-(defconst PATCHED-PACKAGES
-  (mapcar #'intern (-> (getenv "PATCHED_PACKAGES")
+(defconst SYS-FEATURES
+  (mapcar #'intern (-> (getenv "SYS_FEATURES")
                        (or "") (split-string ":")))
-  "A list of symbols which represent system packages that have been patched.")
+  "A list of symbols which represent system features.")
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -668,7 +673,7 @@ This only works with a *patched* Arduino runtime.
 #+BEGIN_SRC emacs-lisp
 (after! ede-arduino
   (let ((arduino-dir (expand-file-name "arduino/" XDG-DATA-HOME)))
-    (when (file-directory-p arduino-dir)
+    (when (and (sys-featurep 'arduino/xdg) (file-directory-p arduino-dir))
       (setq ede-arduino-preferences-file
             (expand-file-name "preferences.txt" arduino-dir)))))
 #+END_SRC
