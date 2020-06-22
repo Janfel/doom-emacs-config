@@ -1,9 +1,10 @@
 #+TITLE: Doom Emacs Configuration
-#+DESCRIPTION: Doom Emacs configuration of Jan Felix Langenbach
 #+AUTHOR: Jan Felix Langenbach
 #+EMAIL: o.hase3@gmail.com
-#+PROPERTY: header-args:emacs-lisp :tangle yes :lexical yes
+#+DESCRIPTION: Doom Emacs configuration of Jan Felix Langenbach
+#+LANGUAGE: en
 #+STARTUP: fold
+#+PROPERTY: header-args:emacs-lisp :tangle yes :lexical yes
 
 * Introduction
 These are some useful links to manuals and other peoples configs.
