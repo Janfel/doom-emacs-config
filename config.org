@@ -926,7 +926,6 @@ Doom Emacs, annoyingly, sets ~moonscript-indent-offset~ to ~tab-width~ by defaul
    'moonscript-mode-hook
    #'doom--setq-moonscript-indent-offset-for-moonscript-mode-h))
 #+END_SRC
-
 ** Org
 #+BEGIN_SRC emacs-lisp
 (after! org
@@ -1144,6 +1143,17 @@ the successor to RLS.
            (cons (cons 'hard_tabs indent-tabs-mode)
                  rustic-rustfmt-config-alist)))
       (apply orig-fn args))))
+#+END_SRC
+
+** Shell
+#+BEGIN_SRC emacs-lisp
+(after! sh-script
+  (defvaralias 'sh-basic-offset 'indent-level)
+  (setq-hook! sh-mode-hook
+    indent-level 4
+    tab-width 4
+    indent-tabs-mode t
+    +fmt-formatter #'shfmt-format-region))
 #+END_SRC
 
 ** XML
