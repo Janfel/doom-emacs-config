@@ -208,7 +208,7 @@ That means we don't need ~featurep!~.
 ** Core
 Don’t turn on ~whitespace-mode~ automatically.
 #+BEGIN_SRC emacs-lisp
-(defadvice! config--disable-automatic-whitespace-mode-a (&rest _)
+(defadvice! *doom--disable-automatic-whitespace-mode-a (&rest _)
   "Don’t turn on `whitespace-mode' on startup."
   :after #'doom-init-ui-h
   (remove-hook 'after-change-major-mode-hook
@@ -343,7 +343,7 @@ Disable tab insertion by default. It will be enabled manually for each mode.
 
 These functions have a tendency to insert tabs where they don’t belong.
 #+BEGIN_SRC emacs-lisp
-(defadvice! config--disable-indent-tabs-mode-a (orig-fn &rest args)
+(defadvice! *emacs--disable-indent-tabs-mode-a (orig-fn &rest args)
   "Let `indent-tabs-mode' be bound to nil."
   :around '(align-areas comment-indent indent-relative)
   (let (indent-tabs-mode) (apply orig-fn args)))
@@ -353,7 +353,7 @@ These functions have a tendency to insert tabs where they don’t belong.
 Make ~+literate-recompile-maybe-h~ compile in non-blocking subprocess.
 #+BEGIN_SRC emacs-lisp
 (when (featurep! :config literate)
-  (defadvice! config--literate-async-compilation-a (&rest _)
+  (defadvice! *literate--async-compilation-a (&rest _)
     "Compile config.org in a separate “doom tangle” process."
     :override #'+literate-recompile-maybe-h
     (when (and (eq major-mode 'org-mode)
@@ -581,7 +581,7 @@ VTerm doesn’t recognize any keypad keys for some reason. This advice translate
 the keypad keycodes into the corresponding keyboard keycodes.
 #+BEGIN_SRC emacs-lisp
 (when (featurep! :term vterm)
-  (defadvice! config--vterm-add-keypad-keys-a (args)
+  (defadvice! *vterm--add-keypad-keys-a (args)
     "Make `vterm' recognize `<kp-*>' sequences by translating them."
     :filter-args #'vterm-send-key
     (let ((key (car args)))
@@ -617,7 +617,7 @@ the keypad keycodes into the corresponding keyboard keycodes.
 
 #+BEGIN_SRC emacs-lisp
 (after! asm-mode
-  (defadvice! config--add-asm-mode-indentation-rules-a (&rest _)
+  (defadvice! *asm--add-indentation-rules-a (&rest _)
     "Add rule clauses to `asm-calculate-indentation'."
     :before-until #'asm-calculate-indentation
     (and (looking-at "section") 0)))
@@ -881,7 +881,7 @@ Doom advises ~newline-and-indent~ to continue comments using the value of
 which is broken in Lua's multiline comments.
 #+BEGIN_SRC emacs-lisp
 (after! lua-mode
-  (defun lua-comment-indent-new-line (&optional soft)
+  (defun *lua-comment-indent-new-line (&optional soft)
     "Break line at point and indent, continuing a series of line comments."
     (interactive)
     (if (or (not (lua-comment-or-string-p))
@@ -895,8 +895,10 @@ which is broken in Lua's multiline comments.
       (indent-according-to-mode)))
 
   (setq-hook! 'lua-mode-hook
-    comment-line-break-function #'lua-comment-indent-new-line))
+    comment-line-break-function #'*lua-comment-indent-new-line))
 #+END_SRC
+
+#+RESULTS:
 
 *** Company
 #+BEGIN_SRC emacs-lisp
@@ -1138,7 +1140,7 @@ the successor to RLS.
 
 #+BEGIN_SRC emacs-lisp
 (after! rustic
-  (defadvice! +rust--rustfmt-respect-indent-tabs-mode-a (orig-fn &rest args)
+  (defadvice! *rustic--rustfmt-respect-indent-tabs-mode-a (orig-fn &rest args)
     "Make `rustic-format-buffer' respect `indent-tabs-mode'."
     :around #'rustic-format-buffer
     (let ((rustic-rustfmt-config-alist
@@ -1171,7 +1173,7 @@ the successor to RLS.
 Make the indentation inside of comments respect ~nxml-child-indent~.
 #+BEGIN_SRC emacs-lisp
 (after! nxml-mode
-  (defadvice! +nxml--indent-correctly-inside-comments-a
+  (defadvice! *nxml--indent-correctly-inside-comments-a
     (orig-fn pos open-delim close-delim)
     :around #'nxml-compute-indent-in-delimited-token
     (let ((indent (funcall orig-fn pos open-delim close-delim)))
