@@ -81,6 +81,32 @@ A library for creating formatting functions.
 #+END_SRC
 
 ** Constants
+*** System
+#+BEGIN_SRC emacs-lisp
+(defconst SYSTEM
+  (let ((sysname (system-name)))
+    (cond ((string= sysname "PhantomJFL") 'Phantom)
+          ((string= sysname "TeslaJFL")   'Tesla)
+          (t 'other)))
+  "Which system are we running on?")
+#+END_SRC
+
+I redefine the operating system constants of Doom Emacs to give them docstrings.
+#+BEGIN_SRC emacs-lisp
+(defconst IS-LINUX IS-LINUX
+  "Are we on a Linux system?")
+
+(defconst IS-MAC IS-MAC
+  "Are we on a Mac?")
+
+(defconst IS-WINDOWS IS-WINDOWS
+  "Are we on a Windows system?")
+
+(defconst IS-BSD IS-BSD
+  "Are we on a BSD system?")
+#+END_SRC
+
+*** Environment
 These constants allow me to use the correct directories everywhere,
 without lengthy invocation of =getenv=.
 #+BEGIN_SRC emacs-lisp
@@ -109,30 +135,6 @@ without lengthy invocation of =getenv=.
   (mapcar #'intern (-> (getenv "SYS_FEATURES")
                        (or "") (split-string ":")))
   "A list of symbols which represent system features.")
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-(defconst SYSTEM
-  (let ((sysname (system-name)))
-    (cond ((string= sysname "PhantomJFL") 'Phantom)
-          ((string= sysname "TeslaJFL")   'Tesla)
-          (t 'other)))
-  "Which system are we running on?")
-#+END_SRC
-
-I redefine the operating system constants of Doom Emacs to give them docstrings.
-#+BEGIN_SRC emacs-lisp
-(defconst IS-LINUX IS-LINUX
-  "Are we on a Linux system?")
-
-(defconst IS-MAC IS-MAC
-  "Are we on a Mac?")
-
-(defconst IS-WINDOWS IS-WINDOWS
-  "Are we on a Windows system?")
-
-(defconst IS-BSD IS-BSD
-  "Are we on a BSD system?")
 #+END_SRC
 
 * Emacs
