@@ -7,7 +7,7 @@
 (defun black-compute-args ()
   "Compute arguments for `black-format-region'."
   (nconc
-   (when (and (sys-featurep 'black/tabs) indent-tabs-mode) '("--use-tabs"))
+   (when (and (sys-feature-p 'black/tabs) indent-tabs-mode) '("--use-tabs"))
    (when (format-all--buffer-extension-p "pyi") '("--pyi"))
    '("--quiet" "-")))
 

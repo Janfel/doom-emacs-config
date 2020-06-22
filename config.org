@@ -45,8 +45,9 @@ A library for creating formatting functions.
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-(defun sys-featurep (sym)
-  (memq sym SYS-FEATURES))
+(defun sys-feature-p (feature)
+  "Return t if FEATURE is available on this system."
+  (memq feature SYS-FEATURES))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -675,7 +676,7 @@ This only works with a *patched* Arduino runtime.
 #+BEGIN_SRC emacs-lisp
 (after! ede-arduino
   (let ((arduino-dir (expand-file-name "arduino/" XDG-DATA-HOME)))
-    (when (and (sys-featurep 'arduino/xdg) (file-directory-p arduino-dir))
+    (when (and (sys-feature-p 'arduino/xdg) (file-directory-p arduino-dir))
       (setq ede-arduino-preferences-file
             (expand-file-name "preferences.txt" arduino-dir)))))
 #+END_SRC
