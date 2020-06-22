@@ -27,8 +27,8 @@ A modern list library inspired by Clojure.
 (require 'dash)
 #+END_SRC
 
-*** [[https://github.com/purcell/reformatter.el][reformatter.el
-]]A library for creating formatting functions.
+*** [[https://github.com/purcell/reformatter.el][reformatter.el]]
+A library for creating formatting functions.
 #+BEGIN_SRC emacs-lisp :tangle no
 (when (featurep! :editor fmt)
   (require 'reformatter))
