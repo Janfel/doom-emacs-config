@@ -160,6 +160,19 @@ Move the ~customize~ blocks into =custom.el=.
 #+BEGIN_SRC emacs-lisp
 (setq custom-file (expand-file-name "custom.el" doom-private-dir))
 #+END_SRC
+** Fill Column Indicator
+#+BEGIN_SRC emacs-lisp
+(when EMACS27+
+  (add-hook! '(prog-mode-hook text-mode-hook)
+             #'display-fill-column-indicator-mode))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(when EMACS27+
+  (defun display-fill-column-indicator-mode--turn-off ()
+    (interactive)
+    (display-fill-column-indicator-mode -1)))
+#+END_SRC
 
 ** Hideshow
 #+BEGIN_SRC emacs-lisp
@@ -947,7 +960,9 @@ Doom Emacs, annoyingly, sets ~moonscript-indent-offset~ to ~tab-width~ by defaul
   ;; Use hard line wrapping to keep all columns shorter than `fill-column'.
   (add-hook! 'org-mode-hook #'turn-off-visual-line-mode #'auto-fill-mode)
   ;; Don’t start `flyspell-mode' automatically.
-  (remove-hook 'org-mode-hook #'flyspell-mode))
+  (remove-hook 'org-mode-hook #'flyspell-mode)
+  (when EMACS27+
+    (add-hook 'org-mode-hook #'display-fill-column-indicator-mode--turn-off)))
 #+END_SRC
 
 *** Modules
