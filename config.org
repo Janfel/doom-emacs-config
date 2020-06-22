@@ -590,6 +590,53 @@ Ivy should recurse into directories when pressing =RET=.
 (when (featurep! :checkers spell)
   (remove-hook 'prog-mode-hook #'flyspell-mode))
 #+END_SRC
+** Tab Bar
+:PROPERTIES:
+:header-args:emacs-lisp: :tangle no :noweb-ref packages/tab-bar
+:END:
+For ~tab-line~ configuration, steal from [[https://gitlab.com/andreyorst/dotfiles/-/blob/master/.config/emacs/init.el][andreyorst]].
+
+Wrap everything in a conditional. Disabled because WIP.
+#+BEGIN_SRC emacs-lisp :tangle no :noweb no-export :noweb-ref
+(when EMACS27+
+  (after! tab-bar
+    <<packages/tab-bar>>))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(setq tab-bar-close-button-show t
+      tab-bar-new-button-show t
+      tab-bar-separator nil
+      tab-bar-tab-name-ellipsis "…"
+      tab-bar-tab-name-truncated-max 20
+      tab-bar-tab-name-function #'tab-bar-tab-name-truncated
+      tab-bar-close-button (propertize
+                            (if (char-displayable-p ?×) " × " " x ")
+                            'close-tab t
+                            :help "Click to close tab"))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(let ((fg   (face-attribute 'default   :foreground))
+      (bg   (face-attribute 'default   :background))
+      (base (face-attribute 'mode-line :background)))
+  (set-face-attribute
+   'tab-bar nil
+   :foreground fg
+   :background bg
+   :box (list :line-width -1 :color base))
+  (set-face-attribute
+   'tab-bar-tab nil
+   :foreground fg
+   :background bg
+   :box (list :color bg)
+   )
+  (set-face-attribute
+   'tab-bar-tab-inactive nil
+   :foreground fg
+   :background base
+   :box (list :color base)))
+#+END_SRC
 
 ** Tree View
 *** Neotree
