@@ -424,7 +424,11 @@ Make ~+literate-recompile-maybe-h~ compile in non-blocking subprocess.
   (after! evil-numbers
     <<evil-numbers-config>>)
   (after! evil-snipe
-    <<evil-snipe-config>>)
+    <<evil-snipe-config>>))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp :noweb no-export
+(when (featurep! :editor evil +everywhere)
   (after! evil-org
     <<evil-org-config>>))
 #+END_SRC
@@ -540,8 +544,7 @@ Doesn’t seem to work due to keymap precedences.
 Doom Emacs changes ~org-cycle~ to skip the =subtree= stage by default when
 ~(featurep! :editor evil +everywhere)~.
 #+BEGIN_SRC emacs-lisp
-(when! (featurep! :editor evil +everywhere)
-  (remove-hook 'org-tab-first-hook #'+org-cycle-only-current-subtree-h))
+(remove-hook 'org-tab-first-hook #'+org-cycle-only-current-subtree-h)
 #+END_SRC
 
 Add block jumping to =[= and =]=.
