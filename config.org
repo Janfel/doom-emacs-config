@@ -561,20 +561,29 @@ Remap =z r= and =z m= to =z O= and =z C=.
 #+END_SRC
 
 ** Flycheck
-#+BEGIN_SRC emacs-lisp
-(map! :when (featurep! :checkers syntax)
-      :after flycheck
-      (:leader :prefix "c"
-        (:prefix ("!" . "flycheck") "" flycheck-command-map))
-      (:map flycheck-command-map
-        "!" #'flycheck-buffer))
+:PROPERTIES:
+:header-args:emacs-lisp: :tangle no :noweb-ref flycheck-config
+:END:
+
+#+BEGIN_SRC emacs-lisp :tangle yes :noweb-ref :noweb no-export
+(when (featurep! :checkers syntax)
+  (after! flycheck
+    <<flycheck-config>>))
 #+END_SRC
 
+Map double exclamation mark to buffer command.
 #+BEGIN_SRC emacs-lisp
-(when! (featurep! :checkers syntax)
-  (after! which-key
-    (which-key-add-key-based-replacements
-      "C-c !" "flycheck")))
+(map! :map flycheck-command-map "!" #'flycheck-buffer)
+#+END_SRC
+
+Name the flycheck prefix keys.
+#+BEGIN_SRC emacs-lisp
+(map! :leader :prefix "c"
+      (:prefix ("!" . "flycheck") "" flycheck-command-map))
+
+(after! which-key
+  (which-key-add-key-based-replacements
+    "C-c !" "flycheck"))
 #+END_SRC
 
 ** Hungry Delete
