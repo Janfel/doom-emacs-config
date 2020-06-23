@@ -940,7 +940,11 @@ Configure some of the common Interpreters for =sly=.
   <<haskell-dante-config>>)
 #+END_SRC
 
-*** Haskell Mode Config
+*** Haskell Mode
+:PROPERTIES:
+:header-args:emacs-lisp: :tangle no :noweb-ref haskell-mode-config
+:END:
+
 #+BEGIN_SRC emacs-lisp
 (setq-hook! 'haskell-mode-hook indent-level 2)
 #+END_SRC
@@ -964,7 +968,11 @@ error code. Using =--no-exit-code= prevents this.
   (add-hook 'haskell-mode-hook #'dante-mode))
 #+END_SRC
 
-*** Dante Config
+*** Dante
+:PROPERTIES:
+:header-args:emacs-lisp: :tangle no :noweb-ref haskell-dante-config
+:END:
+
 #+BEGIN_SRC emacs-lisp
 (after! flycheck (flycheck-add-next-checker 'haskell-dante '(warning . haskell-hlint)))
 #+END_SRC
