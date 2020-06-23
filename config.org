@@ -760,6 +760,7 @@ the keypad keycodes into the corresponding keyboard keycodes.
     (which-key-add-key-based-replacements
       "C-c &" "snippet")))
 #+END_SRC
+
 * Languages
 ** Assembler
 #+BEGIN_SRC emacs-lisp :noweb no-export
@@ -771,6 +772,7 @@ the keypad keycodes into the corresponding keyboard keycodes.
 :PROPERTIES:
 :header-args:emacs-lisp: :tangle no :noweb-ref asm-mode-config
 :END:
+
 #+BEGIN_SRC emacs-lisp
 (setq-hook! 'asm-mode-hook
   tab-width 8
@@ -794,6 +796,7 @@ the keypad keycodes into the corresponding keyboard keycodes.
 :PROPERTIES:
 :header-args:emacs-lisp: :tangle no :noweb-ref basic-mode-config
 :END:
+
 #+BEGIN_SRC emacs-lisp
 (defvaralias 'basic-indent-offset 'indent-level)
 #+END_SRC
@@ -854,6 +857,7 @@ I have yet to create my own style.
 :PROPERTIES:
 :header-args:emacs-lisp: :tangle no :noweb-ref arduino-mode-config
 :END:
+
 #+BEGIN_SRC emacs-lisp
 (setq arduino-mode-home (expand-file-name "~/src/arduino/"))
 #+END_SRC
@@ -870,6 +874,7 @@ This only works with a *patched* Arduino runtime.
 :PROPERTIES:
 :header-args:emacs-lisp: :tangle no :noweb-ref c-mode-config
 :END:
+
 #+BEGIN_SRC emacs-lisp
 (when (featurep! :checkers syntax)
   (setq-hook! 'c-mode-hook
@@ -881,6 +886,7 @@ This only works with a *patched* Arduino runtime.
 :PROPERTIES:
 :header-args:emacs-lisp: :tangle no :noweb-ref c++-mode-config
 :END:
+
 #+BEGIN_SRC emacs-lisp
 (when (featurep! :checkers syntax)
   (setq-hook! 'c++-mode-hook
@@ -894,21 +900,19 @@ Major mode for the [[https://mesonbuild.com][Meson Build System]].
 (use-package! meson-mode :defer t)
 #+END_SRC
 
-** Clojure
+** Clojure :Lisp:
 #+BEGIN_SRC emacs-lisp
-(after! clojure-mode
-  (add-hook 'clojure-mode-hook #'lisp-mode-common-hook))
+(add-hook 'clojure-mode-hook #'lisp-mode-common-hook)
 #+END_SRC
 
-** Common Lisp
+** Common Lisp :Lisp:
 The file extension =.cl= is sometimes used.
 #+BEGIN_SRC emacs-lisp
 (push '("\\.cl\\'" . lisp-mode) auto-mode-alist)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-(after! lisp-mode
-  (add-hook 'lisp-mode-hook #'lisp-mode-common-hook))
+(add-hook 'lisp-mode-hook #'lisp-mode-common-hook)
 #+END_SRC
 
 Configure some of the common Interpreters for =sly=.
@@ -923,29 +927,20 @@ Configure some of the common Interpreters for =sly=.
     (push '(sbcl ("sbcl") :coding-system utf-8-unix) sly-lisp-implementations)))
 #+END_SRC
 
-** Emacs Lisp
-:PROPERTIES:
-:header-args:emacs-lisp: :tangle no :noweb-ref elisp-mode-config
-:END:
-
-#+BEGIN_SRC emacs-lisp :tangle yes :noweb-ref :noweb no-export
-(after! elisp-mode
-  <<elisp-mode-config>>)
-#+END_SRC
-
+** Emacs Lisp :Lisp:
 #+BEGIN_SRC emacs-lisp
 (add-hook 'emacs-lisp-mode-hook       #'lisp-mode-common-hook)
 (add-hook 'lisp-interaction-mode-hook #'lisp-mode-common-hook)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-(set-keymap-parent lisp-interaction-mode-map emacs-lisp-mode-map)
+(after! elisp-mode
+  (set-keymap-parent lisp-interaction-mode-map emacs-lisp-mode-map))
 #+END_SRC
 
-** Fennel
+** Fennel :Lisp:
 #+BEGIN_SRC emacs-lisp
-(after! fennel-mode
-  (add-hook 'fennel-mode-hook #'lisp-mode-common-hook))
+(add-hook 'fennel-mode-hook #'lisp-mode-common-hook)
 #+END_SRC
 
 ** Haskell
@@ -993,6 +988,11 @@ error code. Using =--no-exit-code= prevents this.
 (after! flycheck (flycheck-add-next-checker 'haskell-dante '(warning . haskell-hlint)))
 #+END_SRC
 
+** Hy :Lisp:
+#+BEGIN_SRC emacs-lisp
+(add-hook 'hy-mode-hook #'lisp-mode-common-hook)
+#+END_SRC
+
 ** Javascript
 #+BEGIN_SRC emacs-lisp :noweb no-export
 (after! js
@@ -1003,6 +1003,7 @@ error code. Using =--no-exit-code= prevents this.
 :PROPERTIES:
 :header-args:emacs-lisp: :tangle no :noweb-ref js-mode-config
 :END:
+
 #+BEGIN_SRC emacs-lisp
 (defvaralias 'js-indent-level 'indent-level)
 #+END_SRC
@@ -1030,6 +1031,7 @@ error code. Using =--no-exit-code= prevents this.
 :PROPERTIES:
 :header-args:emacs-lisp: :tangle no :noweb-ref tex-latex-mode-config
 :END:
+
 #+BEGIN_SRC emacs-lisp
 (after! which-key
   (which-key-add-major-mode-key-based-replacements 'latex-mode
@@ -1105,6 +1107,7 @@ Improve the comment insertion of ~comment-dwim~.
 :PROPERTIES:
 :header-args:emacs-lisp: :tangle no :noweb-ref lua-mode-config
 :END:
+
 #+BEGIN_SRC emacs-lisp
 (defvaralias 'lua-indent-level 'indent-level)
 #+END_SRC
@@ -1160,6 +1163,7 @@ yet found a fix for this.
 :PROPERTIES:
 :header-args:emacs-lisp: :tangle no :noweb-ref moonscript-mode-config
 :END:
+
 #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export :noweb-ref
 (after! moonscript
   <<moonscript-mode-config>>)
@@ -1575,27 +1579,10 @@ the successor to RLS.
     (apply orig-fn args)))
 #+END_SRC
 
-** Scheme
-#+BEGIN_SRC emacs-lisp
-(after! scheme
-  <<scheme-mode-config>>)
-(after! geiser
-  <<geiser-mode-config>>)
-#+END_SRC
-
-*** Scheme Mode
-:PROPERTIES:
-:header-args:emacs-lisp: :tangle no :noweb-ref scheme-mode-config
-:END:
-
+** Scheme :Lisp:
 #+BEGIN_SRC emacs-lisp
 (add-hook 'scheme-mode-hook #'lisp-mode-common-hook)
 #+END_SRC
-
-*** Geiser Mode
-:PROPERTIES:
-:header-args:emacs-lisp: :tangle no :noweb-ref geiser-mode-config
-:END:
 
 On Arch, the [[https://www.call-cc.org/][Chicken Scheme]] binaries are called =chicken-csi= and =chicken-csc=.
 #+BEGIN_SRC emacs-lisp
