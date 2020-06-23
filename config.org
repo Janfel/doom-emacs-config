@@ -533,6 +533,10 @@ Doesn’t seem to work due to keymap precedences.
 #+END_SRC
 
 *** Evil Org
+:PROPERTIES:
+:header-args:emacs-lisp: :tangle no :noweb-ref evil-org-config
+:END:
+
 Doom Emacs changes ~org-cycle~ to skip the =subtree= stage by default when
 ~(featurep! :editor evil +everywhere)~.
 #+BEGIN_SRC emacs-lisp
