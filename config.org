@@ -840,14 +840,6 @@ In ~snippet-mode~, whitespace has significant meaning.
 
 * Programming Languages
 ** Arduino
-:PROPERTIES:
-:header-args+: :tangle no :noweb-ref arduino-mode-config
-:END:
-#+BEGIN_SRC emacs-lisp :tangle yes :noweb-ref :noweb no-export
-(after! arduino
-  <<arduino-mode-config>>)
-#+END_SRC
-
 #+BEGIN_SRC emacs-lisp
 (setq arduino-mode-home (expand-file-name "~/src/arduino/"))
 #+END_SRC
