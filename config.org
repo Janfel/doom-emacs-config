@@ -56,6 +56,14 @@ This snippet returns the status of ~lexical-binding~.
 * Definitions
 ** Functions and Macros
 #+BEGIN_SRC emacs-lisp
+(defmacro measure-time (&rest body)
+  "Measure the time it takes to evaluate BODY."
+  `(let ((time (current-time)))
+     ,@body
+     (message "%.06f" (float-time (time-since time)))))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
 (defun string-or (&rest strings)
   "Return the first non-nil and non-empty string in STRINGS."
   (cl-dolist (s strings)
