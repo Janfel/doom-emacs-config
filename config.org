@@ -395,20 +395,42 @@ These functions have a tendency to insert tabs where they don’t belong.
 #+END_SRC
 
 ** Literate Configuration
-Make ~+literate-recompile-maybe-h~ compile in non-blocking subprocess.
-Disabled due to lack of necessity at the moment.
-#+BEGIN_SRC emacs-lisp :tangle no
+Make use of =async.el= to tangle =config.org= in a separate process without
+blocking the main thread.
+#+BEGIN_SRC emacs-lisp
 (when (featurep! :config literate)
-  (defadvice! *literate--async-compilation-a (&rest _)
-    "Compile config.org in a separate “doom tangle” process."
-    :override #'+literate-recompile-maybe-h
-    (when (and (eq major-mode 'org-mode)
-               (file-in-directory-p buffer-file-name doom-private-dir))
-      (message "Compiling your literate config...")
-      (start-process "proc" nil
-                     (expand-file-name "org-tangle" doom-bin-dir)
-                     +literate-config-file))))
+
+  (defvar *literate-tangle-in-progress-p nil
+    "Contains a future of a currently tangling process or nil.")
+
+  (defadvice! *literate-tangle-async-a (&optional force-p)
+    "Compile `+literate-config-file' in an async process."
+    :override #'+literate-tangle-h
+    (let ((default-directory doom-private-dir))
+      (when (or force-p (file-newer-than-file-p +literate-config-file
+                                                +literate-config-cache-file))
+        (print! (start "Compiling your literate config..."))
+        (let ((org  (expand-file-name +literate-config-file))
+              (dest (concat (file-name-sans-extension +literate-config-file) ".el"))
+              (cache +literate-config-cache-file))
+          (when-let* ((proc *literate-tangle-in-progress-p)) (async-wait proc))
+          (setq *literate-tangle-in-progress-p
+                (async-start
+                 (lambda ()
+                   (and (require 'ob-tangle)
+                        (org-babel-tangle-file org dest)
+                        (with-temp-file cache)))
+                 (lambda (&rest _)
+                   (message "Compilation finished!")
+                   (-some-> (expand-file-name dest)
+                     (find-buffer-visiting)
+                     (with-current-buffer (revert-buffer 'ignore-auto 'noconfirm)))
+                   (setq *literate-tangle-in-progress-p nil)))))))))
 #+END_SRC
+
+*** NOTE: Is explicit sync really needed?
+Maybe I should remove ~*literate-tangle-in-progress-p~, as the tangling process
+is currently fast enough to make race conditions unlikely.
 
 ** Spell Checking
 *** Ispell
