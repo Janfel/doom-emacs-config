@@ -1133,6 +1133,15 @@ Add ~company-capf~ as a Company backend.
     "C-c \""  "plot"))
 #+END_SRC
 
+*** Org Babel
+#+BEGIN_SRC emacs-lisp :tangle no
+(defun *org-babel-tangle-file-async (file &optional target-file lang-re finish-func)
+  (require 'async)
+  (async-start
+   (apply-partially #'org-babel-tangle-file target-file lang-re)
+   finish-func))
+#+END_SRC
+
 *** Org Indent
 For some reason, ~show-smartparens-mode~ causes visual glitches.
 #+BEGIN_SRC emacs-lisp
