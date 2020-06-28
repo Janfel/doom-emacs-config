@@ -1097,8 +1097,7 @@ Add ~org-babel-map~ to ~:localleader~.
       "C-M-<right>" #'org-down-element
       "C-M-<up>"    #'org-previous-visible-heading
       "C-M-<down>"  #'org-next-visible-heading
-      (:map org-mode-map :localleader
-       :prefix ("v" . "babel") "" org-babel-map))
+      (:localleader :prefix ("v" . "babel") "" org-babel-map))
 #+END_SRC
 
 *** Org Modules
