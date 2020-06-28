@@ -1,3 +1,3 @@
-#!/usr/bin/env `(setq ext (file-name-extension buffer-file-name))`
+#!/usr/bin/env `(setq ext (or (file-name-extension (or (buffer-file-name) "")) "sh"))`
 `(when (string= ext "bash") "set -euo pipefail\n")`
 $0
