@@ -1053,27 +1053,7 @@ Doom Emacs, annoyingly, sets ~moonscript-indent-offset~ to ~tab-width~ by defaul
 #+END_SRC
 
 ** Org
-#+BEGIN_SRC emacs-lisp :noweb no-export
-(after! org
-  <<org-mode-config>>)
-
-(after! org-indent
-  <<org-indent-config>>)
-
-(after! org-keys
-  <<org-keys-config>>)
-
-(unless (memq 'org doom-disabled-packages)
-  <<org-modules-config>>)
-
-(after! org-src
-  <<org-src-config>>)
-#+END_SRC
-
 *** Org Mode
-:PROPERTIES:
-:header-args+: :tangle no :noweb-ref org-mode-config
-:END:
 #+BEGIN_SRC emacs-lisp
 (setq org-cycle-global-at-bob t
       org-cycle-include-plain-lists nil
@@ -1111,9 +1091,6 @@ Add ~company-capf~ as a Company backend.
 #+END_SRC
 
 *** Org Indent
-:PROPERTIES:
-:header-args+: :tangle no :noweb-ref org-indent-config
-:END:
 For some reason, ~show-smartparens-mode~ causes visual glitches.
 #+BEGIN_SRC emacs-lisp
 (add-hook 'org-indent-mode-hook #'turn-off-show-smartparens-mode)
@@ -1124,30 +1101,22 @@ The indicator doesn’t take the visual indentation into account.
 (when EMACS27+
   (add-hook 'org-mode-hook #'display-fill-column-indicator-mode--turn-off))
 #+END_SRC
+
 *** Org Keys
-:PROPERTIES:
-:header-args+: :tangle no :noweb-ref org-keys-config
-:END:
 Bind shortcuts for navigating headings with the arrow keys.
+Add ~org-babel-map~ to ~:localleader~.
 #+BEGIN_SRC emacs-lisp
-(map! :map org-mode-map
+(map! :after org-keys
+      :map org-mode-map
       "C-M-<left>"  #'org-up-element
       "C-M-<right>" #'org-down-element
       "C-M-<up>"    #'org-previous-visible-heading
-      "C-M-<down>"  #'org-next-visible-heading)
-#+END_SRC
-
-Add ~org-babel-map~ to ~:localleader~.
-#+BEGIN_SRC emacs-lisp
-(map! :map org-mode-map
-      :localleader
-      :prefix ("v" . "babel") "" org-babel-map)
+      "C-M-<down>"  #'org-next-visible-heading
+      (:map org-mode-map :localleader
+       :prefix ("v" . "babel") "" org-babel-map))
 #+END_SRC
 
 *** Org Modules
-:PROPERTIES:
-:header-args+: :tangle no :noweb-ref org-modules-config
-:END:
 These values have to be set before ~org-mode~ is loaded.
 #+BEGIN_SRC emacs-lisp
 (setq org-modules
@@ -1165,13 +1134,11 @@ These values have to be set before ~org-mode~ is loaded.
 #+END_SRC
 
 *** Org Source
-:PROPERTIES:
-:header-args+: :tangle no :noweb-ref org-src-config
-:END:
 #+BEGIN_SRC emacs-lisp
-(push! org-src-lang-modes
-       '("dash" . sh)
-       '("zsh"  . sh))
+(after! org-src
+  (push! org-src-lang-modes
+         '("dash" . sh)
+         '("zsh"  . sh)))
 #+END_SRC
 
 ** Pascal
