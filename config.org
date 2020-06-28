@@ -983,19 +983,7 @@ The file extension =.cl= is sometimes used.
 #+END_SRC
 
 ** Haskell
-#+BEGIN_SRC emacs-lisp :noweb no-export
-(after! haskell-mode
-  <<haskell-mode-config>>)
-
-(when (featurep! :lang haskell +dante)
-  (after! dante
-    <<haskell-dante-config>>))
-#+END_SRC
-
 *** Haskell Mode
-:PROPERTIES:
-:header-args+: :tangle no :noweb-ref haskell-mode-config
-:END:
 #+BEGIN_SRC emacs-lisp
 (setq-hook! 'haskell-mode-hook indent-level 2)
 #+END_SRC
@@ -1009,7 +997,8 @@ Doom Emacs uses this hook which seems not to exist.
 
 These bindings are used by many modes with an inferior REPL.
 #+BEGIN_SRC emacs-lisp
-(map! :map haskell-mode-map
+(map! :after haskell-mode
+      :map haskell-mode-map
       "C-c C-c" #'haskell-process-load-file
       "C-c C-k" #'haskell-process-load-file
       "C-c C-z" #'haskell-interactive-switch)
@@ -1018,15 +1007,13 @@ These bindings are used by many modes with an inferior REPL.
 Flycheck raises a "Suspicious State" error when the linter exits with a nonzero
 error code. Using =--no-exit-code= prevents this.
 #+BEGIN_SRC emacs-lisp
-(after! flycheck (setq flycheck-hlint-args '("--no-exit-code")))
+(setq flycheck-hlint-args '("--no-exit-code"))
 #+END_SRC
 
 *** Dante
-:PROPERTIES:
-:header-args+: :tangle no :noweb-ref haskell-dante-config
-:END:
 #+BEGIN_SRC emacs-lisp
-(after! flycheck (flycheck-add-next-checker 'haskell-dante '(warning . haskell-hlint)))
+(after! (dante flycheck)
+  (flycheck-add-next-checker 'haskell-dante '(warning . haskell-hlint)))
 #+END_SRC
 
 ** HTML :Web:
@@ -1036,14 +1023,6 @@ error code. Using =--no-exit-code= prevents this.
 #+END_SRC
 
 ** JavaScript :Web:
-:PROPERTIES:
-:header-args+: :tangle no :noweb-ref js-mode-config
-:END:
-#+BEGIN_SRC emacs-lisp :tangle yes :noweb-ref :noweb no-export
-(after! js
-  <<js-mode-config>>)
-#+END_SRC
-
 #+BEGIN_SRC emacs-lisp
 (defvaralias 'js-indent-level 'indent-level)
 #+END_SRC
@@ -1062,15 +1041,7 @@ error code. Using =--no-exit-code= prevents this.
 #+END_SRC
 
 ** LaTeX
-#+BEGIN_SRC emacs-lisp :noweb no-export
-(after! tex-mode
-  <<tex-latex-mode-config>>)
-#+END_SRC
-
 *** TeX/LaTeX Mode
-:PROPERTIES:
-:header-args+: :tangle no :noweb-ref tex-latex-mode-config
-:END:
 #+BEGIN_SRC emacs-lisp
 (after! which-key
   (which-key-add-major-mode-key-based-replacements 'latex-mode
@@ -1083,7 +1054,7 @@ error code. Using =--no-exit-code= prevents this.
 
 Let Smartparens handle insertion of =$=.
 #+BEGIN_SRC emacs-lisp
-(map! :map LaTeX-mode-map "$" nil)
+(map! :after tex-mode :map LaTeX-mode-map "$" nil)
 #+END_SRC
 
 Some Smartparens settings for LaTeX pairs.
@@ -1108,8 +1079,7 @@ Maybe add ~latex-electric-env-pair-mode~ to ~LaTeX-mode-hook~.
 Using =dvipng= is faster than =png= and is even recommended
 in the [[info:preview-latex#Requirements][manual]] of =preview-latex=.
 #+BEGIN_SRC emacs-lisp
-(after! preview
-  (when (executable-find "dvipng") (setq preview-image-type 'dvipng)))
+(when (executable-find "dvipng") (setq preview-image-type 'dvipng))
 #+END_SRC
 
 ** Lisp
@@ -1137,19 +1107,7 @@ Improve the comment insertion of ~comment-dwim~.
 #+END_SRC
 
 ** Lua
-#+BEGIN_SRC emacs-lisp :noweb no-export
-(after! lua-mode
-  <<lua-mode-config>>)
-
-(when (featurep! :completion company)
-  (after! company-lua
-    <<company-lua-config>>))
-#+END_SRC
-
 *** Lua Mode
-:PROPERTIES:
-:header-args+: :tangle no :noweb-ref lua-mode-config
-:END:
 #+BEGIN_SRC emacs-lisp
 (defvaralias 'lua-indent-level 'indent-level)
 #+END_SRC
@@ -1196,22 +1154,11 @@ weirdly when deleting line comments inside of a multiline comment. I have not
 yet found a fix for this.
 
 *** Company Lua
-:PROPERTIES:
-:header-args+: :tangle no :noweb-ref company-lua-config
-:END:
 #+BEGIN_SRC emacs-lisp
 (setq company-lua-interpreter 'lua53)
 #+END_SRC
 
 ** MoonScript :Lua:
-:PROPERTIES:
-:header-args+: :tangle no :noweb-ref moonscript-mode-config
-:END:
-#+BEGIN_SRC emacs-lisp :tangle yes :noweb-ref :noweb no-export
-(after! moonscript
-  <<moonscript-mode-config>>)
-#+END_SRC
-
 Consolidate indentation.
 #+BEGIN_SRC emacs-lisp
 (defvaralias 'moonscript-indent-offset 'indent-level)
@@ -1228,9 +1175,9 @@ respect ~indent-tabs-mode~.
 
 Doom Emacs, annoyingly, sets ~moonscript-indent-offset~ to ~tab-width~ by default.
 #+BEGIN_SRC emacs-lisp
-(remove-hook
- 'moonscript-mode-hook
- #'doom--setq-moonscript-indent-offset-for-moonscript-mode-h)
+(after! moonscript
+  (remove-hook 'moonscript-mode-hook
+               #'doom--setq-moonscript-indent-offset-for-moonscript-mode-h))
 #+END_SRC
 
 ** Org
@@ -1473,15 +1420,7 @@ This allows me to not load the entire =:lang/php= module.
 (unless (featurep! :lang php) (use-package! php-mode :defer t))
 #+END_SRC
 
-#+BEGIN_SRC emacs-lisp :noweb no-export
-(after! php-mode
-  <<php-mode-config>>)
-#+END_SRC
-
 *** PHP Mode
-:PROPERTIES:
-:header-args+: :tangle no :noweb-ref php-mode-config
-:END:
 #+BEGIN_SRC emacs-lisp
 (setq-hook! 'php-mode-hook
   indent-level 4
@@ -1496,19 +1435,7 @@ This allows me to not load the entire =:lang/php= module.
 #+END_SRC
 
 ** Python
-#+BEGIN_SRC emacs-lisp :noweb no-export
-(after! python
-  <<python-mode-config>>)
-
-(when (featurep! :completion company)
-  (after! company
-    <<company-jedi-config>>))
-#+END_SRC
-
 *** Python Mode
-:PROPERTIES:
-:header-args+: :tangle no :noweb-ref python-mode-config
-:END:
 #+BEGIN_SRC emacs-lisp
 (defvaralias 'python-indent-offset 'indent-level)
 #+END_SRC
@@ -1534,16 +1461,16 @@ This allows me to not load the entire =:lang/php= module.
 #+END_SRC
 
 *** Company Jedi
-:PROPERTIES:
-:header-args+: :tangle no :noweb-ref company-jedi-config
-:END:
 [[https://jedi.readthedocs.io/en/latest/][Jedi]] gives the best (non LSP) autocompletion for python.
 [[https://github.com/syohex/emacs-company-jedi][=company-jedi=]] is a backend for =company= that interfaces with Jedi.
 This adds =company-jedi= to =company-backends= in Python buffers.
 The package will load when =company-jedi= is invoked by =company=.
 #+BEGIN_SRC emacs-lisp
-(use-package! company-jedi :commands company-jedi)
-(set-company-backend! 'python-mode 'company-jedi)
+(use-package! company-jedi
+  :when (featurep! :completion company)
+  :after company
+  :commands company-jedi
+  :init (set-company-backend! 'python-mode 'company-jedi))
 #+END_SRC
 
 *** _Backup
@@ -1559,15 +1486,7 @@ Use system =mspyls= for =lsp-python-ms=.
 #+END_SRC
 
 ** Rust
-#+BEGIN_SRC emacs-lisp :noweb no-export
-(after! rustic
-  <<rustic-mode-config>>)
-#+END_SRC
-
 *** Rustic Mode
-:PROPERTIES:
-:header-args+: :tangle no :noweb-ref rustic-mode-config
-:END:
 #+BEGIN_SRC emacs-lisp
 (defvaralias 'rustic-indent-offset 'indent-level)
 #+END_SRC
@@ -1609,20 +1528,11 @@ the successor to RLS.
 
 On Arch, the [[https://www.call-cc.org/][Chicken Scheme]] binaries are called =chicken-csi= and =chicken-csc=.
 #+BEGIN_SRC emacs-lisp
-(after! geiser-chicken
-  (when (executable-find "chicken-csi")
-    (setq geiser-chicken-binary "chicken-csi")))
+(when (executable-find "chicken-csi")
+  (setq geiser-chicken-binary "chicken-csi"))
 #+END_SRC
 
 ** Shell
-:PROPERTIES:
-:header-args+: :tangle no :noweb-ref sh-mode-config
-:END:
-#+BEGIN_SRC emacs-lisp :tangle yes :noweb-ref :noweb no-export
-(after! sh-script
-  <<sh-mode-config>>)
-#+END_SRC
-
 #+BEGIN_SRC emacs-lisp
 (defvaralias 'sh-basic-offset 'indent-level)
 #+END_SRC
@@ -1641,14 +1551,6 @@ On Arch, the [[https://www.call-cc.org/][Chicken Scheme]] binaries are called =c
 #+END_SRC
 
 ** XML
-:PROPERTIES:
-:header-args+: :tangle no :noweb-ref nxml-mode-config
-:END:
-#+BEGIN_SRC emacs-lisp :tangle yes :noweb-ref :noweb no-export
-(after! nxml-mode
-  <<nxml-mode-config>>)
-#+END_SRC
-
 #+BEGIN_SRC emacs-lisp
 (setq-hook! 'nxml-mode-hook
   indent-level 2
