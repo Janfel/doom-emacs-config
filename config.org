@@ -419,7 +419,8 @@ These functions have a tendency to insert tabs where they don’t belong.
 
 ** Literate Configuration
 Make ~+literate-recompile-maybe-h~ compile in non-blocking subprocess.
-#+BEGIN_SRC emacs-lisp
+Disabled due to lack of necessity at the moment.
+#+BEGIN_SRC emacs-lisp :tangle no
 (when (featurep! :config literate)
   (defadvice! *literate--async-compilation-a (&rest _)
     "Compile config.org in a separate “doom tangle” process."
