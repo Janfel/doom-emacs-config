@@ -395,14 +395,12 @@ Make ~+literate-recompile-maybe-h~ compile in non-blocking subprocess.
 ** Spell Checking
 *** Ispell
 #+BEGIN_SRC emacs-lisp
-(after! ispell
-  (setq ispell-dictionary "en_US"))
+(setq ispell-dictionary "en_US")
 #+END_SRC
 
 *** Flyspell
 #+BEGIN_SRC emacs-lisp
-(when (featurep! :checkers spell)
-  (remove-hook 'prog-mode-hook #'flyspell-mode))
+(remove-hook 'prog-mode-hook #'flyspell-mode)
 #+END_SRC
 
 ** Terminal
@@ -412,7 +410,7 @@ Make ~+literate-recompile-maybe-h~ compile in non-blocking subprocess.
 *** VTerm
 This hack removes a problematic popup rule.
 #+BEGIN_SRC emacs-lisp
-(setq display-buffer-alist (assoc-delete-all "^vterm" display-buffer-alist))
+(setq display-buffer-alist (assoc-delete-all "^vterm" display-buffer-alist #'string=))
 #+END_SRC
 
 VTerm doesn’t recognize any keypad keys for some reason. This advice translates
@@ -451,8 +449,7 @@ the keypad keycodes into the corresponding keyboard keycodes.
 When =undo-tree= is allowed to automatically save the undo history, it somehow
 chokes on an empty undo list and interrupts us with constant errors.
 #+BEGIN_SRC emacs-lisp
-(when (featurep! :emacs undo +tree)
-  (setq undo-tree-auto-save-history nil))
+(setq undo-tree-auto-save-history nil)
 #+END_SRC
 
 *** Keybindings
@@ -492,30 +489,31 @@ which causes ~evil-shift-width~ to be a localized variable.
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-(map!
- ;; Remap the document scroll motions to something more sensible.
- :m "z+" nil
- :m "z-" nil
- :m "z^" nil
- :m "z." nil
- :m "zT" #'evil-scroll-bottom-line-to-top
- :m "zB" #'evil-scroll-top-line-to-bottom
- :m "z S-<right>" #'evil-scroll-right
- :m "z S-<left>" #'evil-scroll-left
- ;; Map the arrow keys in Evils window map.
- (:map evil-window-map
-  "<up>"      #'evil-window-up
-  "<down>"    #'evil-window-down
-  "<left>"    #'evil-window-left
-  "<right>"   #'evil-window-right
-  "S-<up>"    #'+evil/window-move-up
-  "S-<down>"  #'+evil/window-move-down
-  "S-<left>"  #'+evil/window-move-left
-  "S-<right>" #'+evil/window-move-right
-  "C-h"       nil
-  "C-j"       nil
-  "C-k"       nil
-  "C-l"       nil))
+(map! :when (featurep! :editor evil)
+      :after evil
+      ;; Remap the document scroll motions to something more sensible.
+      :m "z+" nil
+      :m "z-" nil
+      :m "z^" nil
+      :m "z." nil
+      :m "zT" #'evil-scroll-bottom-line-to-top
+      :m "zB" #'evil-scroll-top-line-to-bottom
+      :m "z S-<right>" #'evil-scroll-right
+      :m "z S-<left>" #'evil-scroll-left
+      ;; Map the arrow keys in Evils window map.
+      (:map evil-window-map
+       "<up>"      #'evil-window-up
+       "<down>"    #'evil-window-down
+       "<left>"    #'evil-window-left
+       "<right>"   #'evil-window-right
+       "S-<up>"    #'+evil/window-move-up
+       "S-<down>"  #'+evil/window-move-down
+       "S-<left>"  #'+evil/window-move-left
+       "S-<right>" #'+evil/window-move-right
+       "C-h"       nil
+       "C-j"       nil
+       "C-k"       nil
+       "C-l"       nil))
 #+END_SRC
 
 *** Evil Collection
@@ -567,7 +565,8 @@ Doom Emacs changes ~org-cycle~ to skip the =subtree= stage by default when
 
 Add block jumping to =[= and =]= and remap =z r= and =z m= to =z O= and =z C=.
 #+BEGIN_SRC emacs-lisp
-(map! :after evil-org
+(map! :when (featurep! :editor evil)
+      :after evil-org
       :map evil-org-mode-map
       :m "[ _" #'org-previous-block
       :m "] _" #'org-next-block
@@ -594,10 +593,9 @@ Add block jumping to =[= and =]= and remap =z r= and =z m= to =z O= and =z C=.
 Some function definitions contain tab character that are
 assumed to be eight spaces wide.
 #+BEGIN_SRC emacs-lisp
-(after! helpful
-  (setq-hook! 'helpful-mode-hook
-    tab-width 8
-    x-stretch-cursor nil))
+(setq-hook! 'helpful-mode-hook
+  tab-width 8
+  x-stretch-cursor nil)
 #+END_SRC
 
 ** Hungry Delete
@@ -626,18 +624,10 @@ Ivy should recurse into directories when pressing =RET=.
       "C-<down>"   #'ivy-next-history-element)
 #+END_SRC
 
-** LSP
-#+BEGIN_SRC emacs-lisp
-(when (and (featurep! :checkers syntax)
-           (featurep! :tools lsp))
-  (setq lsp-prefer-flymake nil))
-#+END_SRC
-
 ** Magit
 #+BEGIN_SRC emacs-lisp
-(after! magit
-  (add-hook 'git-commit-setup-hook #'turn-off-flyspell)
-  (setq-hook! 'git-commit-setup-hook fill-column 50))
+(add-hook 'git-commit-setup-hook #'turn-off-flyspell)
+(setq-hook! 'git-commit-setup-hook fill-column 50)
 #+END_SRC
 
 ** Smartparens
@@ -854,7 +844,6 @@ The file extension =.cl= is sometimes used.
 #+END_SRC
 
 ** Haskell
-*** Haskell Mode
 #+BEGIN_SRC emacs-lisp
 (setq-hook! 'haskell-mode-hook indent-level 2)
 #+END_SRC
@@ -881,7 +870,6 @@ error code. Using =--no-exit-code= prevents this.
 (setq flycheck-hlint-args '("--no-exit-code"))
 #+END_SRC
 
-*** Dante
 #+BEGIN_SRC emacs-lisp
 (after! (dante flycheck)
   (flycheck-add-next-checker 'haskell-dante '(warning . haskell-hlint)))
@@ -912,7 +900,6 @@ error code. Using =--no-exit-code= prevents this.
 #+END_SRC
 
 ** LaTeX
-*** TeX/LaTeX Mode
 #+BEGIN_SRC emacs-lisp
 (after! which-key
   (which-key-add-major-mode-key-based-replacements 'latex-mode
@@ -943,15 +930,14 @@ Letting Smartparens handle these works best in my experience.
     (sp-local-pair "\\[" "\\]" :post-handlers '(("||\n[i]" "RET") ("| " "SPC")))))
 #+END_SRC
 
-**** NOTE Electric Env Pairs
-Maybe add ~latex-electric-env-pair-mode~ to ~LaTeX-mode-hook~.
-
-*** AUCTeX
 Using =dvipng= is faster than =png= and is even recommended
 in the [[info:preview-latex#Requirements][manual]] of =preview-latex=.
 #+BEGIN_SRC emacs-lisp
 (when (executable-find "dvipng") (setq preview-image-type 'dvipng))
 #+END_SRC
+
+*** NOTE Electric Env Pairs
+Maybe add ~latex-electric-env-pair-mode~ to ~LaTeX-mode-hook~.
 
 ** Lisp
 A common hook for all lisp modes.
@@ -978,7 +964,6 @@ Improve the comment insertion of ~comment-dwim~.
 #+END_SRC
 
 ** Lua
-*** Lua Mode
 Doom has already set a value for ~lua-indent-level~, so we have to unset it.
 #+BEGIN_SRC emacs-lisp
 (makunbound 'lua-indent-level)
@@ -1021,15 +1006,14 @@ which is broken in Lua's multiline comments.
   comment-line-break-function #'*lua-comment-indent-new-line)
 #+END_SRC
 
-**** NOTE Comment deletion broken
-The advice ~+default--delete-backward-char-a~ to ~backward-delete-char~ behaves
-weirdly when deleting line comments inside of a multiline comment. I have not
-yet found a fix for this.
-
-*** Company Lua
 #+BEGIN_SRC emacs-lisp
 (setq company-lua-interpreter 'lua53)
 #+END_SRC
+
+*** NOTE Comment deletion broken
+The advice ~+default--delete-backward-char-a~ to ~backward-delete-char~ behaves
+weirdly when deleting line comments inside of a multiline comment. I have not
+yet found a fix for this.
 
 ** MoonScript :Lua:
 Consolidate indentation.
@@ -1196,7 +1180,6 @@ This allows me to not load the entire =:lang/php= module.
 (unless (featurep! :lang php) (use-package! php-mode :defer t))
 #+END_SRC
 
-*** PHP Mode
 #+BEGIN_SRC emacs-lisp
 (setq-hook! 'php-mode-hook
   indent-level 4
@@ -1261,7 +1244,6 @@ Use system =mspyls= for =lsp-python-ms=.
 #+END_SRC
 
 ** Rust
-*** Rustic Mode
 #+BEGIN_SRC emacs-lisp
 (defvaralias 'rustic-indent-offset 'indent-level)
 #+END_SRC
@@ -1365,7 +1347,6 @@ Disable ~smartparens-mode~ because it it kind of useless in ~nxml-mode~.
 (add-hook 'nxml-mode-hook #'turn-off-smartparens-mode)
 #+END_SRC
 
-*** Hideshow
 Replace the original ~nxml-mode~ rules with ones that aren’t broken.
 #+BEGIN_SRC emacs-lisp
 (after! hideshow
