@@ -56,6 +56,13 @@ This snippet returns the status of ~lexical-binding~.
 * Definitions
 ** Functions and Macros
 #+BEGIN_SRC emacs-lisp
+(defmacro async! (&rest body)
+  "Evaluate BODY asynchronously for side-effects only."
+  (declare (indent 1))
+  `(async-start (lambda () ,@body) #'ignore))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
 (defmacro measure-time (&rest body)
   "Measure the time it takes to evaluate BODY."
   `(let ((time (current-time)))

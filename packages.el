@@ -14,6 +14,8 @@
 ;; Major mode for simple PHP editing.
 (unless (featurep! :lang php) (package! php-mode))
 
+;; Library for running async processes.
+(package! async)
 ;; Disable escaping insert state when typing too fast.
 (package! evil-escape :disable t)
 ;; Unpin flycheck. The version Doom currently ships is broken for HLint.
