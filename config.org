@@ -853,14 +853,6 @@ This only works with a *patched* Arduino runtime.
 #+END_SRC
 
 ** Assembler
-:PROPERTIES:
-:header-args+: :tangle no :noweb-ref asm-mode-config
-:END:
-#+BEGIN_SRC emacs-lisp :tangle yes :noweb-ref :noweb no-export
-(after! asm-mode
-  <<asm-mode-config>>)
-#+END_SRC
-
 #+BEGIN_SRC emacs-lisp
 (setq-hook! 'asm-mode-hook
   tab-width 8
