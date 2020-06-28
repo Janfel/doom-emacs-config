@@ -13,8 +13,6 @@
 ;;(package! moonscript :recipe (:local-repo "/home/janfel/src/elisp/moonscript-mode"))
 ;; Major mode for simple PHP editing.
 (unless (featurep! :lang php) (package! php-mode))
-;; Pin `rustic-mode' to a newer version until Doom catches up.
-(package! rustic :pin "203a28d86709c3f374bac33188e64fdadf37f935")
 
 ;; Disable escaping insert state when typing too fast.
 (package! evil-escape :disable t)
