@@ -979,7 +979,9 @@ Improve the comment insertion of ~comment-dwim~.
 
 ** Lua
 *** Lua Mode
+Doom has already set a value for ~lua-indent-level~, so we have to unset it.
 #+BEGIN_SRC emacs-lisp
+(makunbound 'lua-indent-level)
 (defvaralias 'lua-indent-level 'indent-level)
 #+END_SRC
 
