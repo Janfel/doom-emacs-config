@@ -885,12 +885,6 @@ This only works with a *patched* Arduino runtime.
 #+END_SRC
 
 ** C/C++
-#+BEGIN_SRC emacs-lisp :noweb no-export
-(after! cc-mode
-  <<c-mode-config>>
-  <<c++-mode-config>>)
-#+END_SRC
-
 *** TODO Code Style
 The default is =doom=.
 I have yet to create my own style.
@@ -922,9 +916,6 @@ I have yet to create my own style.
 
 
 *** C Mode
-:PROPERTIES:
-:header-args+: :tangle no :noweb-ref c-mode-config
-:END:
 #+BEGIN_SRC emacs-lisp
 (when (featurep! :checkers syntax)
   (setq-hook! 'c-mode-hook
@@ -933,9 +924,6 @@ I have yet to create my own style.
 #+END_SRC
 
 *** C++ Mode
-:PROPERTIES:
-:header-args+: :tangle no :noweb-ref c++-mode-config
-:END:
 #+BEGIN_SRC emacs-lisp
 (when (featurep! :checkers syntax)
   (setq-hook! 'c++-mode-hook
