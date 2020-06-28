@@ -1142,52 +1142,20 @@ These values have to be set before ~org-mode~ is loaded.
 #+END_SRC
 
 ** Pascal
-#+BEGIN_SRC emacs-lisp :noweb no-export
-(after! pascal
-  <<pascal-mode-config>>
-  <<pascal-and-opascal-mode-config>>)
-
-(after! opascal
-  <<opascal-mode-config>>
-  <<pascal-and-opascal-mode-config>>)
-#+END_SRC
-
-*** Pascal Mode
-:PROPERTIES:
-:header-args+: :tangle no :noweb-ref pascal-mode-config
-:END:
 #+BEGIN_SRC emacs-lisp
-(defvaralias 'pascal-indent-level 'indent-level)
-(defvaralias 'pascal-case-indent  'indent-level)
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-(setq-hook! 'pascal-mode-hook
-  indent-level 3
-  tab-width 3
-  indent-tabs-mode t)
-#+END_SRC
-
-*** OPascal Mode
-:PROPERTIES:
-:header-args+: :tangle no :noweb-ref opascal-mode-config
-:END:
-#+BEGIN_SRC emacs-lisp
+(defvaralias 'pascal-indent-level  'indent-level)
+(defvaralias 'pascal-case-indent   'indent-level)
 (defvaralias 'opascal-indent-level 'indent-level)
 (defvaralias 'opascal-case-indent  'indent-level)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-(setq-hook! 'opascal-mode-hook
+(setq-hook! '(pascal-mode-hook opascal-mode-hook)
   indent-level 3
   tab-width 3
   indent-tabs-mode t)
 #+END_SRC
 
-*** Pascal and OPascal Mode
-:PROPERTIES:
-:header-args+: :tangle no :noweb-ref pascal-and-opascal-mode-config
-:END:
 #+BEGIN_SRC emacs-lisp
 (when (featurep! :editor fmt)
   (setq-hook! '(pascal-mode-hook opascal-mode-hook)
@@ -1203,50 +1171,18 @@ would be unusable otherwise.
 #+END_SRC
 
 ** Perl
-#+BEGIN_SRC emacs-lisp :noweb no-export
-(after! perl-mode
-  <<perl-mode-config>>
-  <<perl-and-cperl-mode-config>>)
-
-(after! cperl-mode
-  <<cperl-mode-config>>
-  <<perl-and-cperl-mode-config>>)
-#+END_SRC
-
-*** Perl Mode
-:PROPERTIES:
-:header-args+: :tangle no :noweb-ref perl-mode-config
-:END:
 #+BEGIN_SRC emacs-lisp
-(defvaralias 'perl-indent-level 'indent-level)
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-(setq-hook! 'perl-mode-hook
-  indent-level 4
-  tab-width 4
-  indent-tabs-mode t)
-#+END_SRC
-
-*** CPerl Mode
-:PROPERTIES:
-:header-args+: :tangle no :noweb-ref cperl-mode-config
-:END:
-#+BEGIN_SRC emacs-lisp
+(defvaralias 'perl-indent-level  'indent-level)
 (defvaralias 'cperl-indent-level 'indent-level)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-(setq-hook! 'cperl-mode-hook
+(setq-hook! '(perl-mode-hook cperl-mode-hook)
   indent-level 4
   tab-width 4
   indent-tabs-mode t)
 #+END_SRC
 
-*** Perl and CPerl Mode
-:PROPERTIES:
-:header-args+: :tangle no :noweb-ref perl-and-cperl-mode-config
-:END:
 #+BEGIN_SRC emacs-lisp
 (when (featurep! :editor fmt)
   (setq-hook! '(perl-mode-hook cperl-mode-hook)
@@ -1274,7 +1210,6 @@ This allows me to not load the entire =:lang/php= module.
 #+END_SRC
 
 ** Python
-*** Python Mode
 #+BEGIN_SRC emacs-lisp
 (defvaralias 'python-indent-offset 'indent-level)
 #+END_SRC
