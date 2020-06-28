@@ -1028,6 +1028,46 @@ Steel Bank Common Lisp
   (set-keymap-parent lisp-interaction-mode-map emacs-lisp-mode-map))
 #+END_SRC
 
+#+BEGIN_SRC emacs-lisp
+(defun *eval/buffer-and-replace ()
+  (interactive)
+  (+eval/region-and-replace (point-min) (point-max))
+  (let ((result (eval-buffer)))
+    (kill-region (point-min) (point-max))
+    (insert result)))
+
+(defun *eval/sexp-and-replace ()
+  (interactive)
+  (let* ((beg (progn (backward-sexp 1) (point)))
+         (end (progn (forward-sexp  1) (point))))
+    (+eval/region-and-replace beg end)))
+
+(map! :after elisp-mode
+      :map emacs-lisp-mode-map
+      :localleader :prefix "e"
+      "B" #'*eval/buffer-and-replace
+      "E" #'*eval/sexp-and-replace
+      "R" #'+eval/region-and-replace)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(defun *elisp-macroexpand-last-sexp ()
+  (interactive)
+  (when (and (bound-and-true-p evil-mode)
+             (not evil-move-beyond-eol)
+             (or (evil-normal-state-p) (evil-motion-state-p))
+             (not (or (eobp) (eolp))))
+    (forward-char))
+  (backward-sexp)
+  (emacs-lisp-macroexpand)
+  (forward-sexp))
+
+(after! elisp-mode
+  (define-localleader-key! :keymaps
+    '(emacs-lisp-mode-map)
+    "x" #'*elisp-macroexpand-last-sexp))
+#+END_SRC
+
 ** Fennel :Lisp:Lua:
 #+BEGIN_SRC emacs-lisp
 (add-hook 'fennel-mode-hook #'lisp-mode-common-hook)
