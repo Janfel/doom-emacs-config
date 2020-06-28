@@ -241,8 +241,7 @@ For ~tab-line~ configuration, steal from [[https://gitlab.com/andreyorst/dotfile
 Wrap everything in a conditional. Disabled because WIP.
 #+BEGIN_SRC emacs-lisp :tangle no
 (when EMACS27+
-  (after! tab-bar
-    <<tab-bar-config>>))
+  (after! tab-bar))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp :tangle no
