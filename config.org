@@ -427,7 +427,9 @@ Make ~+literate-recompile-maybe-h~ compile in non-blocking subprocess.
     (when (and (eq major-mode 'org-mode)
                (file-in-directory-p buffer-file-name doom-private-dir))
       (message "Compiling your literate config...")
-      (start-process "proc" nil (expand-file-name "doom" doom-bin-dir) "tangle"))))
+      (start-process "proc" nil
+                     (expand-file-name "org-tangle" doom-bin-dir)
+                     +literate-config-file))))
 #+END_SRC
 
 ** Spell Checking
