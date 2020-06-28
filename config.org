@@ -855,8 +855,9 @@ In ~snippet-mode~, whitespace has significant meaning.
 This only works with a *patched* Arduino runtime.
 #+BEGIN_SRC emacs-lisp
 (when (sys-feature-p 'arduino/xdg)
-  (setq ede-arduino-preferences-file
-        (expand-file-name "arduino/preferences.txt" XDG-DATA-HOME)))
+  (let ((pref-file (expand-file-name "arduino/preferences.txt" XDG-DATA-HOME)))
+    (when (file-readable-p pref-file)
+      (setq ede-arduino-preferences-file pref-file))))
 #+END_SRC
 
 ** Assembler
