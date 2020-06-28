@@ -475,39 +475,7 @@ Bind keys for ~redo~.
 #+END_SRC
 
 ** Evil
-#+BEGIN_SRC emacs-lisp :noweb no-export
-(when (featurep! :editor evil)
-  (after! evil
-    <<evil-mode-config>>)
-  (after! evil-numbers
-    <<evil-numbers-config>>)
-  (after! evil-snipe
-    <<evil-snipe-config>>))
-#+END_SRC
-
-The =evil-org= package is only loaded when the =+everywhere= flag is set.
-#+BEGIN_SRC emacs-lisp :noweb no-export
-(when (featurep! :editor evil +everywhere)
-  (after! evil-org
-    <<evil-org-config>>))
-#+END_SRC
-
-Doom Emacs loads the ~evil-collection~ packages manually and needs the
-corresponding variables to be set beforehand. The code below runs
-=<<evil-collection-config>>= right before ~+evil-collection-init~ first called.
-#+BEGIN_SRC emacs-lisp :noweb no-export
-(when (and (featurep! :editor evil +everywhere)
-           doom-interactive-p
-           (not doom-reloading-p)
-           (not (memq 'evil-collection doom-disabled-packages)))
-  (add-transient-hook! #'+evil-collection-init
-    <<evil-collection-config>>))
-#+END_SRC
-
 *** Evil Mode
-:PROPERTIES:
-:header-args+: :tangle no :noweb-ref evil-mode-config
-:END:
 Evil uses Vim’s undo increments by default, which are too coarse for me.
 #+BEGIN_SRC emacs-lisp
 (setq evil-want-fine-undo t)
@@ -524,93 +492,86 @@ which causes ~evil-shift-width~ to be a localized variable.
 ;; (defvaralias 'evil-shift-width 'indent-level)
 #+END_SRC
 
-Remap the document scroll motions to something more sensible.
 #+BEGIN_SRC emacs-lisp
-(map! :m "z+" nil
-      :m "z-" nil
-      :m "z^" nil
-      :m "z." nil
-      :m "zT" #'evil-scroll-bottom-line-to-top
-      :m "zB" #'evil-scroll-top-line-to-bottom
-      :m "z S-<right>" #'evil-scroll-right
-      :m "z S-<left>" #'evil-scroll-left)
-#+END_SRC
-
-Map the arrow keys in Evils window map.
-#+BEGIN_SRC emacs-lisp
-(map! :map evil-window-map
-      "<up>"      #'evil-window-up
-      "<down>"    #'evil-window-down
-      "<left>"    #'evil-window-left
-      "<right>"   #'evil-window-right
-      "S-<up>"    #'+evil/window-move-up
-      "S-<down>"  #'+evil/window-move-down
-      "S-<left>"  #'+evil/window-move-left
-      "S-<right>" #'+evil/window-move-right
-      "C-h"       nil
-      "C-j"       nil
-      "C-k"       nil
-      "C-l"       nil)
+(map!
+ ;; Remap the document scroll motions to something more sensible.
+ :m "z+" nil
+ :m "z-" nil
+ :m "z^" nil
+ :m "z." nil
+ :m "zT" #'evil-scroll-bottom-line-to-top
+ :m "zB" #'evil-scroll-top-line-to-bottom
+ :m "z S-<right>" #'evil-scroll-right
+ :m "z S-<left>" #'evil-scroll-left
+ ;; Map the arrow keys in Evils window map.
+ (:map evil-window-map
+  "<up>"      #'evil-window-up
+  "<down>"    #'evil-window-down
+  "<left>"    #'evil-window-left
+  "<right>"   #'evil-window-right
+  "S-<up>"    #'+evil/window-move-up
+  "S-<down>"  #'+evil/window-move-down
+  "S-<left>"  #'+evil/window-move-left
+  "S-<right>" #'+evil/window-move-right
+  "C-h"       nil
+  "C-j"       nil
+  "C-k"       nil
+  "C-l"       nil))
 #+END_SRC
 
 *** Evil Collection
-:PROPERTIES:
-:header-args+: :tangle no :noweb-ref evil-collection-config
-:END:
-Nobody should be forced to play Tetris with HJKL.
-#+BEGIN_SRC emacs-lisp
-(push! +evil-collection-disabled-list 'tetris '2084-game)
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-(push! +evil-collection-disabled-list 'haskell-error-mode)
+Doom Emacs loads the ~evil-collection~ packages manually and needs the
+corresponding variables to be set beforehand. The code below runs
+right before ~+evil-collection-init~ first called.
+#+BEGIN_SRC emacs-lisp :noweb no-export
+(when (and (featurep! :editor evil +everywhere)
+           doom-interactive-p
+           (not doom-reloading-p)
+           (not (memq 'evil-collection doom-disabled-packages)))
+  (add-transient-hook! #'+evil-collection-init
+    (push! +evil-collection-disabled-list
+           'tetris '2084-game 'haskell-error-mode)))
 #+END_SRC
 
 *** Evil Numbers
-:PROPERTIES:
-:header-args+: :tangle no :noweb-ref evil-numbers-config
-:END:
 Remap the ~inc-at-pt~ functions, so =z == can be used for formatting.
 #+BEGIN_SRC emacs-lisp
-(map! :nv "g +" #'evil-numbers/inc-at-pt
+(map! :when (featurep! :editor evil)
+      :after evil-numbers
+      :nv "g +" #'evil-numbers/inc-at-pt
       :nv "g -" #'evil-numbers/dec-at-pt
       :v  "z +" #'evil-numbers/inc-at-pt-incremental
       :v  "z -" #'evil-numbers/dec-at-pt-incremental)
 #+END_SRC
 
 *** Evil Snipe
-:PROPERTIES:
-:header-args+: :tangle no :noweb-ref evil-snipe-config
-:END:
 Put ~evil-snipe-repeat~ on Comma and Shift-Comma.
 Doesn’t seem to work due to keymap precedences.
 #+BEGIN_SRC emacs-lisp
-(map! :map evil-snipe-parent-transient-map
+(map! :when (featurep! :editor evil)
+      :after evil-snipe
+      :map evil-snipe-parent-transient-map
       "," #'evil-snipe-repeat
       "–" #'evil-snipe-repeat-reverse
       ";" nil)
 #+END_SRC
 
 *** Evil Org
-:PROPERTIES:
-:header-args+: :tangle no :noweb-ref evil-org-config
-:END:
+The =evil-org= package is only loaded when the =+everywhere= flag is set.
+
 Doom Emacs changes ~org-cycle~ to skip the =subtree= stage by default when
 ~(featurep! :editor evil +everywhere)~.
 #+BEGIN_SRC emacs-lisp
-(remove-hook 'org-tab-first-hook #'+org-cycle-only-current-subtree-h)
+(after! evil-org
+  (remove-hook 'org-tab-first-hook #'+org-cycle-only-current-subtree-h))
 #+END_SRC
 
-Add block jumping to =[= and =]=.
+Add block jumping to =[= and =]= and remap =z r= and =z m= to =z O= and =z C=.
 #+BEGIN_SRC emacs-lisp
-(map! :map evil-org-mode-map
+(map! :after evil-org
+      :map evil-org-mode-map
       :m "[ _" #'org-previous-block
-      :m "] _" #'org-next-block)
-#+END_SRC
-
-Remap =z r= and =z m= to =z O= and =z C=.
-#+BEGIN_SRC emacs-lisp
-(map! :map evil-org-mode-map
+      :m "] _" #'org-next-block
       :n "z r" nil
       :n "z m" nil
       :n "z O" #'+org/show-next-fold-level
@@ -618,27 +579,16 @@ Remap =z r= and =z m= to =z O= and =z C=.
 #+END_SRC
 
 ** Flycheck
-:PROPERTIES:
-:header-args+: :tangle no :noweb-ref flycheck-config
-:END:
-#+BEGIN_SRC emacs-lisp :tangle yes :noweb-ref :noweb no-export
-(when (featurep! :checkers syntax)
-  (after! flycheck
-    <<flycheck-config>>))
-#+END_SRC
-
-Map double exclamation mark to buffer command.
 #+BEGIN_SRC emacs-lisp
-(map! :map flycheck-command-map "!" #'flycheck-buffer)
-#+END_SRC
-
-Name the flycheck prefix keys.
-#+BEGIN_SRC emacs-lisp
-(map! :leader :prefix "c"
-      (:prefix ("!" . "flycheck") "" flycheck-command-map))
-
-(map! :map flycheck-mode-map :prefix "C-c"
-      (:prefix ("!" . "flycheck") "" flycheck-command-map))
+(map! :when (featurep! :checkers syntax)
+      :after flycheck
+      ;; Map double exclamation mark.
+      (:map flycheck-command-map "!" #'flycheck-buffer)
+      ;; Name the flycheck prefix keys.
+      (:leader :prefix "c"
+       (:prefix ("!" . "flycheck") "" flycheck-command-map))
+      (:map flycheck-mode-map :prefix "C-c"
+       (:prefix ("!" . "flycheck") "" flycheck-command-map)))
 #+END_SRC
 
 ** Helpful
@@ -660,15 +610,6 @@ These functions delete all whitespace up to the next non-whitespace character.
 #+END_SRC
 
 ** Ivy
-:PROPERTIES:
-:header-args+: :tangle no :noweb-ref ivy-config
-:END:
-#+BEGIN_SRC emacs-lisp :tangle yes :noweb-ref :noweb no-export
-(when (featurep! :completion ivy)
-  (after! ivy
-    <<ivy-config>>))
-#+END_SRC
-
 Don’t show =../= in file completion buffer.
 #+BEGIN_SRC emacs-lisp
 (setq ivy-extra-directories '("./"))
@@ -676,7 +617,9 @@ Don’t show =../= in file completion buffer.
 
 Ivy should recurse into directories when pressing =RET=.
 #+BEGIN_SRC emacs-lisp
-(map! :map ivy-minibuffer-map
+(map! :when (featurep! :completion ivy)
+      :after ivy
+      :map ivy-minibuffer-map
       "<return>"   #'ivy-alt-done
       "C-<return>" #'ivy-immediate-done
       "C-l"        #'ivy-done
@@ -699,18 +642,9 @@ Ivy should recurse into directories when pressing =RET=.
 #+END_SRC
 
 ** Smartparens
-:PROPERTIES:
-:header-args+: :tangle no :noweb-ref smartparens-config
-:END:
-#+BEGIN_SRC emacs-lisp :tangle yes :noweb-ref :noweb no-export
-(when (featurep! :config default +smartparens)
-  (after! smartparens
-    <<smartparens-config>>))
-#+END_SRC
-
 Activate ~show-smartparens-mode~ globally to highlight matching pairs.
 #+BEGIN_SRC emacs-lisp
-(show-smartparens-global-mode +1)
+(after! smartparens (show-smartparens-global-mode +1))
 #+END_SRC
 
 Bind ~sp-raise-sexp~, which I use quite often.
@@ -726,60 +660,44 @@ one. When the linked issue is resolved, this fix can be removed.
 #+END_SRC
 
 ** Which Key
-:PROPERTIES:
-:header-args+: :tangle no :noweb-ref which-key-config
-:END:
-#+BEGIN_SRC emacs-lisp :tangle yes :noweb-ref :noweb no-export
-(after! which-key
-  <<which-key-config>>)
-#+END_SRC
-
 Replace =<up>= and =<down>= with Unicode arrows.
 #+BEGIN_SRC emacs-lisp
-(push! which-key-replacement-alist
-       '(("<up>"   . nil) . ("↑" . nil))
-       '(("<down>" . nil) . ("↓" . nil)))
+(after! which-key
+  (push! which-key-replacement-alist
+         '(("<up>"   . nil) . ("↑" . nil))
+         '(("<down>" . nil) . ("↓" . nil))))
 #+END_SRC
 
 These are some default keybindings that are missing a description.
 #+BEGIN_SRC emacs-lisp
-(which-key-add-key-based-replacements
- "C-x"      '("global" . "Global commands")
- "C-x RET"  "locale"
- "C-x ESC"  "complex-repeat"
+(after! which-key
+  (which-key-add-key-based-replacements
+    "C-x"      '("global" . "Global commands")
+    "C-x RET"  "locale"
+    "C-x ESC"  "complex-repeat"
 
- "C-x 4"    "other-window"
- "C-x 5"    "other-frame"
- "C-x 6"    "two-column"
- "C-x 8"    '("unicode" . "Unicode symbols")
+    "C-x 4"    "other-window"
+    "C-x 5"    "other-frame"
+    "C-x 6"    "two-column"
+    "C-x 8"    '("unicode" . "Unicode symbols")
 
- "C-x @"    '("apply-modifier" . "Add a modifier to the next event")
- "C-x a"    "abbrev"
- "C-x a i"  "inverse"
- "C-x n"    "narrow"
- "C-x r"    "rectangle/register"
- "C-x t"    "tab-bar"
- "C-x v"    "version-control"
- "C-x X"    "edebug"
+    "C-x @"    '("apply-modifier" . "Add a modifier to the next event")
+    "C-x a"    "abbrev"
+    "C-x a i"  "inverse"
+    "C-x n"    "narrow"
+    "C-x r"    "rectangle/register"
+    "C-x t"    "tab-bar"
+    "C-x v"    "version-control"
+    "C-x X"    "edebug"
 
- "C-c"      '("mode-specific" . "Mode specific commands")
+    "C-c"      '("mode-specific" . "Mode specific commands")
 
- "M-s"      "search"
- "M-s h"    "highlight"
- "M-g"      "goto"
-)
+    "M-s"      "search"
+    "M-s h"    "highlight"
+    "M-g"      "goto"))
 #+END_SRC
 
 ** Yasnippet
-:PROPERTIES:
-:header-args+: :tangle no :noweb-ref yasnippet-config
-:END:
-#+BEGIN_SRC emacs-lisp :tangle yes :noweb-ref :noweb no-export
-(when (featurep! :editor snippets)
-  (after! yasnippet
-    <<yasnippet-config>>))
-#+END_SRC
-
 In ~snippet-mode~, whitespace has significant meaning.
 #+BEGIN_SRC emacs-lisp
 (after! ws-butler
