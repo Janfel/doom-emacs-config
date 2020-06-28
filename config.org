@@ -4,7 +4,7 @@
 #+DESCRIPTION: Doom Emacs configuration of Jan Felix Langenbach
 #+LANGUAGE: en
 #+STARTUP: fold
-#+PROPERTY: header-args :noweb no-export :lexical yes :results silent :tangle yes
+#+PROPERTY: header-args :lexical yes :results silent :tangle yes
 
 * Introduction
 These are some useful links to manuals and other peoples configs.
@@ -221,7 +221,7 @@ Treat ~info~ buffers as real buffers.
 #+END_SRC
 
 * Emacs 27 Features
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :noweb no-export
 (when EMACS27+
   <<emacs-27-features>>)
 #+END_SRC
@@ -248,7 +248,7 @@ Treat ~info~ buffers as real buffers.
 For ~tab-line~ configuration, steal from [[https://gitlab.com/andreyorst/dotfiles/-/blob/master/.config/emacs/init.el][andreyorst]].
 
 Wrap everything in a conditional. Disabled because WIP.
-#+BEGIN_SRC emacs-lisp :tangle no :noweb-ref
+#+BEGIN_SRC emacs-lisp :tangle no :noweb-ref :noweb no-export
 (when EMACS27+
   (after! tab-bar
     <<tab-bar-config>>))
@@ -310,7 +310,7 @@ Define these variables from =core/autoload/config.el=.
 :PROPERTIES:
 :header-args+: :tangle no :noweb-ref file-templates-config
 :END:
-#+BEGIN_SRC emacs-lisp :tangle yes :noweb-ref
+#+BEGIN_SRC emacs-lisp :tangle yes :noweb-ref :noweb no-export
 (when (featurep! :editor file-templates)
   <<file-templates-config>>)
 #+END_SRC
@@ -368,7 +368,7 @@ Allows jumping from =^L= to =^L=.
 :header-args+: :tangle no :noweb-ref highlight-indent-guides-config
 :END:
 The package [[https://github.com/DarthFennec/highlight-indent-guides][highlight-indent-guides]] draws a line for each indentation level.
-#+BEGIN_SRC emacs-lisp :tangle yes :noweb-ref
+#+BEGIN_SRC emacs-lisp :tangle yes :noweb-ref :noweb no-export
 (use-package! highlight-indent-guides
   ;; Maybe change this to mode-by-mode basis.
   :commands (highlight-indent-guides-mode)
@@ -451,7 +451,7 @@ Make ~+literate-recompile-maybe-h~ compile in non-blocking subprocess.
 :PROPERTIES:
 :header-args+: :tangle no :noweb-ref vterm-config
 :END:
-#+BEGIN_SRC emacs-lisp :tangle yes :noweb-ref
+#+BEGIN_SRC emacs-lisp :tangle yes :noweb-ref :noweb no-export
 (when (featurep! :term vterm)
   (after! vterm
     <<vterm-config>>))
@@ -511,24 +511,17 @@ Bind keys for ~redo~.
 
 * Packages
 ** Company
-:PROPERTIES:
-:header-args+: :tangle no :noweb-ref company-config
-:END:
-#+BEGIN_SRC emacs-lisp :tangle yes :noweb-ref
-(when (featurep! :completion company)
-  (after! company
-    <<company-config>>))
-#+END_SRC
-
 *** Quickhelp
 #+BEGIN_SRC emacs-lisp
 (use-package! company-quickhelp
+  :when (featurep! :completion company)
+  :after company
   :hook (company-mode-hook . company-quickhelp-local-mode)
   :config (setq company-quickhelp-use-propertized-text nil))
 #+END_SRC
 
 ** Evil
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :noweb no-export
 (when (featurep! :editor evil)
   (after! evil
     <<evil-mode-config>>)
@@ -539,7 +532,7 @@ Bind keys for ~redo~.
 #+END_SRC
 
 The =evil-org= package is only loaded when the =+everywhere= flag is set.
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :noweb no-export
 (when (featurep! :editor evil +everywhere)
   (after! evil-org
     <<evil-org-config>>))
@@ -548,7 +541,7 @@ The =evil-org= package is only loaded when the =+everywhere= flag is set.
 Doom Emacs loads the ~evil-collection~ packages manually and needs the
 corresponding variables to be set beforehand. The code below runs
 =<<evil-collection-config>>= right before ~+evil-collection-init~ first called.
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :noweb no-export
 (when (and (featurep! :editor evil +everywhere)
            doom-interactive-p
            (not doom-reloading-p)
@@ -674,7 +667,7 @@ Remap =z r= and =z m= to =z O= and =z C=.
 :PROPERTIES:
 :header-args+: :tangle no :noweb-ref flycheck-config
 :END:
-#+BEGIN_SRC emacs-lisp :tangle yes :noweb-ref
+#+BEGIN_SRC emacs-lisp :tangle yes :noweb-ref :noweb no-export
 (when (featurep! :checkers syntax)
   (after! flycheck
     <<flycheck-config>>))
@@ -716,7 +709,7 @@ These functions delete all whitespace up to the next non-whitespace character.
 :PROPERTIES:
 :header-args+: :tangle no :noweb-ref ivy-config
 :END:
-#+BEGIN_SRC emacs-lisp :tangle yes :noweb-ref
+#+BEGIN_SRC emacs-lisp :tangle yes :noweb-ref :noweb no-export
 (when (featurep! :completion ivy)
   (after! ivy
     <<ivy-config>>))
@@ -755,7 +748,7 @@ Ivy should recurse into directories when pressing =RET=.
 :PROPERTIES:
 :header-args+: :tangle no :noweb-ref smartparens-config
 :END:
-#+BEGIN_SRC emacs-lisp :tangle yes :noweb-ref
+#+BEGIN_SRC emacs-lisp :tangle yes :noweb-ref :noweb no-export
 (when (featurep! :config default +smartparens)
   (after! smartparens
     <<smartparens-config>>))
@@ -782,11 +775,9 @@ one. When the linked issue is resolved, this fix can be removed.
 :PROPERTIES:
 :header-args+: :tangle no :noweb-ref which-key-config
 :END:
-#+BEGIN_SRC emacs-lisp :tangle yes :noweb-ref
+#+BEGIN_SRC emacs-lisp :tangle yes :noweb-ref :noweb no-export
 (after! which-key
-  <<which-key-config>>
-  (which-key-add-key-based-replacements
-    <<which-key-replacements>>))
+  <<which-key-config>>)
 #+END_SRC
 
 Replace =<up>= and =<down>= with Unicode arrows.
@@ -796,42 +787,40 @@ Replace =<up>= and =<down>= with Unicode arrows.
        '(("<down>" . nil) . ("↓" . nil)))
 #+END_SRC
 
-*** Replacements
-:PROPERTIES:
-:header-args+: :tangle no :noweb-ref which-key-replacements
-:END:
 These are some default keybindings that are missing a description.
 #+BEGIN_SRC emacs-lisp
-"C-x"      '("global" . "Global commands")
-"C-x RET"  "locale"
-"C-x ESC"  "complex-repeat"
+(which-key-add-key-based-replacements
+ "C-x"      '("global" . "Global commands")
+ "C-x RET"  "locale"
+ "C-x ESC"  "complex-repeat"
 
-"C-x 4"    "other-window"
-"C-x 5"    "other-frame"
-"C-x 6"    "two-column"
-"C-x 8"    '("unicode" . "Unicode symbols")
+ "C-x 4"    "other-window"
+ "C-x 5"    "other-frame"
+ "C-x 6"    "two-column"
+ "C-x 8"    '("unicode" . "Unicode symbols")
 
-"C-x @"    '("apply-modifier" . "Add a modifier to the next event")
-"C-x a"    "abbrev"
-"C-x a i"  "inverse"
-"C-x n"    "narrow"
-"C-x r"    "rectangle/register"
-"C-x t"    "tab-bar"
-"C-x v"    "version-control"
-"C-x X"    "edebug"
+ "C-x @"    '("apply-modifier" . "Add a modifier to the next event")
+ "C-x a"    "abbrev"
+ "C-x a i"  "inverse"
+ "C-x n"    "narrow"
+ "C-x r"    "rectangle/register"
+ "C-x t"    "tab-bar"
+ "C-x v"    "version-control"
+ "C-x X"    "edebug"
 
-"C-c"      '("mode-specific" . "Mode specific commands")
+ "C-c"      '("mode-specific" . "Mode specific commands")
 
-"M-s"      "search"
-"M-s h"    "highlight"
-"M-g"      "goto"
+ "M-s"      "search"
+ "M-s h"    "highlight"
+ "M-g"      "goto"
+)
 #+END_SRC
 
 ** Yasnippet
 :PROPERTIES:
 :header-args+: :tangle no :noweb-ref yasnippet-config
 :END:
-#+BEGIN_SRC emacs-lisp :tangle yes :noweb-ref
+#+BEGIN_SRC emacs-lisp :tangle yes :noweb-ref :noweb no-export
 (when (featurep! :editor snippets)
   (after! yasnippet
     <<yasnippet-config>>))
@@ -854,7 +843,7 @@ In ~snippet-mode~, whitespace has significant meaning.
 :PROPERTIES:
 :header-args+: :tangle no :noweb-ref arduino-mode-config
 :END:
-#+BEGIN_SRC emacs-lisp :tangle yes :noweb-ref
+#+BEGIN_SRC emacs-lisp :tangle yes :noweb-ref :noweb no-export
 (after! arduino
   <<arduino-mode-config>>)
 #+END_SRC
@@ -865,17 +854,18 @@ In ~snippet-mode~, whitespace has significant meaning.
 
 This only works with a *patched* Arduino runtime.
 #+BEGIN_SRC emacs-lisp
-(let ((arduino-dir (expand-file-name "arduino/" XDG-DATA-HOME)))
-  (when (and (sys-feature-p 'arduino/xdg) (file-directory-p arduino-dir))
-    (setq ede-arduino-preferences-file
-          (expand-file-name "preferences.txt" arduino-dir))))
+(when (sys-feature-p 'arduino/xdg)
+  (let ((arduino-dir (expand-file-name "arduino/" XDG-DATA-HOME)))
+    (when (file-directory-p arduino-dir)
+      (setq ede-arduino-preferences-file
+            (expand-file-name "preferences.txt" arduino-dir)))))
 #+END_SRC
 
 ** Assembler
 :PROPERTIES:
 :header-args+: :tangle no :noweb-ref asm-mode-config
 :END:
-#+BEGIN_SRC emacs-lisp :tangle yes :noweb-ref
+#+BEGIN_SRC emacs-lisp :tangle yes :noweb-ref :noweb no-export
 (after! asm-mode
   <<asm-mode-config>>)
 #+END_SRC
@@ -897,7 +887,7 @@ This only works with a *patched* Arduino runtime.
 :PROPERTIES:
 :header-args+: :tangle no :noweb-ref basic-mode-config
 :END:
-#+BEGIN_SRC emacs-lisp :tangle yes :noweb-ref
+#+BEGIN_SRC emacs-lisp :tangle yes :noweb-ref :noweb no-export
 (after! basic-mode
   <<basic-mode-config>>)
 #+END_SRC
@@ -920,7 +910,7 @@ This only works with a *patched* Arduino runtime.
 #+END_SRC
 
 ** C/C++
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :noweb no-export
 (after! cc-mode
   <<c-mode-config>>
   <<c++-mode-config>>)
@@ -999,14 +989,14 @@ The file extension =.cl= is sometimes used.
 (add-hook 'lisp-mode-hook #'lisp-mode-common-hook)
 #+END_SRC
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :noweb no-export
 (after! sly
   <<lisp-sly-config>>)
 #+END_SRC
 
 *** Sly
 :PROPERTIES:
-:header-args+: :tangle no :noweb-ref lisp-mode-config
+:header-args+: :tangle no :noweb-ref lisp-sly-config
 :END:
 #+BEGIN_SRC emacs-lisp
 (setq sly-default-lisp 'sbcl)
@@ -1045,7 +1035,7 @@ Steel Bank Common Lisp
 #+END_SRC
 
 ** Haskell
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :noweb no-export
 (after! haskell-mode
   <<haskell-mode-config>>)
 
@@ -1064,7 +1054,9 @@ Steel Bank Common Lisp
 
 Doom Emacs uses this hook which seems not to exist.
 #+BEGIN_SRC emacs-lisp
-(add-hook! 'haskell-mode-hook (run-hooks 'haskell-mode-local-vars-hook))
+(add-hook! 'haskell-mode-hook
+  (defun *haskell--run-mode-local-vars-hook ()
+    (run-hooks 'haskell-mode-local-vars-hook)))
 #+END_SRC
 
 These bindings are used by many modes with an inferior REPL.
@@ -1099,7 +1091,7 @@ error code. Using =--no-exit-code= prevents this.
 :PROPERTIES:
 :header-args+: :tangle no :noweb-ref js-mode-config
 :END:
-#+BEGIN_SRC emacs-lisp :tangle yes :noweb-ref
+#+BEGIN_SRC emacs-lisp :tangle yes :noweb-ref :noweb no-export
 (after! js
   <<js-mode-config>>)
 #+END_SRC
@@ -1122,7 +1114,7 @@ error code. Using =--no-exit-code= prevents this.
 #+END_SRC
 
 ** LaTeX
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :noweb no-export
 (after! tex-mode
   <<tex-latex-mode-config>>)
 #+END_SRC
@@ -1197,7 +1189,7 @@ Improve the comment insertion of ~comment-dwim~.
 #+END_SRC
 
 ** Lua
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :noweb no-export
 (after! lua-mode
   <<lua-mode-config>>)
 
@@ -1267,7 +1259,7 @@ yet found a fix for this.
 :PROPERTIES:
 :header-args+: :tangle no :noweb-ref moonscript-mode-config
 :END:
-#+BEGIN_SRC emacs-lisp :tangle yes :noweb-ref
+#+BEGIN_SRC emacs-lisp :tangle yes :noweb-ref :noweb no-export
 (after! moonscript
   <<moonscript-mode-config>>)
 #+END_SRC
@@ -1294,7 +1286,7 @@ Doom Emacs, annoyingly, sets ~moonscript-indent-offset~ to ~tab-width~ by defaul
 #+END_SRC
 
 ** Org
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :noweb no-export
 (after! org
   <<org-mode-config>>)
 
@@ -1416,7 +1408,7 @@ These values have to be set before ~org-mode~ is loaded.
 #+END_SRC
 
 ** Pascal
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :noweb no-export
 (after! pascal
   <<pascal-mode-config>>
   <<pascal-and-opascal-mode-config>>)
@@ -1477,7 +1469,7 @@ would be unusable otherwise.
 #+END_SRC
 
 ** Perl
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :noweb no-export
 (after! perl-mode
   <<perl-mode-config>>
   <<perl-and-cperl-mode-config>>)
@@ -1533,7 +1525,7 @@ This allows me to not load the entire =:lang/php= module.
 (unless (featurep! :lang php) (use-package! php-mode :defer t))
 #+END_SRC
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :noweb no-export
 (after! php-mode
   <<php-mode-config>>)
 #+END_SRC
@@ -1556,7 +1548,7 @@ This allows me to not load the entire =:lang/php= module.
 #+END_SRC
 
 ** Python
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :noweb no-export
 (after! python
   <<python-mode-config>>)
 
@@ -1608,7 +1600,7 @@ The package will load when =company-jedi= is invoked by =company=.
 
 *** _Backup
 :PROPERTIES:
-:header-args+: :tangle no :noweb-ref
+:header-args+: :tangle no :noweb-ref :noweb no-export
 :END:
 Use system =mspyls= for =lsp-python-ms=.
 #+BEGIN_SRC emacs-lisp :tangle no
@@ -1619,7 +1611,7 @@ Use system =mspyls= for =lsp-python-ms=.
 #+END_SRC
 
 ** Rust
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :noweb no-export
 (after! rustic
   <<rustic-mode-config>>)
 #+END_SRC
@@ -1678,7 +1670,7 @@ On Arch, the [[https://www.call-cc.org/][Chicken Scheme]] binaries are called =c
 :PROPERTIES:
 :header-args+: :tangle no :noweb-ref sh-mode-config
 :END:
-#+BEGIN_SRC emacs-lisp :tangle yes :noweb-ref
+#+BEGIN_SRC emacs-lisp :tangle yes :noweb-ref :noweb no-export
 (after! sh-script
   <<sh-mode-config>>)
 #+END_SRC
@@ -1704,8 +1696,7 @@ On Arch, the [[https://www.call-cc.org/][Chicken Scheme]] binaries are called =c
 :PROPERTIES:
 :header-args+: :tangle no :noweb-ref nxml-mode-config
 :END:
-
-#+BEGIN_SRC emacs-lisp :tangle yes :noweb-ref
+#+BEGIN_SRC emacs-lisp :tangle yes :noweb-ref :noweb no-export
 (after! nxml-mode
   <<nxml-mode-config>>)
 #+END_SRC
@@ -1756,6 +1747,7 @@ Replace the original ~nxml-mode~ rules with ones that aren’t broken.
            sgml-skip-tag-forward
            nil)))
 #+END_SRC
+
 * Keybindings
 ** Ä/Ö/Ü
 #+BEGIN_SRC emacs-lisp
