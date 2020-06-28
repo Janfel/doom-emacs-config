@@ -867,14 +867,6 @@ This only works with a *patched* Arduino runtime.
 #+END_SRC
 
 ** BASIC
-:PROPERTIES:
-:header-args+: :tangle no :noweb-ref basic-mode-config
-:END:
-#+BEGIN_SRC emacs-lisp :tangle yes :noweb-ref :noweb no-export
-(after! basic-mode
-  <<basic-mode-config>>)
-#+END_SRC
-
 #+BEGIN_SRC emacs-lisp
 (defvaralias 'basic-indent-offset 'indent-level)
 #+END_SRC
