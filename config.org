@@ -221,40 +221,31 @@ Treat ~info~ buffers as real buffers.
 #+END_SRC
 
 * Emacs 27 Features
-#+BEGIN_SRC emacs-lisp :noweb no-export
-(when EMACS27+
-  <<emacs-27-features>>)
-#+END_SRC
-
 ** Fill Column Indicator
-:PROPERTIES:
-:header-args+: :tangle no :noweb-ref emacs-27-features
-:END:
 #+BEGIN_SRC emacs-lisp
-(add-hook! '(prog-mode-hook text-mode-hook)
-           #'display-fill-column-indicator-mode)
+(when EMACS27+
+  (add-hook! '(prog-mode-hook text-mode-hook)
+             #'display-fill-column-indicator-mode))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-(defun display-fill-column-indicator-mode--turn-off ()
-  (interactive)
-  (display-fill-column-indicator-mode -1))
+(when EMACS27+
+  (defun display-fill-column-indicator-mode--turn-off ()
+    (interactive)
+    (display-fill-column-indicator-mode -1)))
 #+END_SRC
 
 ** Tab Bar
-:PROPERTIES:
-:header-args+: :tangle no :noweb-ref tab-bar-config
-:END:
 For ~tab-line~ configuration, steal from [[https://gitlab.com/andreyorst/dotfiles/-/blob/master/.config/emacs/init.el][andreyorst]].
 
 Wrap everything in a conditional. Disabled because WIP.
-#+BEGIN_SRC emacs-lisp :tangle no :noweb-ref :noweb no-export
+#+BEGIN_SRC emacs-lisp :tangle no
 (when EMACS27+
   (after! tab-bar
     <<tab-bar-config>>))
 #+END_SRC
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
 (setq tab-bar-close-button-show t
       tab-bar-new-button-show t
       tab-bar-separator nil
@@ -267,7 +258,7 @@ Wrap everything in a conditional. Disabled because WIP.
                             :help "Click to close tab"))
 #+END_SRC
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
 (let ((fg   (face-attribute 'default   :foreground))
       (bg   (face-attribute 'default   :background))
       (base (face-attribute 'mode-line :background)))
@@ -307,36 +298,21 @@ Define these variables from =core/autoload/config.el=.
 
 * Editor Features
 ** File Templates
-:PROPERTIES:
-:header-args+: :tangle no :noweb-ref file-templates-config
-:END:
-#+BEGIN_SRC emacs-lisp :tangle yes :noweb-ref :noweb no-export
+#+BEGIN_SRC emacs-lisp
 (when (featurep! :editor file-templates)
-  <<file-templates-config>>)
-#+END_SRC
+  (defvar +file-templates-fallback-dir +file-templates-dir
+    "The directory where the file templates provided by Doom are stored.")
 
-#+BEGIN_SRC emacs-lisp
-(defvar +file-templates-fallback-dir +file-templates-dir
-  "The directory where the file templates provided by Doom are stored.")
+  (setq +file-templates-dir (expand-file-name "templates/" doom-private-dir))
 
-(setq +file-templates-dir (expand-file-name "templates/" doom-private-dir))
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-(after! yasnippet
-  (setq yas-snippet-dirs
-        (nconc (when (featurep! :editor snippets) '(+snippets-dir))
-               '(+file-templates-dir)
-               (->> yas-snippet-dirs
-                    (delq '+snippets-dir)
-                    (delq '+file-templates-dir))
-               '(+file-templates-fallback-dir))))
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-(set-file-template! "\\.sh\\'"
-  :trigger "__sh"
-  :mode 'sh-mode)
+  (after! yasnippet
+    (setq yas-snippet-dirs
+          (nconc (when (featurep! :editor snippets) '(+snippets-dir))
+                 '(+file-templates-dir)
+                 (->> yas-snippet-dirs
+                      (delq '+snippets-dir)
+                      (delq '+file-templates-dir))
+                 '(+file-templates-fallback-dir)))))
 #+END_SRC
 
 ** Formatting Engine
@@ -364,32 +340,19 @@ Allows jumping from =^L= to =^L=.
 
 ** Indentation
 *** Indent Guides
-:PROPERTIES:
-:header-args+: :tangle no :noweb-ref highlight-indent-guides-config
-:END:
 The package [[https://github.com/DarthFennec/highlight-indent-guides][highlight-indent-guides]] draws a line for each indentation level.
 #+BEGIN_SRC emacs-lisp :tangle yes :noweb-ref :noweb no-export
 (use-package! highlight-indent-guides
   ;; Maybe change this to mode-by-mode basis.
   :commands (highlight-indent-guides-mode)
   :config
-  <<highlight-indent-guides-config>>)
-#+END_SRC
-
-Use bitmap images instead of characters.
-#+BEGIN_SRC emacs-lisp
-(setq highlight-indent-guides-method 'bitmap)
-#+END_SRC
-
-Use a bitmap of a solid line.
-#+BEGIN_SRC emacs-lisp
-(setq highlight-indent-guides-bitmap-function
-      #'highlight-indent-guides--bitmap-line)
-#+END_SRC
-
-Highlight the nearest indent guide.
-#+BEGIN_SRC emacs-lisp
-(setq highlight-indent-guides-responsive 'top)
+  ;; Use bitmap images instead of characters.
+  (setq highlight-indent-guides-method 'bitmap)
+  ;; Use a bitmap of a solid line.
+  (setq highlight-indent-guides-bitmap-function
+        #'highlight-indent-guides--bitmap-line)
+  ;; Highlight the nearest indent guide.
+  (setq highlight-indent-guides-responsive 'top))
 #+END_SRC
 
 *** Indent Level
@@ -448,15 +411,6 @@ Make ~+literate-recompile-maybe-h~ compile in non-blocking subprocess.
 *** EShell
 *** Term
 *** VTerm
-:PROPERTIES:
-:header-args+: :tangle no :noweb-ref vterm-config
-:END:
-#+BEGIN_SRC emacs-lisp :tangle yes :noweb-ref :noweb no-export
-(when (featurep! :term vterm)
-  (after! vterm
-    <<vterm-config>>))
-#+END_SRC
-
 This hack removes a problematic popup rule.
 #+BEGIN_SRC emacs-lisp
 (setq display-buffer-alist (assoc-delete-all "^vterm" display-buffer-alist))
@@ -1548,6 +1502,12 @@ On Arch, the [[https://www.call-cc.org/][Chicken Scheme]] binaries are called =c
 (when (featurep! :editor fmt)
   (setq-hook! 'sh-mode-hook
     +fmt-formatter #'shfmt-format-region))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(set-file-template! "\\.sh\\'"
+  :trigger "__sh"
+  :mode 'sh-mode)
 #+END_SRC
 
 ** XML
