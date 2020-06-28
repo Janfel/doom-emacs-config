@@ -952,32 +952,17 @@ The file extension =.cl= is sometimes used.
 (add-hook 'lisp-mode-hook #'lisp-mode-common-hook)
 #+END_SRC
 
-#+BEGIN_SRC emacs-lisp :noweb no-export
-(after! sly
-  <<lisp-sly-config>>)
-#+END_SRC
-
 *** Sly
-:PROPERTIES:
-:header-args+: :tangle no :noweb-ref lisp-sly-config
-:END:
 #+BEGIN_SRC emacs-lisp
 (setq sly-default-lisp 'sbcl)
 #+END_SRC
 
-GNU Common Lisp
 #+BEGIN_SRC emacs-lisp
-(push '(clisp ("clisp")) sly-lisp-implementations)
-#+END_SRC
-
-CMU Common Lisp
-#+BEGIN_SRC emacs-lisp
-(push '(cmucl ("cmucl")) sly-lisp-implementations)
-#+END_SRC
-
-Steel Bank Common Lisp
-#+BEGIN_SRC emacs-lisp
-(push '(sbcl ("sbcl") :coding-system utf-8-unix) sly-lisp-implementations)
+(after! sly
+  (push! sly-lisp-implementations
+         '(clisp ("clisp"))
+         '(cmucl ("cmucl"))
+         '(sbcl ("sbcl") :coding-system utf-8-unix)))
 #+END_SRC
 
 ** CSS :Web:
