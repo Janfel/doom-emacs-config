@@ -664,6 +664,13 @@ Ivy should recurse into directories when pressing =RET=.
       "C-<down>"   #'ivy-next-history-element)
 #+END_SRC
 
+** Macrostep
+#+BEGIN_SRC emacs-lisp
+(map! :after macrostep
+      :map macrostep-keymap
+      :n "c" #'macrostep-collapse)
+#+END_SRC
+
 ** Magit
 #+BEGIN_SRC emacs-lisp
 (add-hook 'git-commit-setup-hook #'turn-off-flyspell)
