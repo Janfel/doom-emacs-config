@@ -1373,6 +1373,26 @@ the successor to RLS.
     (apply orig-fn args)))
 #+END_SRC
 
+Make ~lsp-rust~ respect the =CARGO_HOME= and =RUSTUP_HOME= environment
+variables.
+#+BEGIN_SRC emacs-lisp
+(defconst CARGO-HOME
+  (-> (getenv "CARGO_HOME")
+      (string-or "~/.cargo/")
+      (file-name-as-directory)
+      (expand-file-name)))
+
+(defconst RUSTUP-HOME
+  (-> (getenv "RUSTUP_HOME")
+      (string-or "~/.rustup/")
+      (file-name-as-directory)
+      (expand-file-name)))
+
+(setq lsp-rust-library-directories
+      (list (expand-file-name "registry/src/" CARGO-HOME)
+            (expand-file-name "toolchains/" RUSTUP-HOME)))
+#+END_SRC
+
 ** Scheme :Lisp:
 #+BEGIN_SRC emacs-lisp
 (add-hook 'scheme-mode-hook #'lisp-mode-common-hook)
