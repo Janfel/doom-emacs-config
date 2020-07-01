@@ -673,7 +673,7 @@ Ivy should recurse into directories when pressing =RET=.
 
 ** Magit
 #+BEGIN_SRC emacs-lisp
-(add-hook 'git-commit-setup-hook #'turn-off-flyspell)
+(add-hook   'git-commit-setup-hook #'turn-off-flyspell)
 (setq-hook! 'git-commit-setup-hook fill-column 50)
 #+END_SRC
 
