@@ -1398,6 +1398,15 @@ variables.
 (add-hook 'scheme-mode-hook #'lisp-mode-common-hook)
 #+END_SRC
 
+*** Geiser
+Make =geiser= read init files from ~doom-private-dir~ instead of ~$HOME~.
+#+BEGIN_SRC emacs-lisp
+(let ((config-dir (expand-file-name "geiser/" doom-private-dir)))
+  (cl-dolist (s '(guile chez chicken racket))
+    (set (intern (format "geiser-%s-init-file" s))
+         (expand-file-name (format "init-%s.scm" s) config-dir))))
+#+END_SRC
+
 On Arch, the [[https://www.call-cc.org/][Chicken Scheme]] binaries are called =chicken-csi= and =chicken-csc=.
 #+BEGIN_SRC emacs-lisp
 (when (executable-find "chicken-csi")
