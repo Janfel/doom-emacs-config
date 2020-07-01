@@ -1475,6 +1475,10 @@ Replace the original ~nxml-mode~ rules with ones that aren’t broken.
            nil)))
 #+END_SRC
 
+#+BEGIN_SRC emacs-lisp
+(setq lsp-xml-server-work-dir (expand-file-name "lsp4xml/" XDG-CACHE-HOME))
+#+END_SRC
+
 * Keybindings
 ** Ä/Ö/Ü
 #+BEGIN_SRC emacs-lisp
