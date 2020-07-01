@@ -312,7 +312,7 @@ Define these variables from =core/autoload/config.el=.
 
 * Editor Features
 ** File Templates
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
 (when (featurep! :editor file-templates)
   (defvar +file-templates-fallback-dir +file-templates-dir
     "The directory where the file templates provided by Doom are stored.")
