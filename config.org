@@ -919,10 +919,10 @@ The file extension =.cl= is sometimes used.
   (emacs-lisp-macroexpand)
   (forward-sexp))
 
-(after! elisp-mode
-  (define-localleader-key! :keymaps
-    '(emacs-lisp-mode-map)
-    "x" #'*elisp-macroexpand-last-sexp))
+(map! :after elisp-mode
+      :map emacs-lisp-mode-map
+      :localleader
+      "x" #'*elisp-macroexpand-last-sexp)
 #+END_SRC
 
 ** Fennel :Lisp:Lua:
