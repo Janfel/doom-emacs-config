@@ -676,6 +676,103 @@ Ivy should recurse into directories when pressing =RET=.
 (setq-hook! 'git-commit-setup-hook fill-column 50)
 #+END_SRC
 
+** Org
+*** Org Mode
+#+BEGIN_SRC emacs-lisp
+(setq org-cycle-global-at-bob t
+      org-cycle-include-plain-lists nil
+      org-directory (expand-file-name "~/text/org/")
+      org-startup-folded t)
+#+END_SRC
+
+Use hard line wrapping to keep all columns shorter than ~fill-column~.
+#+BEGIN_SRC emacs-lisp
+(add-hook! 'org-mode-hook #'turn-off-visual-line-mode #'auto-fill-mode)
+#+END_SRC
+
+Don’t start ~flyspell-mode~ automatically.
+#+BEGIN_SRC emacs-lisp
+(remove-hook 'org-mode-hook #'flyspell-mode)
+#+END_SRC
+
+Add ~company-capf~ as a Company backend.
+#+BEGIN_SRC emacs-lisp
+(set-company-backend! 'org-mode 'company-capf)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(after! smartparens
+  (sp-local-pair 'org-mode "=" "=")
+  (sp-local-pair 'org-mode "~" "~"))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(after! which-key
+  (which-key-add-major-mode-key-based-replacements 'org-mode
+    "C-c C-x" "more"
+    "C-c C-v" "babel"
+    "C-c \""  "plot"))
+#+END_SRC
+
+*** Org Babel
+#+BEGIN_SRC emacs-lisp :tangle no
+(defun *org-babel-tangle-file-async (file &optional target-file lang-re finish-func)
+  (require 'async)
+  (async-start
+   (apply-partially #'org-babel-tangle-file target-file lang-re)
+   finish-func))
+#+END_SRC
+
+*** Org Indent
+For some reason, ~show-smartparens-mode~ causes visual glitches.
+#+BEGIN_SRC emacs-lisp
+(add-hook 'org-indent-mode-hook #'turn-off-show-smartparens-mode)
+#+END_SRC
+
+The indicator doesn’t take the visual indentation into account.
+#+BEGIN_SRC emacs-lisp
+(when EMACS27+
+  (add-hook 'org-mode-hook #'display-fill-column-indicator-mode--turn-off))
+#+END_SRC
+
+*** Org Keys
+Bind shortcuts for navigating headings with the arrow keys.
+Add ~org-babel-map~ to ~:localleader~.
+#+BEGIN_SRC emacs-lisp
+(map! :after org-keys
+      :map org-mode-map
+      "C-M-<left>"  #'org-up-element
+      "C-M-<right>" #'org-down-element
+      "C-M-<up>"    #'org-previous-visible-heading
+      "C-M-<down>"  #'org-next-visible-heading
+      (:localleader :prefix ("v" . "babel") "" org-babel-map))
+#+END_SRC
+
+*** Org Modules
+These values have to be set before ~org-mode~ is loaded.
+#+BEGIN_SRC emacs-lisp
+(setq org-modules
+      '(;; ol-w3m
+        ;; ol-bbdb
+        ol-bibtex
+        ;; ol-docview
+        ;; ol-gnus
+        ol-info
+        ;; ol-irc
+        ;; ol-mhe
+        ;; ol-rmail
+        ;; ol-eww
+        ))
+#+END_SRC
+
+*** Org Source
+#+BEGIN_SRC emacs-lisp
+(after! org-src
+  (push! org-src-lang-modes
+         '("dash" . sh)
+         '("zsh"  . sh)))
+#+END_SRC
+
 ** Smartparens
 Activate ~show-smartparens-mode~ globally to highlight matching pairs.
 #+BEGIN_SRC emacs-lisp
@@ -1158,103 +1255,6 @@ This might fix the issue with ~moonscript-indent-line~.
       (untabify (line-beginning-position) (line-end-position))
       (apply orig-fn args)
       (tabify   (line-beginning-position) (line-end-position)))))
-#+END_SRC
-
-** Org
-*** Org Mode
-#+BEGIN_SRC emacs-lisp
-(setq org-cycle-global-at-bob t
-      org-cycle-include-plain-lists nil
-      org-directory (expand-file-name "~/text/org/")
-      org-startup-folded t)
-#+END_SRC
-
-Use hard line wrapping to keep all columns shorter than ~fill-column~.
-#+BEGIN_SRC emacs-lisp
-(add-hook! 'org-mode-hook #'turn-off-visual-line-mode #'auto-fill-mode)
-#+END_SRC
-
-Don’t start ~flyspell-mode~ automatically.
-#+BEGIN_SRC emacs-lisp
-(remove-hook 'org-mode-hook #'flyspell-mode)
-#+END_SRC
-
-Add ~company-capf~ as a Company backend.
-#+BEGIN_SRC emacs-lisp
-(set-company-backend! 'org-mode 'company-capf)
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-(after! smartparens
-  (sp-local-pair 'org-mode "=" "=")
-  (sp-local-pair 'org-mode "~" "~"))
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-(after! which-key
-  (which-key-add-major-mode-key-based-replacements 'org-mode
-    "C-c C-x" "more"
-    "C-c C-v" "babel"
-    "C-c \""  "plot"))
-#+END_SRC
-
-*** Org Babel
-#+BEGIN_SRC emacs-lisp :tangle no
-(defun *org-babel-tangle-file-async (file &optional target-file lang-re finish-func)
-  (require 'async)
-  (async-start
-   (apply-partially #'org-babel-tangle-file target-file lang-re)
-   finish-func))
-#+END_SRC
-
-*** Org Indent
-For some reason, ~show-smartparens-mode~ causes visual glitches.
-#+BEGIN_SRC emacs-lisp
-(add-hook 'org-indent-mode-hook #'turn-off-show-smartparens-mode)
-#+END_SRC
-
-The indicator doesn’t take the visual indentation into account.
-#+BEGIN_SRC emacs-lisp
-(when EMACS27+
-  (add-hook 'org-mode-hook #'display-fill-column-indicator-mode--turn-off))
-#+END_SRC
-
-*** Org Keys
-Bind shortcuts for navigating headings with the arrow keys.
-Add ~org-babel-map~ to ~:localleader~.
-#+BEGIN_SRC emacs-lisp
-(map! :after org-keys
-      :map org-mode-map
-      "C-M-<left>"  #'org-up-element
-      "C-M-<right>" #'org-down-element
-      "C-M-<up>"    #'org-previous-visible-heading
-      "C-M-<down>"  #'org-next-visible-heading
-      (:localleader :prefix ("v" . "babel") "" org-babel-map))
-#+END_SRC
-
-*** Org Modules
-These values have to be set before ~org-mode~ is loaded.
-#+BEGIN_SRC emacs-lisp
-(setq org-modules
-      '(;; ol-w3m
-        ;; ol-bbdb
-        ol-bibtex
-        ;; ol-docview
-        ;; ol-gnus
-        ol-info
-        ;; ol-irc
-        ;; ol-mhe
-        ;; ol-rmail
-        ;; ol-eww
-        ))
-#+END_SRC
-
-*** Org Source
-#+BEGIN_SRC emacs-lisp
-(after! org-src
-  (push! org-src-lang-modes
-         '("dash" . sh)
-         '("zsh"  . sh)))
 #+END_SRC
 
 ** Pascal
