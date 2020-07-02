@@ -843,7 +843,7 @@ In ~snippet-mode~, whitespace has significant meaning.
     "C-c &" "snippet"))
 #+END_SRC
 
-* Programming Languages
+* Languages
 ** Arduino
 #+BEGIN_SRC emacs-lisp
 (setq arduino-mode-home (expand-file-name "~/src/arduino/"))
