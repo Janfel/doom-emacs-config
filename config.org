@@ -786,6 +786,10 @@ This only works with a *patched* Arduino runtime.
 #+END_SRC
 
 ** C/C++
+#+BEGIN_SRC emacs-lisp
+(defvaralias 'c-basic-offset 'indent-level)
+#+END_SRC
+
 *** TODO Code Style
 The default is =doom=.
 I have yet to create my own style.
