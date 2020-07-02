@@ -1513,9 +1513,23 @@ Make the indentation inside of comments respect ~nxml-child-indent~.
     indent))
 #+END_SRC
 
+#+BEGIN_SRC emacs-lisp
+(modify-syntax-entry ?\" "\"" nxml-mode-syntax-table)
+(modify-syntax-entry ?<  "(>" nxml-mode-syntax-table)
+(modify-syntax-entry ?>  ")<" nxml-mode-syntax-table)
+#+END_SRC
+
 Disable ~smartparens-mode~ because it it kind of useless in ~nxml-mode~.
 #+BEGIN_SRC emacs-lisp
 (add-hook 'nxml-mode-hook #'turn-off-smartparens-mode)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(after! smartparens
+  (sp-with-modes '(nxml-mode)
+    (sp-local-pair "<" ">" :actions nil)
+    (sp-local-pair "'" "'" :actions nil)
+    (sp-local-pair "\"" "\"" :unless '(:rem sp-point-after-word-p))))
 #+END_SRC
 
 Replace the original ~nxml-mode~ rules with ones that aren’t broken.
