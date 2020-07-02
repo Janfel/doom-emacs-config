@@ -1254,7 +1254,8 @@ This might fix the issue with ~moonscript-indent-line~.
     (let (indent-tabs-mode)
       (untabify (line-beginning-position) (line-end-position))
       (apply orig-fn args)
-      (tabify   (line-beginning-position) (line-end-position)))))
+      (tabify (line-beginning-position)
+              (save-excursion (back-to-indentation) (point))))))
 #+END_SRC
 
 ** Pascal
