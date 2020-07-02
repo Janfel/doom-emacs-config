@@ -1504,6 +1504,7 @@ Make the indentation inside of comments respect ~nxml-child-indent~.
   :around #'nxml-compute-indent-in-delimited-token
   (let ((indent (funcall orig-fn pos open-delim close-delim)))
     (when (and (string= "<!--" open-delim) (string= "-->" close-delim)
+               (progn (goto-char xmltok-start) (looking-at-p "<!--[[:blank:]]*$"))
                (progn (goto-char pos)
                       (back-to-indentation)
                       (not (looking-at-p "-->"))))
