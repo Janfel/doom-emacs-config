@@ -874,6 +874,19 @@ The file extension =.cl= is sometimes used.
 #+END_SRC
 
 ** CSS :Web:
+** Elixir
+#+BEGIN_SRC emacs-lisp
+(defvaralias 'elixir-basic-offset      'indent-level)
+(defvaralias 'elixir-smie-indent-basic 'indent-level)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(setq-hook! 'elixir-mode-hook
+  indent-level 2
+  tab-width 2
+  indent-tabs-mode t)
+#+END_SRC
+
 ** Emacs Lisp :Lisp:
 #+BEGIN_SRC emacs-lisp
 (add-hook 'emacs-lisp-mode-hook       #'lisp-mode-common-hook)
