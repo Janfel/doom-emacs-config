@@ -1246,6 +1246,7 @@ Doom Emacs, annoyingly, sets ~moonscript-indent-offset~ to ~tab-width~ by defaul
 
 *** TODO Test this advice for indenting with tabs.
 This might fix the issue with ~moonscript-indent-line~.
+This should not be used with =Janfel/moonscript-mode=.
 #+BEGIN_SRC emacs-lisp :tangle no
 (defadvice! *moonscript--run-untabified-a (orig-fn &rest args)
   :around '(moonscript-indent-line moonscript-indent-level)
