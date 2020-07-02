@@ -1490,6 +1490,13 @@ On Arch, the [[https://www.call-cc.org/][Chicken Scheme]] binaries are called =c
     +fmt-formatter #'tidy-format-region))
 #+END_SRC
 
+#+BEGIN_SRC emacs-lisp
+(defadvice! *nxml--parameter-soft-not-being-optional-a (&optional soft)
+  "Make the parameter SOFT optional to follow the spec of `comment-line-break-function'."
+  :filter-args #'nxml-newline-and-indent
+  (list soft))
+#+END_SRC
+
 Make the indentation inside of comments respect ~nxml-child-indent~.
 #+BEGIN_SRC emacs-lisp
 (defadvice! *nxml--indent-correctly-inside-comments-a
