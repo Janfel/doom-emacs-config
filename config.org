@@ -450,7 +450,7 @@ is currently fast enough to make race conditions unlikely.
 *** VTerm
 This hack removes a problematic popup rule.
 #+BEGIN_SRC emacs-lisp
-(setq display-buffer-alist (assoc-delete-all "^vterm" display-buffer-alist #'string=))
+(setq display-buffer-alist (assoc-delete-all "^vterm" display-buffer-alist))
 #+END_SRC
 
 VTerm doesn’t recognize any keypad keys for some reason. This advice translates
