@@ -7,7 +7,7 @@
 (defun perltidy-compute-args ()
   "Compute arguments for `perltidy-format-region'."
   (nconc
-   (when (file-readable-p perltidy-config-file)
+   (when (and perltidy-config-file (file-readable-p perltidy-config-file))
      (list (format "--profile=%s" perltidy-config-file)))
    (list
     (if indent-tabs-mode "--tabs" "--notabs")

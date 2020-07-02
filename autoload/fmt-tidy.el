@@ -12,7 +12,7 @@
   (when indent-tabs-mode (warn "HTML Tidy doesn't support indent-tabs-mode"))
   (nconc
    (when (memq major-mode tidy-xml-mode-list) '("-xml"))
-   (when (file-readable-p tidy-config-file)
+   (when (and tidy-config-file (file-readable-p tidy-config-file))
      (list "-config" tidy-config-file))
    (list
     "--quiet"            "yes"

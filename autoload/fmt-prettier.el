@@ -2,7 +2,11 @@
 ;;;###if (featurep! :editor fmt +define)
 
 (defvar prettier-config-file nil
-  "The configuration file for `prettier-format-buffer'.")
+  "The configuration file for `prettier-format-buffer'.
+
+If this is nil, Prettier will find the correct file on it’s own.
+If this is a string, it will override Prettier’s automatic detection.
+If this is the symbol “none”, Prettier will not search for a config file.")
 
 (defvar-local prettier-format-parser nil
   "The parser that `prettier-format-region' should use.")
@@ -36,6 +40,10 @@
     (nconc
      (-some->> buffer-file-name (list "--stdin-filepath"))
      (-some->> parser           (list "--parser"))
+     (when prettier-config-file
+       (cond ((eq prettier-config-file 'none) (list "--no-config"))
+             ((file-readable-p prettier-config-file)
+              (list "--config" prettier-config-file))))
      (list
       ;; TODO: Use --cursor-offset --range-start --range-end.
       (if indent-tabs-mode "--use-tabs" "--no-use-tabs")

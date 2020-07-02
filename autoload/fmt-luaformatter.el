@@ -9,7 +9,7 @@
   (let ((indent      (if indent-tabs-mode 1 indent-level))
         (cont-indent (if indent-tabs-mode 1 indent-level)))
     (nconc
-     (when (file-readable-p luaformatter-config-file)
+     (when (and luaformatter-config-file (file-readable-p luaformatter-config-file))
        (list "--config" luaformatter-config-file))
      (list
       (if indent-tabs-mode "--use-tab" "--no-use-tab")

@@ -1,7 +1,7 @@
 ;;; ~/.config/doom-emacs/autoload/fmt-ptop.el -*- lexical-binding: t; -*-
 ;;;###if (featurep! :editor fmt +define)
 
-(defvar ptop-formatter-config
+(defvar ptop-config-file
   (expand-file-name "pascal/ptop.cfg" XDG-CONFIG-HOME)
   "The configuration file for `ptop-format-buffer'.")
 
@@ -9,8 +9,8 @@
   "Compute arguments for `ptop-format-region'."
   (when IS-WINDOWS (error "PTOP can't be used on Windows"))
   (nconc
-   (when (file-readable-p ptop-formatter-config)
-     (list "-c" ptop-formatter-config))
+   (when (and ptop-config-file (file-readable-p ptop-config-file))
+     (list "-c" ptop-config-file))
    (list
     "-i" (number-to-string indent-level)
     "-l" (number-to-string fill-column)
