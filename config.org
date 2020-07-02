@@ -664,13 +664,6 @@ Ivy should recurse into directories when pressing =RET=.
       "C-<down>"   #'ivy-next-history-element)
 #+END_SRC
 
-** Macrostep
-#+BEGIN_SRC emacs-lisp
-(map! :after macrostep
-      :map macrostep-keymap
-      :n "c" #'macrostep-collapse)
-#+END_SRC
-
 ** Magit
 #+BEGIN_SRC emacs-lisp
 (add-hook   'git-commit-setup-hook #'turn-off-flyspell)
@@ -920,6 +913,7 @@ The file extension =.cl= is sometimes used.
       "R" #'+eval/region-and-replace)
 #+END_SRC
 
+*** Macro Expansion
 #+BEGIN_SRC emacs-lisp
 (defun *elisp-macroexpand-last-sexp ()
   (interactive)
@@ -936,6 +930,12 @@ The file extension =.cl= is sometimes used.
       :map emacs-lisp-mode-map
       :localleader
       "x" #'*elisp-macroexpand-last-sexp)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(map! :after macrostep
+      :map macrostep-keymap
+      :n "c" #'macrostep-collapse)
 #+END_SRC
 
 ** Fennel :Lisp:Lua:
