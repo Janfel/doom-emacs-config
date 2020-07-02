@@ -394,6 +394,12 @@ These functions have a tendency to insert tabs where they don’t belong.
   (let (indent-tabs-mode) (apply orig-fn args)))
 #+END_SRC
 
+** Language Server Protocol
+*** TODO Try semantic highlighting.
+#+BEGIN_SRC emacs-lisp :tangle no
+(setq lsp-enable-semantic-highlighting t)
+#+END_SRC
+
 ** Literate Configuration
 Make use of =async.el= to tangle =config.org= in a separate process without
 blocking the main thread.
@@ -1139,6 +1145,19 @@ Doom Emacs, annoyingly, sets ~moonscript-indent-offset~ to ~tab-width~ by defaul
 (after! moonscript
   (remove-hook 'moonscript-mode-hook
                #'doom--setq-moonscript-indent-offset-for-moonscript-mode-h))
+#+END_SRC
+
+*** TODO Test this advice for indenting with tabs.
+This might fix the issue with ~moonscript-indent-line~.
+#+BEGIN_SRC emacs-lisp :tangle no
+(defadvice! *moonscript--run-untabified-a (orig-fn &rest args)
+  :around '(moonscript-indent-line moonscript-indent-level)
+  (if (not indent-tabs-mode)
+      (apply orig-fn args)
+    (let (indent-tabs-mode)
+      (untabify (line-beginning-position) (line-end-position))
+      (apply orig-fn args)
+      (tabify   (line-beginning-position) (line-end-position)))))
 #+END_SRC
 
 ** Org
