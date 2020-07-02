@@ -20,6 +20,8 @@
 (package! async)
 ;; Disable escaping insert state when typing too fast.
 (package! evil-escape :disable t)
+;; Improve jumping with %.
+(package! evil-matchit)
 ;; Unpin flycheck. The version Doom currently ships is broken for HLint.
 (package! flycheck :pin nil)
 ;; Display ^L form-feed as horizontal line.

@@ -577,6 +577,15 @@ right before ~+evil-collection-init~ first called.
            'tetris '2084-game 'haskell-error-mode)))
 #+END_SRC
 
+*** Evil Matchit
+#+BEGIN_SRC emacs-lisp
+(use-package! evil-matchit
+  :when (featurep! :editor evil)
+  :after-call pre-command-hook
+  :init (setq evilmi-shortcut "%")
+  :config (global-evil-matchit-mode +1))
+#+END_SRC
+
 *** Evil Numbers
 Remap the ~inc-at-pt~ functions, so =z == can be used for formatting.
 #+BEGIN_SRC emacs-lisp
