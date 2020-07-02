@@ -973,7 +973,6 @@ The file extension =.cl= is sometimes used.
          '(sbcl ("sbcl") :coding-system utf-8-unix)))
 #+END_SRC
 
-** CSS :Web:
 ** Elixir
 #+BEGIN_SRC emacs-lisp
 (defvaralias 'elixir-basic-offset      'indent-level)
@@ -998,6 +997,7 @@ The file extension =.cl= is sometimes used.
   (set-keymap-parent lisp-interaction-mode-map emacs-lisp-mode-map))
 #+END_SRC
 
+*** Evaluation
 #+BEGIN_SRC emacs-lisp
 (defun *eval/buffer-and-replace ()
   (interactive)
@@ -1082,13 +1082,12 @@ error code. Using =--no-exit-code= prevents this.
   (flycheck-add-next-checker 'haskell-dante '(warning . haskell-hlint)))
 #+END_SRC
 
-** HTML :Web:
 ** Hy :Lisp:Python:
 #+BEGIN_SRC emacs-lisp
 (add-hook 'hy-mode-hook #'lisp-mode-common-hook)
 #+END_SRC
 
-** JavaScript :Web:
+** JavaScript
 #+BEGIN_SRC emacs-lisp
 (defvaralias 'js-indent-level 'indent-level)
 #+END_SRC
@@ -1190,6 +1189,11 @@ Doom has already set a value for ~lua-indent-level~, so we have to unset it.
     +fmt-formatter #'luaformatter-format-region))
 #+END_SRC
 
+#+BEGIN_SRC emacs-lisp
+(setq company-lua-interpreter 'lua53)
+#+END_SRC
+
+*** Indentation in Comments
 Doom advises ~newline-and-indent~ to continue comments using the value of
 ~comment-line-break-function~. The standard value is ~comment-indent-new-line~,
 which is broken in Lua's multiline comments.
@@ -1211,10 +1215,6 @@ which is broken in Lua's multiline comments.
 #+BEGIN_SRC emacs-lisp
 (setq-hook! 'lua-mode-hook
   comment-line-break-function #'*lua-comment-indent-new-line)
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-(setq company-lua-interpreter 'lua53)
 #+END_SRC
 
 *** NOTE Comment deletion broken
