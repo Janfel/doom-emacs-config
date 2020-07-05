@@ -994,11 +994,57 @@ The file extension =.cl= is sometimes used.
 (defvaralias 'elixir-smie-indent-basic 'indent-level)
 #+END_SRC
 
+The Elixir formatter =mix format= sadly has very strong conventions. I might be
+able to work around this when I implement my own =fmt-mix= functions, using
+~doom/retab~ or =unexpand= after formatting, but for now we just set
+~indent-level~ to =2=.
 #+BEGIN_SRC emacs-lisp
-(setq-hook! 'elixir-mode-hook
-  indent-level 2
-  tab-width 2
-  indent-tabs-mode t)
+(setq-hook! 'elixir-mode-hook indent-level 2)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(set-popup-rule! "^\\*Alchemist-IEx\\*$"
+  :size 0.3 :vslot 2 :ttl nil :quit 'current)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(after! alchemist
+  (setq +eval-repls (assq-delete-all 'alchemist-mode +eval-repls)))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(map! :after alchemist
+      :map alchemist-mode-map
+      :localleader
+      "a" 'alchemist-mode-keymap
+      "i" #'alchemist-iex-run
+      "I" #'alchemist-iex-project-run
+      "M-r" #'alchemist-test-toggle-test-report-display)
+
+(which-key-add-major-mode-key-based-replacements 'elixir-mode
+  "C-c   a" "alchemist"
+  "SPC m a" "alchemist"
+
+  "C-c   a c" "compile"
+  "C-c   a e" "execute"
+  "C-c   a f" "info"
+  "C-c   a h" "help"
+  "C-c   a i" "iex"
+  "C-c   a m" "mix"
+  "C-c   a o" "macroexpand"
+  "C-c   a X" "hex"
+  "C-c   a p" "project"
+  "C-c   a v" "eval"
+  "SPC m a X" "hex"
+  "SPC m a c" "compile"
+  "SPC m a e" "execute"
+  "SPC m a f" "info"
+  "SPC m a h" "help"
+  "SPC m a i" "iex"
+  "SPC m a m" "mix"
+  "SPC m a o" "macroexpand"
+  "SPC m a p" "project"
+  "SPC m a v" "eval")
 #+END_SRC
 
 ** Emacs Lisp :Lisp:
