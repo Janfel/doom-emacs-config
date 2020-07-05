@@ -783,6 +783,16 @@ These values have to be set before ~org-mode~ is loaded.
          '("zsh"  . sh)))
 #+END_SRC
 
+** Projectile
+#+BEGIN_SRC emacs-lisp
+(map! :after projectile
+      :map projectile-mode-map
+      :leader :prefix "p"
+      :desc "M-x in root" ":" #'projectile-run-command-in-root
+      :desc "Shell command in root" "!" #'projectile-run-shell-command-in-root
+      :desc "Async command in root" "&" #'projectile-run-async-shell-command-in-root)
+#+END_SRC
+
 ** Smartparens
 Activate ~show-smartparens-mode~ globally to highlight matching pairs.
 #+BEGIN_SRC emacs-lisp
@@ -1658,7 +1668,8 @@ similar to that of ~universal-argument~.
 Bind ~shell-command~ in a similar way to =M-x= and =M-;=.
 #+BEGIN_SRC emacs-lisp
 (map! :leader
-      :desc "Shell command" "!" #'shell-command)
+      :desc "Shell command" "!" #'shell-command
+      :desc "Async command" "&" #'async-shell-command)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
