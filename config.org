@@ -852,6 +852,11 @@ In ~snippet-mode~, whitespace has significant meaning.
     "C-c &" "snippet"))
 #+END_SRC
 
+*** NOTE Other Packages
+More Evil-related packages that I might try out some time.
++ [[https://github.com/willghatch/emacs-on-parens][on-parens]]
++ [[https://github.com/expez/evil-smartparens][evil-smartparens]]
+
 * Languages
 ** Arduino
 #+BEGIN_SRC emacs-lisp
