@@ -225,6 +225,17 @@ Define these variables from =core/autoload/config.el=.
       :desc "Hide top comment" "c" #'hs-hide-initial-comment-block)
 #+END_SRC
 
+** HL Line Mode
+While ~hl-line-mode~ is active, ~face-at-point~ always returns ~hl-line~.
+This advice unhighlights the current line before ~face-at-point~ is called.
+#+BEGIN_SRC emacs-lisp
+(after! hl-line
+  (defadvice! *hl-line--fix-face-at-point-a (orig-fn &rest args)
+    :before #'face-at-point
+    (when hl-line-mode
+      (hl-line-unhighlight))))
+#+END_SRC
+
 ** Info
 Treat ~info~ buffers as real buffers.
 #+BEGIN_SRC emacs-lisp
