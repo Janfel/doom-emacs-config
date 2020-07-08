@@ -211,6 +211,13 @@ Define these variables from =core/autoload/config.el=.
       doom-bin     (concat doom-bin-dir   "doom"))
 #+END_SRC
 
+** Fonts
+#+BEGIN_SRC emacs-lisp
+(setq doom-font (font-spec :family "Source Code Pro" :size 13)
+      doom-serif-font (font-spec :family "Source Serif Pro")
+      doom-variable-pitch-font (font-spec :family "Source Sans Pro"))
+#+END_SRC
+
 ** Hideshow
 #+BEGIN_SRC emacs-lisp
 (map! :after hideshow
