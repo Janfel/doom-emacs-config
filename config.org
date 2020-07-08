@@ -195,6 +195,22 @@ Move the ~customize~ blocks into =custom.el=.
 (setq custom-file (expand-file-name "custom.el" doom-private-dir))
 #+END_SRC
 
+** Doom Emacs
+Don’t turn on ~whitespace-mode~ automatically.
+#+BEGIN_SRC emacs-lisp
+(defadvice! *doom--disable-automatic-whitespace-mode-a (&rest _)
+  "Don’t turn on `whitespace-mode' on startup."
+  :after #'doom-init-ui-h
+  (remove-hook 'after-change-major-mode-hook
+               #'doom-highlight-non-default-indentation-h))
+#+END_SRC
+
+Define these variables from =core/autoload/config.el=.
+#+BEGIN_SRC emacs-lisp
+(setq doom-bin-dir (concat doom-emacs-dir "bin/")
+      doom-bin     (concat doom-bin-dir   "doom"))
+#+END_SRC
+
 ** Hideshow
 #+BEGIN_SRC emacs-lisp
 (map! :after hideshow
@@ -293,22 +309,6 @@ Wrap everything in a conditional. Disabled because WIP.
    :foreground fg
    :background base
    :box (list :color base)))
-#+END_SRC
-
-* Doom Emacs Configuration
-Don’t turn on ~whitespace-mode~ automatically.
-#+BEGIN_SRC emacs-lisp
-(defadvice! *doom--disable-automatic-whitespace-mode-a (&rest _)
-  "Don’t turn on `whitespace-mode' on startup."
-  :after #'doom-init-ui-h
-  (remove-hook 'after-change-major-mode-hook
-               #'doom-highlight-non-default-indentation-h))
-#+END_SRC
-
-Define these variables from =core/autoload/config.el=.
-#+BEGIN_SRC emacs-lisp
-(setq doom-bin-dir (concat doom-emacs-dir "bin/")
-      doom-bin     (concat doom-bin-dir   "doom"))
 #+END_SRC
 
 * Editor Features
