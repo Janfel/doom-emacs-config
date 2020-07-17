@@ -832,10 +832,10 @@ Bind ~sp-raise-sexp~, which I use quite often.
 (map! :n "z r" #'sp-raise-sexp)
 #+END_SRC
 
-*** WAIT Closing paren deleted twice ([[https://github.com/hlissner/doom-emacs/issues/3268][#3268]])
+*** DONE Closing paren deleted twice ([[https://github.com/hlissner/doom-emacs/issues/3268][#3268]])
 This is currently broken, in that two closing delimiters are deleted instead of
 one. When the linked issue is resolved, this fix can be removed.
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
 (setq sp-autodelete-pair nil)
 #+END_SRC
 
