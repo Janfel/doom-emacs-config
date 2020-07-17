@@ -249,6 +249,16 @@ Treat ~info~ buffers as real buffers.
 (after! info (set-popup-rule! "^\\*info\\*$" :ignore))
 #+END_SRC
 
+** Theme
+Set the color theme. On =Tesla= I currently use light themes.
+#+BEGIN_SRC emacs-lisp
+(setq doom-theme
+      (cl-case SYSTEM
+        ('Phantom 'doom-one)
+        ('Tesla   'doom-one-light)
+        (t        'doom-one)))
+#+END_SRC
+
 ** Visual Line Mode
 #+BEGIN_SRC emacs-lisp
 (defun turn-off-visual-line-mode ()
