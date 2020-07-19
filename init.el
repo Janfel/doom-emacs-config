@@ -16,8 +16,8 @@
   "Which system are we running on?")
 
 (doom! :input
-       ;;chinese
-       ;;japanese
+       ;;chinese                        ;
+       ;;japanese                       ;
 
        :completion
        (company +childframe)            ; the ultimate code completion backend
@@ -32,7 +32,7 @@
        doom-quit                        ; DOOM quit-message prompts when you quit Emacs
        ;;fill-column                    ; a `fill-column' indicator
        hl-todo                          ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
-       ;;hydra
+       ;;hydra                          ;
        ;;indent-guides                  ; highlighted indent columns
        modeline                         ; snazzy, Atom-inspired modeline, plus API
        nav-flash                        ; blink the current line after jumping
@@ -58,7 +58,7 @@
        ;;format                         ; format
        ;;(format +onsave)               ; automated prettiness
        (fmt +define)                    ; simple formatting framework by JFL
-       ;;fmt
+       ;;fmt                            ;
        ;;god                            ; run Emacs commands without modifier keys
        ;;lispy                          ; vim for lisp, for people who don't like vim
        ;;multiple-cursors               ; editing in many places at once
@@ -87,10 +87,10 @@
        ;;grammar                        ; tasing grammar mistake every you make
 
        :tools
-       ;;ansible
+       ;;ansible                        ;
        ;;debugger                       ; FIXME stepping through code, to help you add bugs
-       ;;direnv
-       ;;docker
+       ;;direnv                         ;
+       ;;docker                         ;
        editorconfig                     ; let someone else argue about tabs vs spaces
        ;;ein                            ; tame Jupyter notebooks with emacs
        (eval +overlay)                  ; run code, run (also, repls)
@@ -139,8 +139,8 @@
        ;;julia                          ; a better, faster MATLAB
        ;;kotlin                         ; a better, slicker Java(Script)
        latex                            ; writing papers in Emacs has never been so fun
-       ;;lean
-       ;;factor
+       ;;lean                           ;
+       ;;factor                         ;
        ;;ledger                         ; an accounting system in Emacs
        (lua                             ; one-based indices? one-based indices
         +moonscript)
@@ -150,12 +150,12 @@
        ;;ocaml                          ; an objective camel
        org
        ;;(org                           ; organize your plain life in plain text
-        ;;+dragndrop                    ; drag & drop files/images into org buffers
-        ;;+hugo                         ; use Emacs for hugo blogging
-        ;;+jupyter                      ; ipython/jupyter support for babel
-        ;;+pandoc                       ; export-with-pandoc support
-        ;;+pomodoro                     ; be fruitful with the tomato technique
-        ;;+present)                     ; using org-mode for presentations
+       ;;+dragndrop                     ; drag & drop files/images into org buffers
+       ;;+hugo                          ; use Emacs for hugo blogging
+       ;;+jupyter                       ; ipython/jupyter support for babel
+       ;;+pandoc                        ; export-with-pandoc support
+       ;;+pomodoro                      ; be fruitful with the tomato technique
+       ;;+present)                      ; using org-mode for presentations
        ;;perl                           ; write code no one else can comprehend
        ;;php                            ; perl's insecure younger brother
        ;;plantuml                       ; diagrams for confusing people more
@@ -178,12 +178,12 @@
        ;;yaml                           ; JSON, but readable
 
        :email
-       ;;(mu4e +gmail)
-       ;;notmuch
-       ;;(wanderlust +gmail)
+       ;;(mu4e +gmail)                  ;
+       ;;notmuch                        ;
+       ;;(wanderlust +gmail)            ;
 
        :app
-       ;;calendar
+       ;;calendar                       ;
        ;;irc                            ; how neckbeards socialize
        ;;(rss +org)                     ; emacs as an RSS reader
        ;;twitter                        ; twitter client https://twitter.com/vnought
