@@ -715,6 +715,12 @@ Ivy should recurse into directories when pressing =RET=.
       "C-<down>"   #'ivy-next-history-element)
 #+END_SRC
 
+*** NOTE Counsel Compile
+Currently Doom maps =SPC c c= and =SPC p c= to ~+ivy/compile~ and
+~+ivy/project-compile~ which are specialized versions of ~counsel-compile~.
+I would like to have some key bound to ~counsel-compile~, but I first need to
+experiment a bit with the current system.
+
 ** Magit
 #+BEGIN_SRC emacs-lisp
 (add-hook   'git-commit-setup-hook #'turn-off-flyspell)
