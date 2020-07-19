@@ -74,6 +74,7 @@ This snippet returns the status of ~lexical-binding~.
 #+BEGIN_SRC emacs-lisp
 (defun string-or (&rest strings)
   "Return the first non-nil and non-empty string in STRINGS."
+  (declare (pure t) (side-effect-free t))
   (cl-dolist (s strings)
     (when (and s (not (string-empty-p s)))
       (cl-return s))))
