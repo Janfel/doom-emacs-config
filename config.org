@@ -283,7 +283,7 @@ Set the color theme. On =Tesla= I currently use light themes.
 
 #+BEGIN_SRC emacs-lisp
 (when EMACS27+
-  (defun display-fill-column-indicator-mode--turn-off ()
+  (defun display-fill-column-indicator--turn-off ()
     (interactive)
     (display-fill-column-indicator-mode -1)))
 #+END_SRC
@@ -774,7 +774,7 @@ For some reason, ~show-smartparens-mode~ causes visual glitches.
 The indicator doesn’t take the visual indentation into account.
 #+BEGIN_SRC emacs-lisp
 (when EMACS27+
-  (add-hook 'org-mode-hook #'display-fill-column-indicator-mode--turn-off))
+  (add-hook 'org-mode-hook #'display-fill-column-indicator--turn-off))
 #+END_SRC
 
 *** Org Keys
