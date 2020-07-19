@@ -422,6 +422,17 @@ These functions have a tendency to insert tabs where they don’t belong.
 (setq lsp-enable-semantic-highlighting t)
 #+END_SRC
 
+** Line Numbers
+On =Tesla=, ~display-line-numbers-mode~ causes noticeable slowdown.
+#+BEGIN_SRC emacs-lisp
+(when (eq SYSTEM 'Tesla)
+  (remove-hook!
+    '(prog-mode-hook
+      text-mode-hook
+      conf-mode-hook)
+    #'display-line-numbers-mode))
+#+END_SRC
+
 ** Literate Configuration
 Make use of =async.el= to tangle =config.org= in a separate process without
 blocking the main thread.
