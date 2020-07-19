@@ -8,6 +8,13 @@
 ;; More information about these modules (and what flags they support) can be
 ;; found in modules/README.org.
 
+(defconst SYSTEM
+  (let ((sysname (system-name)))
+    (cond ((string= sysname "PhantomJFL") 'Phantom)
+          ((string= sysname "TeslaJFL")   'Tesla)
+          (t 'other)))
+  "Which system are we running on?")
+
 (doom! :input
        ;;chinese
        ;;japanese
