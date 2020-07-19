@@ -889,6 +889,11 @@ In ~snippet-mode~, whitespace has significant meaning.
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
+(when EMACS27+
+  (add-hook 'snippet-mode-hook #'display-fill-column-indicator--turn-off))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
 (after! which-key
   (which-key-add-key-based-replacements
     "C-c &" "snippet"))
