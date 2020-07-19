@@ -83,6 +83,7 @@ This snippet returns the status of ~lexical-binding~.
 #+BEGIN_SRC emacs-lisp
 (defun sys-feature-p (feature)
   "Return t if FEATURE is available on this system."
+  (declare (side-effect-free t))
   (memq feature SYS-FEATURES))
 #+END_SRC
 
