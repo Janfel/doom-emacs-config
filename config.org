@@ -1055,6 +1055,19 @@ Major mode for the [[https://mesonbuild.com][Meson Build System]].
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
+(when (featurep! :checkers syntax)
+  (defvar *flycheck-gcc-header-warnings '("no-pragma-once-outside-header")
+    "A list of warnings to be added to `flycheck-gcc-warnings' when editing a C/C++ header file.")
+  (defvar *flycheck-clang-header-warnings '("no-pragma-once-outside-header")
+    "A list of warnings to be added to `flycheck-clang-warnings' when editing a C/C++ header file.")
+  (add-hook! '(c-mode c++-mode)
+    (defun *flycheck-maybe-add-gcc-clang-header-warnings-h ()
+      (when (*cc-header-file-p)
+        (setq-local
+         flycheck-gcc-warnings
+         (nconc flycheck-gcc-header-warnings flycheck-gcc-warnings)
+         flycheck-clang-warnings
+         (nconc flycheck-clang-header-warnings flycheck-clang-warnings))))))
 #+END_SRC
 
 *** Smartparens
