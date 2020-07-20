@@ -362,6 +362,12 @@ Wrap everything in a conditional. Disabled because WIP.
                  '(+file-templates-fallback-dir)))))
 #+END_SRC
 
+** Find Other File
+#+BEGIN_SRC emacs-lisp
+(map! :leader :prefix "f"
+      :desc "Find other file" "o" #'ff-find-other-file)
+#+END_SRC
+
 ** Formatting Engine
 I replace the default formatting function with my own.
 #+BEGIN_SRC emacs-lisp
