@@ -981,6 +981,12 @@ This only works with a *patched* Arduino runtime.
 (defvaralias 'c-basic-offset 'indent-level)
 #+END_SRC
 
+#+BEGIN_SRC emacs-lisp
+(setq-hook! 'c-mode-common-hook
+  indent-level 'set-from-style
+  indent-tabs-mode t)
+#+END_SRC
+
 *** TODO Code Style
 The default is =doom=.
 I have yet to create my own style.
