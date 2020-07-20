@@ -1019,6 +1019,12 @@ I have yet to create my own style.
 
 *** C Mode
 *** C++ Mode
+*** Meson Mode
+Major mode for the [[https://mesonbuild.com][Meson Build System]].
+#+BEGIN_SRC emacs-lisp
+(use-package! meson-mode :defer t)
+#+END_SRC
+
 *** Flycheck
 #+BEGIN_SRC emacs-lisp
 (when (featurep! :checkers syntax)
@@ -1034,10 +1040,7 @@ I have yet to create my own style.
     flycheck-clang-language-standard "gnu++17"))
 #+END_SRC
 
-*** Meson Mode
-Major mode for the [[https://mesonbuild.com][Meson Build System]].
 #+BEGIN_SRC emacs-lisp
-(use-package! meson-mode :defer t)
 #+END_SRC
 
 *** Smartparens
