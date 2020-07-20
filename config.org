@@ -188,6 +188,17 @@ Move the ~customize~ blocks into =custom.el=.
 (setq custom-file (expand-file-name "custom.el" doom-private-dir))
 #+END_SRC
 
+** Dead Keys
+This is a workaround for when composing using IBus doesn’t work.
+#+BEGIN_SRC emacs-lisp
+(when (eq SYSTEM 'Tesla)
+  (add-hook! 'doom-first-input-hook (require 'iso-transl))
+  (after! iso-transl
+    (cl-dolist (keypair iso-transl-dead-key-alist)
+      (define-key key-translation-map
+        (vector (cdr keypair) (cdr keypair)) (string (car keypair))))))
+#+END_SRC
+
 ** Doom Emacs
 Don’t turn on ~whitespace-mode~ automatically.
 #+BEGIN_SRC emacs-lisp
