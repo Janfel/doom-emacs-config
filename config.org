@@ -961,8 +961,6 @@ This only works with a *patched* Arduino runtime.
 
 #+BEGIN_SRC emacs-lisp
 (setq-hook! 'basic-mode-hook
-  indent-level 4
-  tab-width 4
   indent-tabs-mode t)
 #+END_SRC
 
@@ -1434,8 +1432,6 @@ would be unusable otherwise.
 
 #+BEGIN_SRC emacs-lisp
 (setq-hook! '(perl-mode-hook cperl-mode-hook)
-  indent-level 4
-  tab-width 4
   indent-tabs-mode t)
 #+END_SRC
 
@@ -1453,8 +1449,6 @@ This allows me to not load the entire =:lang/php= module.
 
 #+BEGIN_SRC emacs-lisp
 (setq-hook! 'php-mode-hook
-  indent-level 4
-  tab-width 4
   indent-tabs-mode t)
 #+END_SRC
 
@@ -1471,8 +1465,6 @@ This allows me to not load the entire =:lang/php= module.
 
 #+BEGIN_SRC emacs-lisp
 (setq-hook! 'python-mode-hook
-  indent-level 4
-  tab-width 4
   indent-tabs-mode nil)
 #+END_SRC
 
@@ -1521,8 +1513,6 @@ Use system =mspyls= for =lsp-python-ms=.
 
 #+BEGIN_SRC emacs-lisp
 (setq-hook! '(rustic-mode-hook rustic-macro-expansion-mode-hook)
-  indent-level 4
-  tab-width 4
   indent-tabs-mode t)
   #+END_SRC
 
@@ -1596,8 +1586,6 @@ On Arch, the [[https://www.call-cc.org/][Chicken Scheme]] binaries are called =c
 
 #+BEGIN_SRC emacs-lisp
 (setq-hook! 'sh-mode-hook
-  indent-level 4
-  tab-width 4
   indent-tabs-mode t)
 #+END_SRC
 
