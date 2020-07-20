@@ -1018,6 +1018,8 @@ I have yet to create my own style.
 
 
 *** C Mode
+*** C++ Mode
+*** Flycheck
 #+BEGIN_SRC emacs-lisp
 (when (featurep! :checkers syntax)
   (setq-hook! 'c-mode-hook
@@ -1025,7 +1027,6 @@ I have yet to create my own style.
     flycheck-clang-language-standard "gnu18"))
 #+END_SRC
 
-*** C++ Mode
 #+BEGIN_SRC emacs-lisp
 (when (featurep! :checkers syntax)
   (setq-hook! 'c++-mode-hook
