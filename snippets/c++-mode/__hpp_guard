@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# group: file templates
+# contributor: Jan Felix Langenbach
+# --
+#ifndef ${1:__`
+(upcase (replace-regexp-in-string "[^[:alnum:]]" "_" (file-name-nondirectory buffer-file-name) t t))
+`_$(upcase yas-text)}
+#define $1
+
+$0
+
+#endif // $1
