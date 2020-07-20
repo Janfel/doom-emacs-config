@@ -1025,6 +1025,20 @@ Major mode for the [[https://mesonbuild.com][Meson Build System]].
 (use-package! meson-mode :defer t)
 #+END_SRC
 
+*** Header/Source
+#+BEGIN_SRC emacs-lisp
+(defun *cc-header-file-p (&optional filename)
+  (when-let* ((name (or filename buffer-file-name)))
+    (string-prefix-p "h" (file-name-extension name) 'ignore-case)))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(defun *cc-other-file-extension (&optional filename)
+  (declare (side-effect-free t))
+  (when-let* ((name (or filename buffer-file-name)))
+    (caadr (assoc name cc-other-file-alist #'string-match-p))))
+#+END_SRC
+
 *** Flycheck
 #+BEGIN_SRC emacs-lisp
 (when (featurep! :checkers syntax)
