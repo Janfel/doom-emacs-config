@@ -118,6 +118,19 @@ This snippet returns the status of ~lexical-binding~.
         (forward-line 1)))))
 #+END_SRC
 
+[[https://lists.gnu.org/archive/html/emacs-devel/2020-07/msg00326.html][Stolen from Jeff Norden on the =emacs-devel= mailing list.]]
+#+BEGIN_SRC emacs-lisp
+(defun keyboard-quit-strong ()
+  (interactive)
+  (if (not (eq last-command 'keyboard-quit-strong))
+      (keyboard-quit)
+    (setq this-command 'top-level)
+    (ding)
+    (top-level)))
+
+(map! "C-G" #'keyboard-quit-strong)
+#+END_SRC
+
 ** Constants
 *** System
 I redefine the operating system constants of Doom Emacs to give them docstrings.
