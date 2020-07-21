@@ -189,9 +189,18 @@ Move the ~customize~ blocks into =custom.el=.
 #+END_SRC
 
 ** Dead Keys
+:PROPERTIES:
+:header-args+: :tangle no
+:END:
 This is a workaround for when composing using IBus doesn’t work.
+This bug is triggered by not having =ttf-bitstream-vera= installed.
 #+BEGIN_SRC emacs-lisp
-(when (eq SYSTEM 'Tesla)
+(defconst XIM-INPUT-BROKEN nil
+  "If this is t, the input of special characters using XIM is broken.")
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(when XIM-INPUT-BROKEN
   (add-hook! 'doom-first-input-hook (require 'iso-transl))
   (after! iso-transl
     (cl-dolist (keypair iso-transl-dead-key-alist)
