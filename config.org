@@ -477,38 +477,34 @@ Make use of =async.el= to tangle =config.org= in a separate process without
 blocking the main thread.
 #+BEGIN_SRC emacs-lisp
 (when (featurep! :config literate)
-
-  (defvar *literate-tangle-in-progress-p nil
-    "Contains a future of a currently tangling process or nil.")
-
-  (defadvice! *literate-tangle-async-a (&optional force-p)
+  (defun *literate-tangle-async-h ()
     "Compile `+literate-config-file' in an async process."
-    :override #'+literate-tangle-h
-    (let ((default-directory doom-private-dir))
-      (when (or force-p (file-newer-than-file-p +literate-config-file
-                                                +literate-config-cache-file))
-        (print! (start "Compiling your literate config..."))
-        (let ((org  (expand-file-name +literate-config-file))
-              (dest (concat (file-name-sans-extension +literate-config-file) ".el"))
-              (cache +literate-config-cache-file))
-          (when-let* ((proc *literate-tangle-in-progress-p)) (async-wait proc))
-          (setq *literate-tangle-in-progress-p
-                (async-start
-                 (lambda ()
-                   (and (require 'ob-tangle)
-                        (org-babel-tangle-file org dest)
-                        (with-temp-file cache)))
-                 (lambda (&rest _)
-                   (message "Compilation finished!")
-                   (-some-> (expand-file-name dest)
-                     (find-buffer-visiting)
-                     (with-current-buffer (revert-buffer 'ignore-auto 'noconfirm)))
-                   (setq *literate-tangle-in-progress-p nil)))))))))
-#+END_SRC
+    (message "Compiling your literate config...")
+    (let* ((start (current-time))
+           (org   (expand-file-name +literate-config-file doom-private-dir))
+           (dest  (concat (file-name-sans-extension org) ".el"))
+           (cache +literate-config-cache-file))
+      (async-start
+       (lambda ()
+         (let (org-mode-hook)
+           (require 'ob-tangle)
+           (require 'ox)
+           (set-buffer (find-file-noselect org))
+           (org-export-expand-include-keyword)
+           (org-babel-tangle nil dest)
+           (with-temp-file cache)))
+       (lambda (_)
+         (when-let* ((buf (find-buffer-visiting dest)))
+           (with-current-buffer buf (revert-buffer 'ignore-auto 'noconfirm)))
+         (message "Compilation finished in %.02f seconds."
+                  (float-time (time-since start)))))))
 
-*** NOTE: Is explicit sync really needed?
-Maybe I should remove ~*literate-tangle-in-progress-p~, as the tangling process
-is currently fast enough to make race conditions unlikely.
+  (defadvice! *literate-recompile-async-a (orig-fn &rest args)
+    "Make `+literate-recompile-maybe-h' use `*literate-tangle-async-h'."
+    :around #'+literate-recompile-maybe-h
+    (cl-letf (((symbol-function '+literate-tangle-h) #'*literate-tangle-async-h))
+      (apply orig-fn args))))
+#+END_SRC
 
 ** Spell Checking
 *** Ispell
