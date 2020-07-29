@@ -1014,10 +1014,31 @@ This only works with a *patched* Arduino runtime.
 (after! cc-mode
   (c-add-style
    "jfl"
-   '("doom"
+   '((c-basic-offset   . 4)
+     (tab-width        . 4)
      (indent-tabs-mode . t)
-     (c-basic-offset   . 4)
-     (tab-width        . 4)))
+
+     (c-comment-only-line-offset . 0)
+     (c-hanging-braces-alist
+      (brace-list-open)
+      (brace-entry-open)
+      (substatement-open after)
+      (block-close . c-snug-do-while)
+      (arglist-cont-nonempty))
+     (c-cleanup-list
+      brace-else-brace
+      brace-elseif-brace
+      brace-catch-brace)
+     (c-offsets-alist
+      (knr-argdecl-intro  . 0)
+      (statement-cont     . +)
+      (substatement-open  . 0)
+      (substatement-label . 0)
+      (case-label         . -)
+      (access-label       . -)
+      (label              . -)
+      (inclass            . +))))
+
   (setq c-default-style
         '((awk-mode  . "awk")
           (java-mode . "java")
