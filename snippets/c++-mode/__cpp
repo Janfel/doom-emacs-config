@@ -2,6 +2,6 @@
 # group: file templates
 # contributor: Jan Felix Langenbach
 # --
-#include "`(file-name-base buffer-file-name)`.`(*cc-other-file-extension)`"
+#include "`(file-name-base)``(*cc-other-file-extension)`"
 
 $0
