@@ -128,7 +128,7 @@ This snippet returns the status of ~lexical-binding~.
     (ding)
     (top-level)))
 
-(map! "C-G" #'keyboard-quit-strong)
+(map! "C-M-g" #'keyboard-quit-strong)
 #+END_SRC
 
 ** Constants
