@@ -1069,8 +1069,8 @@ determining the project root directory.
 
 #+BEGIN_SRC emacs-lisp
 (defun *cc-other-file-extension (&optional filename)
-  (declare (side-effect-free t))
   (when-let* ((name (or filename buffer-file-name)))
+    (require 'find-file)
     (caadr (assoc name cc-other-file-alist #'string-match-p))))
 #+END_SRC
 
