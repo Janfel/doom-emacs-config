@@ -707,6 +707,11 @@ Add block jumping to =[= and =]= and remap =z r= and =z m= to =z O= and =z C=.
       :n "z C" #'+org/hide-next-fold-level)
 #+END_SRC
 
+*** NOTE Other Packages
+More Evil-related packages that I might try out some time.
++ [[https://github.com/willghatch/emacs-on-parens][on-parens]]
++ [[https://github.com/expez/evil-smartparens][evil-smartparens]]
+
 ** Flycheck
 #+BEGIN_SRC emacs-lisp
 (map! :when (featurep! :checkers syntax)
@@ -947,11 +952,6 @@ In ~snippet-mode~, whitespace has significant meaning.
   (which-key-add-key-based-replacements
     "C-c &" "snippet"))
 #+END_SRC
-
-*** NOTE Other Packages
-More Evil-related packages that I might try out some time.
-+ [[https://github.com/willghatch/emacs-on-parens][on-parens]]
-+ [[https://github.com/expez/evil-smartparens][evil-smartparens]]
 
 * Languages
 ** Arduino
