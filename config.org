@@ -1005,45 +1005,24 @@ This only works with a *patched* Arduino runtime.
 #+END_SRC
 
 ** C/C++
+*** Code Style
 #+BEGIN_SRC emacs-lisp
 (defvaralias 'c-basic-offset 'indent-level)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-(setq-hook! 'c-mode-common-hook
-  indent-level 'set-from-style
-  indent-tabs-mode t)
-#+END_SRC
-
-*** TODO Code Style
-The default is =doom=.
-I have yet to create my own style.
-#+BEGIN_SRC emacs-lisp :tangle no
 (after! cc-mode
-  (c-add-style "jfl"
-               '("linux"
-                 (indent-tabs-mode . t)
-                 (c-basic-offset   . 4)
-                 (tab-width        . 4)))
+  (c-add-style
+   "jfl"
+   '("doom"
+     (indent-tabs-mode . t)
+     (c-basic-offset   . 4)
+     (tab-width        . 4)))
   (setq c-default-style
-        '((java-mode . "java")
-          (awk-mode  . "awk")
-          ;; (other     . "k&r")
-          (other     . "jfl")
-          )))
+        '((awk-mode  . "awk")
+          (java-mode . "java")
+          (other     . "jfl"))))
 #+END_SRC
-
-#+BEGIN_SRC emacs-lisp :tangle no
-(after! cc-mode
-  (c-add-style "jfl" '("linux"
-                       (indent-tabs-mode . t)
-                       (tab-width . 4)
-                       (c-basic-offset . 4)))
-  (if (listp c-default-style)
-      (setf (alist-get 'other c-default-style) "jfl")
-    (setq c-default-style "jfl")))
-#+END_SRC
-
 
 *** C Mode
 *** C++ Mode
