@@ -522,9 +522,12 @@ blocking the main thread.
 *** EShell
 *** Term
 *** VTerm
-This hack removes a problematic popup rule.
+This removes the problematic default popup rule for =vterm= buffers and replaces
+it with a sane alternative.
 #+BEGIN_SRC emacs-lisp
-(setq display-buffer-alist (assoc-delete-all "^vterm" display-buffer-alist))
+(after! vterm
+  (setq display-buffer-alist (assoc-delete-all "^vterm" display-buffer-alist))
+  (set-popup-rule! "^\\*doom:vterm-popup:" :size 0.25 :vslot -4 :select t :quit 'current :ttl nil))
 #+END_SRC
 
 VTerm doesn’t recognize any keypad keys for some reason. This advice translates
