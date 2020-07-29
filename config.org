@@ -576,6 +576,13 @@ Bind keys for ~redo~.
       :n "U" #'redo)
 #+END_SRC
 
+** Workspaces
+#+BEGIN_SRC emacs-lisp
+(defadvice! *workspace/display ()
+  :after #'+workspace/display
+  (set-transient-map doom-leader-workspace-map))
+#+END_SRC
+
 * Packages
 ** Company
 *** Quickhelp
