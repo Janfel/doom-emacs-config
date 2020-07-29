@@ -1053,6 +1053,13 @@ Major mode for the [[https://mesonbuild.com][Meson Build System]].
 (use-package! meson-mode :defer t)
 #+END_SRC
 
+Add the =meson.build= file to the files that projectile looks for when
+determining the project root directory.
+#+BEGIN_SRC emacs-lisp
+(after! projectile
+  (push "meson.build" projectile-project-root-files-top-down-recurring))
+#+END_SRC
+
 *** Header/Source
 #+BEGIN_SRC emacs-lisp
 (defun *cc-header-file-p (&optional filename)
