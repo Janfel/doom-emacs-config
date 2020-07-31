@@ -1106,9 +1106,9 @@ determining the project root directory.
       (when (*cc-header-file-p)
         (setq-local
          flycheck-gcc-warnings
-         (nconc *flycheck-gcc-header-warnings flycheck-gcc-warnings)
+         (append *flycheck-gcc-header-warnings flycheck-gcc-warnings)
          flycheck-clang-warnings
-         (nconc *flycheck-clang-header-warnings flycheck-clang-warnings))))))
+         (append *flycheck-clang-header-warnings flycheck-clang-warnings))))))
 #+END_SRC
 
 *** Smartparens
