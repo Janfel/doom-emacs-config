@@ -1030,6 +1030,7 @@ This only works with a *patched* Arduino runtime.
       brace-elseif-brace
       brace-catch-brace)
      (c-offsets-alist
+      (inline-open        . 0)
       (knr-argdecl-intro  . 0)
       (substatement-open  . 0)
       (substatement-label . 0)
