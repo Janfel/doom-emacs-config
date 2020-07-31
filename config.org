@@ -1772,7 +1772,7 @@ Replace the original ~nxml-mode~ rules with ones that aren’t broken.
 Use C-p to paste.
 #+BEGIN_SRC emacs-lisp
 (map! :i "C-p" #'yank
-      :i "M-p" #'yank-pop)
+      :i "C-S-p" #'yank-pop)
 #+END_SRC
 
 ** Folding
