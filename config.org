@@ -1101,14 +1101,14 @@ determining the project root directory.
     "A list of warnings to be added to `flycheck-gcc-warnings' when editing a C/C++ header file.")
   (defvar *flycheck-clang-header-warnings '("no-pragma-once-outside-header")
     "A list of warnings to be added to `flycheck-clang-warnings' when editing a C/C++ header file.")
-  (add-hook! '(c-mode c++-mode)
+  (add-hook! '(c-mode-hook c++-mode-hook)
     (defun *flycheck-maybe-add-gcc-clang-header-warnings-h ()
       (when (*cc-header-file-p)
         (setq-local
          flycheck-gcc-warnings
-         (nconc flycheck-gcc-header-warnings flycheck-gcc-warnings)
+         (nconc *flycheck-gcc-header-warnings flycheck-gcc-warnings)
          flycheck-clang-warnings
-         (nconc flycheck-clang-header-warnings flycheck-clang-warnings))))))
+         (nconc *flycheck-clang-header-warnings flycheck-clang-warnings))))))
 #+END_SRC
 
 *** Smartparens
