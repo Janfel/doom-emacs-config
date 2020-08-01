@@ -104,7 +104,8 @@ This snippet returns the status of ~lexical-binding~.
         (end (if (doom-region-active-p)
                  (doom-region-end)
                (line-end-position)))
-        (column (or column comment-column)))
+        (column (or column comment-column))
+        (indent-tabs-mode nil))
     (save-excursion
       (goto-char beg)
       (while (< (point) end)
