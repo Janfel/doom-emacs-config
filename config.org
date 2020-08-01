@@ -715,6 +715,18 @@ Add block jumping to =[= and =]= and remap =z r= and =z m= to =z O= and =z C=.
       :n "z C" #'+org/hide-next-fold-level)
 #+END_SRC
 
+*** Operators
+This operator capitalizes a region similar to ~evil-upcase~ and ~evil-downcase~.
+#+BEGIN_SRC emacs-lisp
+(evil-define-operator *evil-capitalize (beg end type)
+  "Capitalize text."
+  (if (eq type 'block)
+      (evil-apply-on-block #'*evil-capitalize beg end nil)
+    (capitalize-region beg end)))
+(map! :n "g C-u" #'*evil-capitalize
+      :v   "C-u" #'*evil-capitalize)
+#+END_SRC
+
 *** NOTE Other Packages
 More Evil-related packages that I might try out some time.
 + [[https://github.com/willghatch/emacs-on-parens][on-parens]]
