@@ -1,7 +1,7 @@
 ;;; lang/basic/autoload.el -*- lexical-binding: t; -*-
 
 (defun +basic-denumber (beg end)
-  ""
+  "Remove line number from every line in the region BEG to END."
   (save-excursion
     (goto-char beg)
     (while (< (point) end)
@@ -10,7 +10,7 @@
 
 ;;;###autoload
 (defun +basic/denumber ()
-  ""
+  "Remove line number from every line in current buffer/region."
   (interactive "*")
   (if (doom-region-active-p)
       (+basic-denumber (doom-region-beginning) (doom-region-end))
