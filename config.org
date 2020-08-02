@@ -16,7 +16,6 @@ These are some useful links to manuals and other peoples configs.
 + [[https://github.com/poncie/.emacs.d][Poncie’s Config]]
 + [[http://pages.sachachua.com/.emacs.d/Sacha.html][Sacha Chua’s Config]]
 + [[http://aaronbedra.com/emacs.d/#languages][Aaron Bedra’s Config]]
-+ [[https://dotdoom.rgoswami.me/config.html][Rohit Goswami’s Config]] (Very Old)
 
 ** Header
 This header comment ensures that everything in this file is lexically scoped.
