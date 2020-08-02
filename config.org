@@ -367,6 +367,12 @@ Wrap everything in a conditional. Disabled because WIP.
 #+END_SRC
 
 * Editor Features
+** Electric Quotes
+I have implemented ~set-electric-quote-chars~ in [[file:autoload/electric-quote.el][=autoload/electric-quote.el=]].
+
+*** NOTE Emacs 27 adds ~electric-quote-replace-double~
+This variable might be very useful in certain modes.
+
 ** File Templates
 #+BEGIN_SRC emacs-lisp :tangle no
 (when (featurep! :editor file-templates)
