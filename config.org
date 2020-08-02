@@ -238,6 +238,33 @@ Define these variables from =core/autoload/config.el=.
       doom-bin     (concat doom-bin-dir   "doom"))
 #+END_SRC
 
+** Emacs C Source Code
+#+BEGIN_SRC emacs-lisp
+(defvar source-directory-base
+  (file-name-as-directory (file-name-nondirectory (directory-file-name source-directory)))
+  "Name of `source-directory' without the leading path.
+
+This variable is a string of the form “emacs-VERSION/” where VERSION is
+the true version of Emacs including any release-candidate specifiers.")
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(defvar current-source-directory
+  (let ((dir (expand-file-name source-directory-base "~/opt/src/")))
+    (if (file-accessible-directory-p dir) dir))
+  "Directory where Emacs sources can be found.
+
+This differs from `source-directory' in that it either currently contains
+the Emacs source code, or is set to nil.")
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(setq find-function-C-source-directory
+      (when current-source-directory
+       (let ((dir (expand-file-name "src/" current-source-directory)))
+        (if (file-accessible-directory-p dir) dir))))
+#+END_SRC
+
 ** Fonts
 #+BEGIN_SRC emacs-lisp
 (setq doom-font (font-spec :family "Source Code Pro" :size 13)
