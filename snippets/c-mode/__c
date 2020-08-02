@@ -2,6 +2,6 @@
 # group: file templates
 # contributor: Jan Felix Langenbach
 # --
-#include "`(file-name-base)`.h"
+#include "`(file-name-base (buffer-file-name))`.h"
 
 $0
