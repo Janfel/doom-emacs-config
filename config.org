@@ -848,7 +848,7 @@ For some reason, ~show-smartparens-mode~ causes visual glitches.
 The indicator doesn’t take the visual indentation into account.
 #+BEGIN_SRC emacs-lisp
 (when EMACS27+
-  (add-hook 'org-mode-hook #'display-fill-column-indicator--turn-off))
+  (add-hook 'org-indent-mode-hook #'display-fill-column-indicator--turn-off))
 #+END_SRC
 
 *** Org Keys
