@@ -340,65 +340,6 @@ Set the color theme. On =Tesla= I currently use light themes.
           space-after-tab)))
 #+END_SRC
 
-* Emacs 27 Features
-** Fill Column Indicator
-#+BEGIN_SRC emacs-lisp
-(when EMACS27+
-  (add-hook! '(prog-mode-hook text-mode-hook)
-             #'display-fill-column-indicator-mode))
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-(when EMACS27+
-  (defun display-fill-column-indicator--turn-off ()
-    (interactive)
-    (display-fill-column-indicator-mode -1)))
-#+END_SRC
-
-** Tab Bar
-For ~tab-line~ configuration, steal from [[https://gitlab.com/andreyorst/dotfiles/-/blob/master/.config/emacs/init.el][andreyorst]].
-
-Wrap everything in a conditional. Disabled because WIP.
-#+BEGIN_SRC emacs-lisp :tangle no
-(when EMACS27+
-  (after! tab-bar))
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp :tangle no
-(setq tab-bar-close-button-show t
-      tab-bar-new-button-show t
-      tab-bar-separator nil
-      tab-bar-tab-name-ellipsis "…"
-      tab-bar-tab-name-truncated-max 20
-      tab-bar-tab-name-function #'tab-bar-tab-name-truncated
-      tab-bar-close-button (propertize
-                            (if (char-displayable-p ?×) " × " " x ")
-                            'close-tab t
-                            :help "Click to close tab"))
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp :tangle no
-(let ((fg   (face-attribute 'default   :foreground))
-      (bg   (face-attribute 'default   :background))
-      (base (face-attribute 'mode-line :background)))
-  (set-face-attribute
-   'tab-bar nil
-   :foreground fg
-   :background bg
-   :box (list :line-width -1 :color base))
-  (set-face-attribute
-   'tab-bar-tab nil
-   :foreground fg
-   :background bg
-   :box (list :color bg)
-   )
-  (set-face-attribute
-   'tab-bar-tab-inactive nil
-   :foreground fg
-   :background base
-   :box (list :color base)))
-#+END_SRC
-
 * Editor Features
 ** Electric Quotes
 I have implemented ~set-electric-quote-chars~ in [[file:autoload/electric-quote.el][=autoload/electric-quote.el=]].
@@ -422,6 +363,20 @@ This variable might be very useful in certain modes.
                       (delq '+snippets-dir)
                       (delq '+file-templates-dir))
                  '(+file-templates-fallback-dir)))))
+#+END_SRC
+
+** Fill Column Indicator :27:
+#+BEGIN_SRC emacs-lisp
+(when EMACS27+
+  (add-hook! '(prog-mode-hook text-mode-hook)
+             #'display-fill-column-indicator-mode))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(when EMACS27+
+  (defun display-fill-column-indicator--turn-off ()
+    (interactive)
+    (display-fill-column-indicator-mode -1)))
 #+END_SRC
 
 ** Find Other File
@@ -555,6 +510,50 @@ blocking the main thread.
 *** Flyspell
 #+BEGIN_SRC emacs-lisp
 (remove-hook 'prog-mode-hook #'flyspell-mode)
+#+END_SRC
+
+** Tab Bar :27:
+For ~tab-line~ configuration, steal from [[https://gitlab.com/andreyorst/dotfiles/-/blob/master/.config/emacs/init.el][andreyorst]].
+
+Wrap everything in a conditional. Disabled because WIP.
+#+BEGIN_SRC emacs-lisp :tangle no
+(when EMACS27+
+  (after! tab-bar))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp :tangle no
+(setq tab-bar-close-button-show t
+      tab-bar-new-button-show t
+      tab-bar-separator nil
+      tab-bar-tab-name-ellipsis "…"
+      tab-bar-tab-name-truncated-max 20
+      tab-bar-tab-name-function #'tab-bar-tab-name-truncated
+      tab-bar-close-button (propertize
+                            (if (char-displayable-p ?×) " × " " x ")
+                            'close-tab t
+                            :help "Click to close tab"))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp :tangle no
+(let ((fg   (face-attribute 'default   :foreground))
+      (bg   (face-attribute 'default   :background))
+      (base (face-attribute 'mode-line :background)))
+  (set-face-attribute
+   'tab-bar nil
+   :foreground fg
+   :background bg
+   :box (list :line-width -1 :color base))
+  (set-face-attribute
+   'tab-bar-tab nil
+   :foreground fg
+   :background bg
+   :box (list :color bg)
+   )
+  (set-face-attribute
+   'tab-bar-tab-inactive nil
+   :foreground fg
+   :background base
+   :box (list :color base)))
 #+END_SRC
 
 ** Terminal
