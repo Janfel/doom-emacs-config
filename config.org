@@ -1220,6 +1220,13 @@ able to work around this when I implement my own =fmt-mix= functions, using
 #+END_SRC
 
 ** Emacs Lisp :Lisp:
+Much GNU code has embedded tabs which are supposed to display as eight spaces.
+For consistency, the ~tab-width~ in all Elisp modes is set to eight.
+#+BEGIN_SRC emacs-lisp
+(setq-hook! '(emacs-lisp-mode-hook lisp-interaction-mode-hook)
+  tab-width 8)
+#+END_SRC
+
 #+BEGIN_SRC emacs-lisp
 (add-hook 'emacs-lisp-mode-hook       #'lisp-mode-common-hook)
 (add-hook 'lisp-interaction-mode-hook #'lisp-mode-common-hook)
