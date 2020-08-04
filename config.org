@@ -1117,7 +1117,10 @@ determining the project root directory.
   (push "meson.build" projectile-project-root-files-top-down-recurring))
 #+END_SRC
 
+*** LSP
+Activate the =clang-tidy= integration of =clangd=.
 #+BEGIN_SRC emacs-lisp
+(setq lsp-clients-clangd-args '("--clang-tidy"))
 #+END_SRC
 
 *** Flycheck
