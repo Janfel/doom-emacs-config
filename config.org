@@ -1165,7 +1165,7 @@ determining the project root directory.
 *** Smartparens
 Add automatic bracket spacing in ~sp-c-modes~, which is removed in =smartparens-c.el=.
 #+BEGIN_SRC emacs-lisp
-(after! smartparens
+(after! smartparens-c
   (sp-with-modes sp-c-modes
     (sp-local-pair "{" nil :post-handlers '(("||\n[i]" "RET") ("| " "SPC")))))
 #+END_SRC
