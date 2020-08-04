@@ -1117,18 +1117,7 @@ determining the project root directory.
   (push "meson.build" projectile-project-root-files-top-down-recurring))
 #+END_SRC
 
-*** Header/Source
 #+BEGIN_SRC emacs-lisp
-(defun *cc-header-file-p (&optional filename)
-  (when-let* ((name (or filename buffer-file-name)))
-    (string-prefix-p "h" (file-name-extension name) 'ignore-case)))
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-(defun *cc-other-file-extension (&optional filename)
-  (when-let* ((name (or filename buffer-file-name)))
-    (require 'find-file)
-    (caadr (assoc name cc-other-file-alist #'string-match-p))))
 #+END_SRC
 
 *** Flycheck
