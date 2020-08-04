@@ -1154,6 +1154,13 @@ Activate the =clang-tidy= integration of =clangd=.
          (append *flycheck-clang-header-warnings flycheck-clang-warnings))))))
 #+END_SRC
 
+#+BEGIN_SRC emacs-lisp
+(use-package! flycheck-clang-tidy
+  :when (featurep! :checkers syntax)
+  :after flycheck
+  :hook (flycheck-mode-hook . flycheck-clang-tidy-setup))
+#+END_SRC
+
 *** Smartparens
 Add automatic bracket spacing in ~sp-c-modes~, which is removed in =smartparens-c.el=.
 #+BEGIN_SRC emacs-lisp
