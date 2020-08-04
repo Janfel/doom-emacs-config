@@ -1323,6 +1323,16 @@ For consistency, the ~tab-width~ in all Elisp modes is set to eight.
       :n "c" #'macrostep-collapse)
 #+END_SRC
 
+*** WAIT Fix Path in Elisp Module Header ([[doom-repo:pull/3684][#3684]])
+This fix can be removed if my PR is merged.
+#+BEGIN_SRC emacs-lisp
+(defadvice! *file-templates-short-path-in-doomdir-a (path)
+  :filter-return #'+file-templates-get-short-path
+  (if (file-in-directory-p path doom-private-dir)
+      (file-relative-name path doom-private-dir)
+    path))
+#+END_SRC
+
 ** Fennel :Lisp:Lua:
 #+BEGIN_SRC emacs-lisp
 (add-hook 'fennel-mode-hook #'lisp-mode-common-hook)
