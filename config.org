@@ -1143,7 +1143,7 @@ determining the project root directory.
     "A list of warnings to be added to `flycheck-clang-warnings' when editing a C/C++ header file.")
   (add-hook! '(c-mode-hook c++-mode-hook)
     (defun *flycheck-maybe-add-gcc-clang-header-warnings-h ()
-      (when (*cc-header-file-p)
+      (when (-some-> (buffer-file-name) (*cc-header-file-p))
         (setq-local
          flycheck-gcc-warnings
          (append *flycheck-gcc-header-warnings flycheck-gcc-warnings)
