@@ -2,6 +2,7 @@
 # group: file templates
 # contributor: Jan Felix Langenbach
 # --
-#include "`(file-name-base (buffer-file-name))``(*cc-other-file-extension)`"
+`(when-let* ((f buffer-file-name))
+   (format "#include \"%s%s\"" (file-name-base f) (*cc-other-file-extension f)))`
 
 $0

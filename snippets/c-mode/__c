@@ -2,6 +2,6 @@
 # group: file templates
 # contributor: Jan Felix Langenbach
 # --
-#include "`(file-name-base (buffer-file-name))`.h"
+`(when-let* ((f buffer-file-name)) (format "#include \"%s.h\"" (file-name-base f)))`
 
 $0
