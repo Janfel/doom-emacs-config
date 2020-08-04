@@ -1,4 +1,4 @@
-;;; ~/.config/doom-emacs/autoload/fmt-shfmt.el -*- lexical-binding: t; -*-
+;;; autoload/fmt-shfmt.el -*- lexical-binding: t; -*-
 ;;;###if (featurep! :editor fmt)
 
 (defun shfmt-compute-args ()

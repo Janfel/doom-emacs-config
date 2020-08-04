@@ -1,4 +1,4 @@
-;;; ~/.config/doom-emacs/autoload/fmt-tidy.el -*- lexical-binding: t; -*-
+;;; autoload/fmt-tidy.el -*- lexical-binding: t; -*-
 ;;;###if (featurep! :editor fmt +define)
 
 (defvar tidy-config-file nil

@@ -1,4 +1,4 @@
-;;; ~/.config/doom-emacs/autoload/fmt-perltidy.el -*- lexical-binding: t; -*-
+;;; autoload/fmt-perltidy.el -*- lexical-binding: t; -*-
 ;;;###if (featurep! :editor fmt +define)
 
 (defvar perltidy-config-file nil

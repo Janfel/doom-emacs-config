@@ -1,4 +1,4 @@
-;;; ~/.config/doom-emacs/autoload/fmt-black.el -*- lexical-binding: t; -*-
+;;; autoload/fmt-black.el -*- lexical-binding: t; -*-
 ;;;###if (featurep! :editor fmt +define)
 
 ;; Autoload `format-all--buffer-extension-p'.

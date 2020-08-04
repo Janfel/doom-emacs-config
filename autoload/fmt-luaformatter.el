@@ -1,4 +1,4 @@
-;;; ~/.config/doom-emacs/autoload/fmt-luaformatter.el -*- lexical-binding: t; -*-
+;;; autoload/fmt-luaformatter.el -*- lexical-binding: t; -*-
 ;;;###if (featurep! :editor fmt)
 
 (defvar luaformatter-config-file nil

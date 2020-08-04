@@ -1,4 +1,4 @@
-;;; ~/.config/doom-emacs/autoload/fmt-ptop.el -*- lexical-binding: t; -*-
+;;; autoload/fmt-ptop.el -*- lexical-binding: t; -*-
 ;;;###if (featurep! :editor fmt +define)
 
 (defvar ptop-config-file

@@ -1,4 +1,4 @@
-;;; ~/.config/doom-emacs/cli.el -*- lexical-binding: t; -*-
+;;; cli.el -*- lexical-binding: t; -*-
 
 (when (featurep! :config literate)
   (remove-hook 'doom-cli-pre-hook #'+literate-tangle-h)

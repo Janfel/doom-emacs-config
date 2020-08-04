@@ -20,7 +20,7 @@ These are some useful links to manuals and other peoples configs.
 ** Header
 This header comment ensures that everything in this file is lexically scoped.
 #+BEGIN_SRC emacs-lisp
-;;; doom/config.el -*- lexical-binding: t; -*-
+;;; config.el -*- lexical-binding: t; -*-
 #+END_SRC
 
 ** Requires
