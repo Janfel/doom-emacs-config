@@ -1107,7 +1107,14 @@ When this PR is accepted and Doom is updated, these files can be removed:
 *** Meson Mode
 Major mode for the [[https://mesonbuild.com][Meson Build System]].
 #+BEGIN_SRC emacs-lisp
-(use-package! meson-mode :defer t)
+(use-package! meson-mode
+  :defer t
+  :config
+  (let ((dir (expand-file-name "~/opt/src/meson-0.55.0/docs/markdown/")))
+    (when (file-accessible-directory-p dir)
+      (setq meson-markdown-docs-dir dir)))
+  (set-lookup-handlers! 'meson-mode
+    :documentation #'meson-lookup-doc-at-point))
 #+END_SRC
 
 Add the =meson.build= file to the files that projectile looks for when
