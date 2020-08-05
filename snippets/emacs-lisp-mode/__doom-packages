@@ -1,0 +1,3 @@
+;;; `(+file-templates-get-short-path)` -*- no-byte-compile: t; -*-
+
+$0
