@@ -1334,6 +1334,19 @@ For consistency, the ~tab-width~ in all Elisp modes is set to eight.
       :n "c" #'macrostep-collapse)
 #+END_SRC
 
+*** Smartparens
+#+BEGIN_SRC emacs-lisp
+(after! smartparens
+  (defun *sp-emacs-lisp-after-char-quote-p (id action context)
+    (unless (eq context 'string)
+      (sp--looking-back-p (concat "\\?\\\\?" (regexp-quote id)) 5 t)))
+
+  (cl-dolist (delim '("(" "\\(" "\\\\("))
+   (sp-local-pair '(emacs-lisp-mode lisp-interaction-mode)
+                  delim nil
+                  :unless '(:add *sp-emacs-lisp-after-char-quote-p))))
+#+END_SRC
+
 *** WAIT Fix Path in Elisp Module Header ([[doom-repo:pull/3684][#3684]])
 This fix can be removed if my PR is merged.
 #+BEGIN_SRC emacs-lisp
