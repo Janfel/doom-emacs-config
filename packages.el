@@ -1,16 +1,13 @@
 ;;; packages.el -*- no-byte-compile: t; -*-
 
-;;; Examples:
-;; (package! some-package)
-;; (package! another-package :recipe (:host github :repo "username/repo"))
-;; (package! builtin-package :disable t)
+;; The elided SHA1 hashes are caused by `+emacs-lisp-truncate-pin'.
 
 ;; Major mode for the Meson build system for C/C++.
 (package! meson-mode)
 ;; My own verson of `moonscript-mode'.
 (package! moonscript
-  :recipe (:host github :repo "Janfel/moonscript-mode")
-  :pin "ac5d35d3a1970db958c687991a1f2c49f7921150")
+  :pin "ac5d35d3a1970db958c687991a1f2c49f7921150"
+  :recipe (:fork (:host github :repo "Janfel/moonscript-mode")))
 ;;(package! moonscript :recipe (:local-repo "/home/janfel/src/elisp/moonscript-mode"))
 ;; Major mode for simple PHP editing.
 (unless (featurep! :lang php) (package! php-mode))
