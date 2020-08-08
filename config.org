@@ -1104,7 +1104,7 @@ Major mode for the [[https://mesonbuild.com][Meson Build System]].
     (when (file-accessible-directory-p dir)
       (setq meson-markdown-docs-dir dir)))
   (set-lookup-handlers! 'meson-mode
-    :documentation #'meson-lookup-doc-at-point))
+    :documentation #'meson-lookup-doc))
 #+END_SRC
 
 Add the =meson.build= file to the files that projectile looks for when
