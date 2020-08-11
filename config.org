@@ -1858,6 +1858,12 @@ Replace the original ~nxml-mode~ rules with ones that aren’t broken.
 #+END_SRC
 
 * Keybindings
+** Translations
+Translate the real minus into the ASCII minus character.
+#+BEGIN_SRC emacs-lisp
+(map! :map key-translation-map "−" "-")
+#+END_SRC
+
 ** Ä/Ö/Ü
 #+BEGIN_SRC emacs-lisp
 (map! "C-ü" #'execute-extended-command)
