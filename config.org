@@ -331,6 +331,12 @@ Set the color theme. On =Tesla= I currently use light themes.
 #+END_SRC
 
 * Editor Features
+** Calculator
+#+BEGIN_SRC emacs-lisp
+(when (featurep! :editor evil)
+  (add-hook! 'calc-mode-hook #'evil-emacs-state))
+#+END_SRC
+
 ** Electric Quotes
 I have implemented ~set-electric-quote-chars~ in [[file:autoload/electric-quote.el][=autoload/electric-quote.el=]].
 
@@ -685,7 +691,7 @@ right before ~+evil-collection-init~ first called.
            (not (memq 'evil-collection doom-disabled-packages)))
   (add-transient-hook! #'+evil-collection-init
     (push! +evil-collection-disabled-list
-           'tetris '2084-game 'haskell-error-mode)))
+           'calc 'tetris '2084-game 'haskell-error-mode)))
 #+END_SRC
 
 *** Evil Matchit
