@@ -19,30 +19,30 @@ These are some useful links to manuals and other peoples configs.
 
 ** Header
 This header comment ensures that everything in this file is lexically scoped.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 ;;; config.el -*- lexical-binding: t; -*-
-#+END_SRC
+#+end_src
 
 ** Requires
 *** [[https://github.com/magnars/dash.el][dash.el]]
 A modern list library inspired by Clojure.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (require 'dash)
-#+END_SRC
+#+end_src
 
 *** [[https://github.com/purcell/reformatter.el][reformatter.el]]
 A library for creating formatting functions.
-#+BEGIN_SRC emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle no
 (when (featurep! :editor fmt)
   (require 'reformatter))
-#+END_SRC
+#+end_src
 
 ** Snippets
 :PROPERTIES:
 :header-args+: :tangle no :lexical yes
 :END:
 This snippet returns the status of ~lexical-binding~.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun lex-p ()
   "Return t if lexical binding is in effect."
   (let (lex _lex-p)
@@ -51,56 +51,56 @@ This snippet returns the status of ~lexical-binding~.
     (funcall _lex-p)))
 
 (if (lex-p) "Yes" "No")
-#+END_SRC
+#+end_src
 
 * Definitions
 ** Functions and Macros
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defmacro async! (&rest body)
   "Evaluate BODY asynchronously for side-effects only."
   (declare (indent 1))
   `(async-start (lambda () ,@body) #'ignore))
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun directory-name-base (dirname)
   "Return the last component of DIRNAME."
   (declare (pure t) (side-effect-free t))
   (file-name-as-directory (file-name-nondirectory (directory-file-name dirname))))
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defmacro measure-time (&rest body)
   "Measure the time it takes to evaluate BODY."
   `(let ((time (current-time)))
      ,@body
      (message "%.06f" (float-time (time-since time)))))
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun string-or (&rest strings)
   "Return the first non-nil and non-empty string in STRINGS."
   (declare (pure t) (side-effect-free t))
   (cl-dolist (s strings)
     (when (and s (not (string-empty-p s)))
       (cl-return s))))
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun sys-feature-p (feature)
   "Return t if FEATURE is available on this system."
   (declare (side-effect-free t))
   (memq feature SYS-FEATURES))
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defmacro push! (place &rest values)
   "Push VALUES into PLACE."
   `(setf ,place (nconc (list ,@values) ,place)))
-#+END_SRC
+#+end_src
 
 ** Commands
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun comments-to-column (&optional column)
   "Move any end-of-line comments to COLUMN or `comment-column'."
   (interactive "*")
@@ -123,10 +123,10 @@ This snippet returns the status of ~lexical-binding~.
           (delete-char (abs (skip-syntax-backward "\\s-")))
           (indent-to column 1))
         (forward-line 1)))))
-#+END_SRC
+#+end_src
 
 [[https://lists.gnu.org/archive/html/emacs-devel/2020-07/msg00326.html][Stolen from Jeff Norden on the =emacs-devel= mailing list.]]
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun keyboard-quit-strong ()
   (interactive)
   (if (not (eq last-command 'keyboard-quit-strong))
@@ -136,12 +136,12 @@ This snippet returns the status of ~lexical-binding~.
     (top-level)))
 
 (map! "C-M-g" #'keyboard-quit-strong)
-#+END_SRC
+#+end_src
 
 ** Constants
 *** System
 I redefine the operating system constants of Doom Emacs to give them docstrings.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defconst IS-LINUX IS-LINUX
   "Are we on a Linux system?")
 
@@ -153,12 +153,12 @@ I redefine the operating system constants of Doom Emacs to give them docstrings.
 
 (defconst IS-BSD IS-BSD
   "Are we on a BSD system?")
-#+END_SRC
+#+end_src
 
 *** Environment
 These constants allow me to use the correct directories everywhere,
 without lengthy invocation of =getenv=.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defconst XDG-DATA-HOME
   (-> (getenv "XDG_DATA_HOME")
       (string-or "~/.local/share/")
@@ -184,29 +184,29 @@ without lengthy invocation of =getenv=.
   (mapcar #'intern (-> (getenv "SYS_FEATURES")
                        (or "") (split-string ":")))
   "A list of symbols which represent system features.")
-#+END_SRC
+#+end_src
 
 * General Configuration
 Don’t untabify when deleting a tab character.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq backward-delete-char-untabify-method nil)
-#+END_SRC
+#+end_src
 
 Make the block cursor stretch to highlight tab characters.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq x-stretch-cursor t)
-#+END_SRC
+#+end_src
 
 Make the output buffer of ~shell-command~ a popup buffer.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (set-popup-rule! "^\\*Shell Command Output\\*$" :quit t)
-#+END_SRC
+#+end_src
 
 ** Custom.el
 Move the ~customize~ blocks into =custom.el=.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq custom-file (expand-file-name "custom.el" doom-private-dir))
-#+END_SRC
+#+end_src
 
 ** Dead Keys
 :PROPERTIES:
@@ -214,62 +214,62 @@ Move the ~customize~ blocks into =custom.el=.
 :END:
 This is a workaround for when composing using IBus doesn’t work.
 This bug is triggered by not having =ttf-bitstream-vera= installed.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defconst XIM-INPUT-BROKEN nil
   "If this is t, the input of special characters using XIM is broken.")
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (when XIM-INPUT-BROKEN
   (add-hook! 'doom-first-input-hook (require 'iso-transl))
   (after! iso-transl
     (cl-dolist (keypair iso-transl-dead-key-alist)
       (define-key key-translation-map
         (vector (cdr keypair) (cdr keypair)) (string (car keypair))))))
-#+END_SRC
+#+end_src
 
 ** Doom Emacs
 Don’t turn on ~whitespace-mode~ automatically.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defadvice! *doom--disable-automatic-whitespace-mode-a (&rest _)
   "Don’t turn on `whitespace-mode' on startup."
   :after #'doom-init-ui-h
   (remove-hook 'after-change-major-mode-hook
                #'doom-highlight-non-default-indentation-h))
-#+END_SRC
+#+end_src
 
 Define these variables from =core/autoload/config.el=.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq doom-bin-dir (concat doom-emacs-dir "bin/")
       doom-bin     (concat doom-bin-dir   "doom"))
-#+END_SRC
+#+end_src
 
 ** Emacs C Source Code
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defvar source-directory-base
   (directory-name-base source-directory)
   "Name of `source-directory' without the leading path.
 
 This variable is a string of the form “emacs-VERSION/” where VERSION is
 the true version of Emacs including any release-candidate specifiers.")
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq find-function-C-source-directory
       (let ((dir (expand-file-name
                   (concat "~/opt/share/" source-directory-base "src/"))))
         (if (file-accessible-directory-p dir) dir)))
-#+END_SRC
+#+end_src
 
 ** Fonts
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq doom-font (font-spec :family "Source Code Pro" :size 13)
       doom-serif-font (font-spec :family "Source Serif Pro")
       doom-variable-pitch-font (font-spec :family "Source Sans Pro"))
-#+END_SRC
+#+end_src
 
 ** Hideshow
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (map! :after hideshow
       :map hs-minor-mode-map
       :leader :prefix ("c h" . "Hide code")
@@ -280,44 +280,44 @@ the true version of Emacs including any release-candidate specifiers.")
       :desc "Show block"       "B" #'hs-show-block
       :desc "Hide level"       "l" #'hs-hide-level
       :desc "Hide top comment" "c" #'hs-hide-initial-comment-block)
-#+END_SRC
+#+end_src
 
 ** HL Line Mode
 While ~hl-line-mode~ is active, ~face-at-point~ always returns ~hl-line~.
 This advice unhighlights the current line before ~face-at-point~ is called.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (after! hl-line
   (defadvice! *hl-line--fix-face-at-point-a (orig-fn &rest args)
     :before #'face-at-point
     (when hl-line-mode
       (hl-line-unhighlight))))
-#+END_SRC
+#+end_src
 
 ** Info
 Treat ~info~ buffers as real buffers.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (after! info (set-popup-rule! "^\\*info\\*$" :ignore))
-#+END_SRC
+#+end_src
 
 ** Theme
 Set the color theme. On =Tesla= I currently use light themes.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq doom-theme
       (cl-case SYSTEM
         ('Phantom 'doom-one)
         ('Tesla   'doom-one-light)
         (t        'doom-one)))
-#+END_SRC
+#+end_src
 
 ** Visual Line Mode
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun turn-off-visual-line-mode ()
   (interactive)
   (visual-line-mode -1))
-#+END_SRC
+#+end_src
 
 ** Whitespace Mode
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (after! whitespace
   (setq whitespace-style
         '(face
@@ -328,14 +328,14 @@ Set the color theme. On =Tesla= I currently use light themes.
           tab-mark
           space-before-tab
           space-after-tab)))
-#+END_SRC
+#+end_src
 
 * Editor Features
 ** Calculator
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (when (featurep! :editor evil)
   (add-hook! 'calc-mode-hook #'evil-emacs-state))
-#+END_SRC
+#+end_src
 
 ** Electric Quotes
 I have implemented ~set-electric-quote-chars~ in [[file:autoload/electric-quote.el][=autoload/electric-quote.el=]].
@@ -344,7 +344,7 @@ I have implemented ~set-electric-quote-chars~ in [[file:autoload/electric-quote.
 This variable might be very useful in certain modes.
 
 ** File Templates
-#+BEGIN_SRC emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle no
 (when (featurep! :editor file-templates)
   (defvar +file-templates-fallback-dir +file-templates-dir
     "The directory where the file templates provided by Doom are stored.")
@@ -359,55 +359,55 @@ This variable might be very useful in certain modes.
                       (delq '+snippets-dir)
                       (delq '+file-templates-dir))
                  '(+file-templates-fallback-dir)))))
-#+END_SRC
+#+end_src
 
 ** Fill Column Indicator :27:
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (when EMACS27+
   (add-hook! '(prog-mode-hook text-mode-hook)
              #'display-fill-column-indicator-mode))
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (when EMACS27+
   (defun display-fill-column-indicator--turn-off ()
     (interactive)
     (display-fill-column-indicator-mode -1)))
-#+END_SRC
+#+end_src
 
 ** Find Other File
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (map! :leader :prefix "f"
       :desc "Find other file" "o" #'ff-find-other-file)
-#+END_SRC
+#+end_src
 
 ** Formatting Engine
 I replace the default formatting function with my own.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (map! :when (featurep! :editor fmt)
       :nv "g =" #'+fmt:region
       :map doom-leader-code-map
       :desc "Format buffer/region" "f" #'+fmt/dwim)
-#+END_SRC
+#+end_src
 
 ** Form Feed
 This mode displays instances of =^L= (form feed) as horizontal lines.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package! form-feed
   :hook ((prog-mode text-mode) . form-feed-mode))
-#+END_SRC
+#+end_src
 
 *** Keybindings
 Allows jumping from =^L= to =^L=.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (map! "C-M-<next>"  #'forward-page
       "C-M-<prior>" #'backward-page)
-#+END_SRC
+#+end_src
 
 ** Indentation
 *** Indent Guides
 The package [[https://github.com/DarthFennec/highlight-indent-guides][highlight-indent-guides]] draws a line for each indentation level.
-#+BEGIN_SRC emacs-lisp :tangle yes :noweb-ref :noweb no-export
+#+begin_src emacs-lisp :tangle yes :noweb-ref :noweb no-export
 (use-package! highlight-indent-guides
   ;; Maybe change this to mode-by-mode basis.
   :commands (highlight-indent-guides-mode)
@@ -419,54 +419,54 @@ The package [[https://github.com/DarthFennec/highlight-indent-guides][highlight-
         #'highlight-indent-guides--bitmap-line)
   ;; Highlight the nearest indent guide.
   (setq highlight-indent-guides-responsive 'top))
-#+END_SRC
+#+end_src
 
 *** Indent Level
 Indentation in Emacs is a mess currently. Each mode defines its own variables.
 This consolidates indentation into one single variable.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defvar-local indent-level 4
   "Indentation level for all major-modes.")
 
 (defvaralias 'standard-indent 'indent-level)
-#+END_SRC
+#+end_src
 
 *** Tabs for Indentation
 Disable tab insertion by default. It will be enabled manually for each mode.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq-default tab-width 4)
 (setq-default indent-tabs-mode nil)
-#+END_SRC
+#+end_src
 
 These functions have a tendency to insert tabs where they don’t belong.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defadvice! *emacs--disable-indent-tabs-mode-a (orig-fn &rest args)
   "Let `indent-tabs-mode' be bound to nil."
   :around '(align-areas comment-indent indent-relative)
   (let (indent-tabs-mode) (apply orig-fn args)))
-#+END_SRC
+#+end_src
 
 ** Language Server Protocol
 *** TODO Try semantic highlighting.
-#+BEGIN_SRC emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle no
 (setq lsp-enable-semantic-highlighting t)
-#+END_SRC
+#+end_src
 
 ** Line Numbers
 On =Tesla=, ~display-line-numbers-mode~ causes noticeable slowdown.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (when (eq SYSTEM 'Tesla)
   (remove-hook!
     '(prog-mode-hook
       text-mode-hook
       conf-mode-hook)
     #'display-line-numbers-mode))
-#+END_SRC
+#+end_src
 
 ** Literate Configuration
 Make use of =async.el= to tangle =config.org= in a separate process without
 blocking the main thread.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (when (featurep! :config literate)
   (defun *literate-tangle-async-h ()
     "Compile `+literate-config-file' in an async process."
@@ -495,29 +495,29 @@ blocking the main thread.
     :around #'+literate-recompile-maybe-h
     (cl-letf (((symbol-function '+literate-tangle-h) #'*literate-tangle-async-h))
       (apply orig-fn args))))
-#+END_SRC
+#+end_src
 
 ** Spell Checking
 *** Ispell
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq ispell-dictionary "en_US")
-#+END_SRC
+#+end_src
 
 *** Flyspell
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (remove-hook 'prog-mode-hook #'flyspell-mode)
-#+END_SRC
+#+end_src
 
 ** Tab Bar :27:
 For ~tab-line~ configuration, steal from [[https://gitlab.com/andreyorst/dotfiles/-/blob/master/.config/emacs/init.el][andreyorst]].
 
 Wrap everything in a conditional. Disabled because WIP.
-#+BEGIN_SRC emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle no
 (when EMACS27+
   (after! tab-bar))
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle no
 (setq tab-bar-close-button-show t
       tab-bar-new-button-show t
       tab-bar-separator nil
@@ -528,9 +528,9 @@ Wrap everything in a conditional. Disabled because WIP.
                             (if (char-displayable-p ?×) " × " " x ")
                             'close-tab t
                             :help "Click to close tab"))
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle no
 (let ((fg   (face-attribute 'default   :foreground))
       (bg   (face-attribute 'default   :background))
       (base (face-attribute 'mode-line :background)))
@@ -550,7 +550,7 @@ Wrap everything in a conditional. Disabled because WIP.
    :foreground fg
    :background base
    :box (list :color base)))
-#+END_SRC
+#+end_src
 
 ** Terminal
 *** Shell
@@ -559,15 +559,15 @@ Wrap everything in a conditional. Disabled because WIP.
 *** VTerm
 This removes the problematic default popup rule for =vterm= buffers and replaces
 it with a sane alternative.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (after! vterm
   (setq display-buffer-alist (assoc-delete-all "^vterm" display-buffer-alist))
   (set-popup-rule! "^\\*doom:vterm-popup:" :size 0.25 :vslot -4 :select t :quit 'current :ttl nil))
-#+END_SRC
+#+end_src
 
 VTerm doesn’t recognize any keypad keys for some reason. This advice translates
 the keypad keycodes into the corresponding keyboard keycodes.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defadvice! *vterm--add-keypad-keys-a (args)
   "Make `vterm' recognize `<kp-*>' sequences by translating them."
   :filter-args #'vterm-send-key
@@ -583,16 +583,16 @@ the keypad keycodes into the corresponding keyboard keycodes.
                         (t key))))
       (setf (car args) key))
     args))
-#+END_SRC
+#+end_src
 
 ** Tree View
 *** Neotree
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (map! :when (featurep! :ui neotree)
       :after neotree
       :map neotree-mode-map
       :n "<tab>" #'neotree-quick-look)
-#+END_SRC
+#+end_src
 
 *** Treemacs
 ** Undo/Redo
@@ -600,54 +600,54 @@ the keypad keycodes into the corresponding keyboard keycodes.
 *** Undo Tree
 When =undo-tree= is allowed to automatically save the undo history, it somehow
 chokes on an empty undo list and interrupts us with constant errors.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq undo-tree-auto-save-history nil)
-#+END_SRC
+#+end_src
 
 *** Keybindings
 Bind keys for ~redo~.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (map! "<redo>" #'redo
       :n "U" #'redo)
-#+END_SRC
+#+end_src
 
 ** Workspaces
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defadvice! *workspace/display ()
   :after #'+workspace/display
   (set-transient-map doom-leader-workspace-map))
-#+END_SRC
+#+end_src
 
 * Packages
 ** Company
 *** Quickhelp
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package! company-quickhelp
   :when (featurep! :completion company)
   :after company
   :hook (company-mode-hook . company-quickhelp-local-mode)
   :config (setq company-quickhelp-use-propertized-text nil))
-#+END_SRC
+#+end_src
 
 ** Evil
 *** Evil Mode
 Evil uses Vim’s undo increments by default, which are too coarse for me.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq evil-want-fine-undo t)
-#+END_SRC
+#+end_src
 
 Automatic conversion of tabs seems to be broken.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq evil-indent-convert-tabs nil)
-#+END_SRC
+#+end_src
 
 We can’t use ~defvaralias~ here, because ~evil-mode~ is already running
 which causes ~evil-shift-width~ to be a localized variable.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 ;; (defvaralias 'evil-shift-width 'indent-level)
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (map! :when (featurep! :editor evil)
       :after evil
       ;; Remap the document scroll motions to something more sensible.
@@ -678,13 +678,13 @@ which causes ~evil-shift-width~ to be a localized variable.
        "C-j"       nil
        "C-k"       nil
        "C-l"       nil))
-#+END_SRC
+#+end_src
 
 *** Evil Collection
 Doom Emacs loads the ~evil-collection~ packages manually and needs the
 corresponding variables to be set beforehand. The code below runs
 right before ~+evil-collection-init~ first called.
-#+BEGIN_SRC emacs-lisp :noweb no-export
+#+begin_src emacs-lisp :noweb no-export
 (when (and (featurep! :editor evil +everywhere)
            doom-interactive-p
            (not doom-reloading-p)
@@ -692,52 +692,52 @@ right before ~+evil-collection-init~ first called.
   (add-transient-hook! #'+evil-collection-init
     (push! +evil-collection-disabled-list
            'calc 'tetris '2084-game 'haskell-error-mode)))
-#+END_SRC
+#+end_src
 
 *** Evil Matchit
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package! evil-matchit
   :when (featurep! :editor evil)
   :after-call pre-command-hook
   :init (setq evilmi-shortcut "%")
   :config (global-evil-matchit-mode +1))
-#+END_SRC
+#+end_src
 
 *** Evil Numbers
 Remap the ~inc-at-pt~ functions, so =z == can be used for formatting.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (map! :when (featurep! :editor evil)
       :after evil-numbers
       :nv "g +" #'evil-numbers/inc-at-pt
       :nv "g -" #'evil-numbers/dec-at-pt
       :v  "z +" #'evil-numbers/inc-at-pt-incremental
       :v  "z -" #'evil-numbers/dec-at-pt-incremental)
-#+END_SRC
+#+end_src
 
 *** Evil Snipe
 Put ~evil-snipe-repeat~ on Comma and Shift-Comma.
 Doesn’t seem to work due to keymap precedences.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (map! :when (featurep! :editor evil)
       :after evil-snipe
       :map evil-snipe-parent-transient-map
       "," #'evil-snipe-repeat
       "–" #'evil-snipe-repeat-reverse
       ";" nil)
-#+END_SRC
+#+end_src
 
 *** Evil Org
 The =evil-org= package is only loaded when the =+everywhere= flag is set.
 
 Doom Emacs changes ~org-cycle~ to skip the =subtree= stage by default when
 ~(featurep! :editor evil +everywhere)~.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (after! evil-org
   (remove-hook 'org-tab-first-hook #'+org-cycle-only-current-subtree-h))
-#+END_SRC
+#+end_src
 
 Add block jumping to =[= and =]= and remap =z r= and =z m= to =z O= and =z C=.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (map! :when (featurep! :editor evil)
       :after evil-org
       :map evil-org-mode-map
@@ -747,11 +747,11 @@ Add block jumping to =[= and =]= and remap =z r= and =z m= to =z O= and =z C=.
       :n "z m" nil
       :n "z O" #'+org/show-next-fold-level
       :n "z C" #'+org/hide-next-fold-level)
-#+END_SRC
+#+end_src
 
 *** Operators
 This operator capitalizes a region similar to ~evil-upcase~ and ~evil-downcase~.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (evil-define-operator *evil-capitalize (beg end type)
   "Capitalize text."
   (if (eq type 'block)
@@ -759,7 +759,7 @@ This operator capitalizes a region similar to ~evil-upcase~ and ~evil-downcase~.
     (capitalize-region beg end)))
 (map! :n "g C-u" #'*evil-capitalize
       :v   "C-u" #'*evil-capitalize)
-#+END_SRC
+#+end_src
 
 *** NOTE Other Packages
 More Evil-related packages that I might try out some time.
@@ -767,7 +767,7 @@ More Evil-related packages that I might try out some time.
 + [[https://github.com/expez/evil-smartparens][evil-smartparens]]
 
 ** Flycheck
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (map! :when (featurep! :checkers syntax)
       :after flycheck
       ;; Map double exclamation mark.
@@ -777,33 +777,33 @@ More Evil-related packages that I might try out some time.
        (:prefix ("!" . "flycheck") "" flycheck-command-map))
       (:map flycheck-mode-map :prefix "C-c"
        (:prefix ("!" . "flycheck") "" flycheck-command-map)))
-#+END_SRC
+#+end_src
 
 ** Helpful
 Some function definitions contain tab character that are
 assumed to be eight spaces wide.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq-hook! 'helpful-mode-hook
   tab-width 8
   x-stretch-cursor nil)
-#+END_SRC
+#+end_src
 
 ** Hungry Delete
 These functions delete all whitespace up to the next non-whitespace character.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package! hungry-delete
   :bind (("M-DEL"      . hungry-delete-backward)
          ("M-<delete>" . hungry-delete-forward)))
-#+END_SRC
+#+end_src
 
 ** Ivy
 Don’t show =../= in file completion buffer.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq ivy-extra-directories '("./"))
-#+END_SRC
+#+end_src
 
 Ivy should recurse into directories when pressing =RET=.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (map! :when (featurep! :completion ivy)
       :after ivy
       :map ivy-minibuffer-map
@@ -812,7 +812,7 @@ Ivy should recurse into directories when pressing =RET=.
       "C-l"        #'ivy-done
       "C-<up>"     #'ivy-previous-history-element
       "C-<down>"   #'ivy-next-history-element)
-#+END_SRC
+#+end_src
 
 *** NOTE Counsel Compile
 Currently Doom maps =SPC c c= and =SPC p c= to ~+ivy/compile~ and
@@ -821,79 +821,79 @@ I would like to have some key bound to ~counsel-compile~, but I first need to
 experiment a bit with the current system.
 
 ** Magit
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (add-hook   'git-commit-setup-hook #'turn-off-flyspell)
 (setq-hook! 'git-commit-setup-hook fill-column 50)
-#+END_SRC
+#+end_src
 
 ** Org
 *** Org Mode
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq org-cycle-global-at-bob t
       org-cycle-include-plain-lists nil
       org-directory (expand-file-name "~/text/org/")
       org-startup-folded t)
-#+END_SRC
+#+end_src
 
 Use hard line wrapping to keep all columns shorter than ~fill-column~.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (add-hook! 'org-mode-hook #'turn-off-visual-line-mode #'auto-fill-mode)
-#+END_SRC
+#+end_src
 
 Don’t start ~flyspell-mode~ automatically.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (remove-hook 'org-mode-hook #'flyspell-mode)
-#+END_SRC
+#+end_src
 
 Enable formatting inside of SRC blocks.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq-hook! 'org-mode-hook +fmt-formatter #'org-mode-format-dwim)
-#+END_SRC
+#+end_src
 
 Add ~company-capf~ as a Company backend.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (set-company-backend! 'org-mode 'company-capf)
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (after! smartparens
   (sp-local-pair 'org-mode "=" "=")
   (sp-local-pair 'org-mode "~" "~"))
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (after! which-key
   (which-key-add-major-mode-key-based-replacements 'org-mode
     "C-c C-x" "more"
     "C-c C-v" "babel"
     "C-c \""  "plot"))
-#+END_SRC
+#+end_src
 
 *** Org Babel
-#+BEGIN_SRC emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle no
 (defun *org-babel-tangle-file-async (file &optional target-file lang-re finish-func)
   (require 'async)
   (async-start
    (apply-partially #'org-babel-tangle-file target-file lang-re)
    finish-func))
-#+END_SRC
+#+end_src
 
 *** Org Indent
 For some reason, ~show-smartparens-mode~ causes visual glitches.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (add-hook 'org-indent-mode-hook #'turn-off-show-smartparens-mode)
-#+END_SRC
+#+end_src
 
 The indicator doesn’t take the visual indentation into account.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (when EMACS27+
   (add-hook 'org-indent-mode-hook #'display-fill-column-indicator--turn-off))
-#+END_SRC
+#+end_src
 
 *** Org Keys
 Bind shortcuts for navigating headings with the arrow keys.
 Add ~org-babel-map~ to ~:localleader~.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (map! :after org-keys
       :map org-mode-map
       "C-M-<left>"  #'org-up-element
@@ -901,11 +901,11 @@ Add ~org-babel-map~ to ~:localleader~.
       "C-M-<up>"    #'org-previous-visible-heading
       "C-M-<down>"  #'org-next-visible-heading
       (:localleader :prefix ("v" . "babel") "" org-babel-map))
-#+END_SRC
+#+end_src
 
 *** Org Modules
 These values have to be set before ~org-mode~ is loaded.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq org-modules
       '(;; ol-w3m
         ;; ol-bbdb
@@ -918,55 +918,55 @@ These values have to be set before ~org-mode~ is loaded.
         ;; ol-rmail
         ;; ol-eww
         ))
-#+END_SRC
+#+end_src
 
 *** Org Source
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (after! org-src
   (push! org-src-lang-modes
          '("dash" . sh)
          '("zsh"  . sh)))
-#+END_SRC
+#+end_src
 
 ** Projectile
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (map! :after projectile
       :map projectile-mode-map
       :leader :prefix "p"
       :desc "M-x in root" ":" #'projectile-run-command-in-root
       :desc "Shell command in root" "!" #'projectile-run-shell-command-in-root
       :desc "Async command in root" "&" #'projectile-run-async-shell-command-in-root)
-#+END_SRC
+#+end_src
 
 ** Smartparens
 Activate ~show-smartparens-mode~ globally to highlight matching pairs.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (after! smartparens (show-smartparens-global-mode +1))
-#+END_SRC
+#+end_src
 
 Bind ~sp-raise-sexp~, which I use quite often.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (map! :n "z r" #'sp-raise-sexp)
-#+END_SRC
+#+end_src
 
 *** DONE Closing paren deleted twice ([[https://github.com/hlissner/doom-emacs/issues/3268][#3268]])
 This is currently broken, in that two closing delimiters are deleted instead of
 one. When the linked issue is resolved, this fix can be removed.
-#+BEGIN_SRC emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle no
 (setq sp-autodelete-pair nil)
-#+END_SRC
+#+end_src
 
 ** Which Key
 Replace =<up>= and =<down>= with Unicode arrows.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (after! which-key
   (push! which-key-replacement-alist
          '(("<up>"   . nil) . ("↑" . nil))
          '(("<down>" . nil) . ("↓" . nil))))
-#+END_SRC
+#+end_src
 
 These are some default keybindings that are missing a description.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (after! which-key
   (which-key-add-key-based-replacements
     "C-x"      '("global" . "Global commands")
@@ -992,77 +992,77 @@ These are some default keybindings that are missing a description.
     "M-s"      "search"
     "M-s h"    "highlight"
     "M-g"      "goto"))
-#+END_SRC
+#+end_src
 
 ** Yasnippet
 In ~snippet-mode~, whitespace has significant meaning.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (after! ws-butler
   (push 'snippet-mode ws-butler-global-exempt-modes))
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (when EMACS27+
   (add-hook 'snippet-mode-hook #'display-fill-column-indicator--turn-off))
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (after! which-key
   (which-key-add-key-based-replacements
     "C-c &" "snippet"))
-#+END_SRC
+#+end_src
 
 * Languages
 ** Arduino
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq arduino-mode-home (expand-file-name "~/src/arduino/"))
-#+END_SRC
+#+end_src
 
 This only works with a *patched* Arduino runtime.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (when (sys-feature-p 'arduino/xdg)
   (let ((pref-file (expand-file-name "arduino/preferences.txt" XDG-DATA-HOME)))
     (when (file-readable-p pref-file)
       (setq ede-arduino-preferences-file pref-file))))
-#+END_SRC
+#+end_src
 
 ** Assembler
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq-hook! 'asm-mode-hook
   tab-width 8
   indent-tabs-mode t)
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defadvice! *asm--add-indentation-rules-a (&rest _)
   "Add rule clauses to `asm-calculate-indentation'."
   :before-until #'asm-calculate-indentation
   (and (looking-at "section") 0))
-#+END_SRC
+#+end_src
 
 ** BASIC
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defvaralias 'basic-indent-offset 'indent-level)
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq-hook! 'basic-mode-hook
   indent-tabs-mode t)
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (when (featurep! :editor fmt)
   (setq-hook! 'basic-mode-hook
     +fmt-formatter #'basic-format-code))
-#+END_SRC
+#+end_src
 
 ** C/C++
 *** Code Style
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defvaralias 'c-basic-offset 'indent-level)
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (after! cc-mode
   (c-add-style
    "jfl"
@@ -1094,7 +1094,7 @@ This only works with a *patched* Arduino runtime.
         '((awk-mode  . "awk")
           (java-mode . "java")
           (other     . "jfl"))))
-#+END_SRC
+#+end_src
 
 *** C Mode
 *** C++ Mode
@@ -1107,7 +1107,7 @@ When this PR is accepted and Doom is updated, these files can be removed:
 
 *** Meson Mode
 Major mode for the [[https://mesonbuild.com][Meson Build System]].
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package! meson-mode
   :defer t
   :config
@@ -1116,37 +1116,37 @@ Major mode for the [[https://mesonbuild.com][Meson Build System]].
       (setq meson-markdown-docs-dir dir)))
   (set-lookup-handlers! 'meson-mode
     :documentation #'meson-lookup-doc))
-#+END_SRC
+#+end_src
 
 Add the =meson.build= file to the files that projectile looks for when
 determining the project root directory.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (after! projectile
   (push "meson.build" projectile-project-root-files-top-down-recurring))
-#+END_SRC
+#+end_src
 
 *** LSP
 Activate the =clang-tidy= integration of =clangd=.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq lsp-clients-clangd-args '("--clang-tidy"))
-#+END_SRC
+#+end_src
 
 *** Flycheck
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (when (featurep! :checkers syntax)
   (setq-hook! 'c-mode-hook
     flycheck-gcc-language-standard   "gnu18"
     flycheck-clang-language-standard "gnu18"))
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (when (featurep! :checkers syntax)
   (setq-hook! 'c++-mode-hook
     flycheck-gcc-language-standard   "gnu++17"
     flycheck-clang-language-standard "gnu++17"))
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (when (featurep! :checkers syntax)
   (defvar *flycheck-gcc-header-warnings '("no-pragma-once-outside-header")
     "A list of warnings to be added to `flycheck-gcc-warnings' when editing a C/C++ header file.")
@@ -1160,76 +1160,76 @@ Activate the =clang-tidy= integration of =clangd=.
          (append *flycheck-gcc-header-warnings flycheck-gcc-warnings)
          flycheck-clang-warnings
          (append *flycheck-clang-header-warnings flycheck-clang-warnings))))))
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package! flycheck-clang-tidy
   :when (featurep! :checkers syntax)
   :after flycheck
   :hook (flycheck-mode-hook . flycheck-clang-tidy-setup))
-#+END_SRC
+#+end_src
 
 *** Smartparens
 Add automatic bracket spacing in ~sp-c-modes~, which is removed in =smartparens-c.el=.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (after! smartparens-c
   (sp-with-modes sp-c-modes
     (sp-local-pair "{" nil :post-handlers '(("||\n[i]" "RET") ("| " "SPC")))))
-#+END_SRC
+#+end_src
 
 ** Clojure :Lisp:
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (add-hook 'clojure-mode-hook #'lisp-mode-common-hook)
-#+END_SRC
+#+end_src
 
 ** Common Lisp :Lisp:
 The file extension =.cl= is sometimes used.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (push '("\\.cl\\'" . lisp-mode) auto-mode-alist)
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (add-hook 'lisp-mode-hook #'lisp-mode-common-hook)
-#+END_SRC
+#+end_src
 
 *** Sly
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq sly-default-lisp 'sbcl)
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (after! sly
   (push! sly-lisp-implementations
          '(clisp ("clisp"))
          '(cmucl ("cmucl"))
          '(sbcl ("sbcl") :coding-system utf-8-unix)))
-#+END_SRC
+#+end_src
 
 ** Elixir
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defvaralias 'elixir-basic-offset      'indent-level)
 (defvaralias 'elixir-smie-indent-basic 'indent-level)
-#+END_SRC
+#+end_src
 
 The Elixir formatter =mix format= sadly has very strong conventions. I might be
 able to work around this when I implement my own =fmt-mix= functions, using
 ~doom/retab~ or =unexpand= after formatting, but for now we just set
 ~indent-level~ to =2=.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq-hook! 'elixir-mode-hook indent-level 2)
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (set-popup-rule! "^\\*Alchemist-IEx\\*$"
   :size 0.3 :vslot 2 :ttl nil :quit 'current)
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (after! alchemist
   (setq +eval-repls (assq-delete-all 'alchemist-mode +eval-repls)))
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (map! :after alchemist
       :map alchemist-mode-map
       :localleader
@@ -1262,28 +1262,28 @@ able to work around this when I implement my own =fmt-mix= functions, using
   "SPC m a o" "macroexpand"
   "SPC m a p" "project"
   "SPC m a v" "eval")
-#+END_SRC
+#+end_src
 
 ** Emacs Lisp :Lisp:
 Much GNU code has embedded tabs which are supposed to display as eight spaces.
 For consistency, the ~tab-width~ in all Elisp modes is set to eight.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq-hook! '(emacs-lisp-mode-hook lisp-interaction-mode-hook)
   tab-width 8)
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (add-hook 'emacs-lisp-mode-hook       #'lisp-mode-common-hook)
 (add-hook 'lisp-interaction-mode-hook #'lisp-mode-common-hook)
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (after! elisp-mode
   (set-keymap-parent lisp-interaction-mode-map emacs-lisp-mode-map))
-#+END_SRC
+#+end_src
 
 *** Evaluation
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun *eval/buffer-and-replace ()
   (interactive)
   (+eval/region-and-replace (point-min) (point-max))
@@ -1303,9 +1303,9 @@ For consistency, the ~tab-width~ in all Elisp modes is set to eight.
       "B" #'*eval/buffer-and-replace
       "E" #'*eval/sexp-and-replace
       "R" #'+eval/region-and-replace)
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defadvice! *pp-eval-expression-prefix-arg-a (expression &optional arg)
   "Make `pp-eval-expression' with prefix argument insert the result."
   :override #'pp-eval-expression
@@ -1318,10 +1318,10 @@ For consistency, the ~tab-width~ in all Elisp modes is set to eight.
         (pp-display-expression (car values) "*Pp Eval Output*")
       (princ val (current-buffer))
       (message "Inserted into %s buffer" (buffer-name)))))
-#+END_SRC
+#+end_src
 
 *** Macro Expansion
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun *elisp-macroexpand-last-sexp ()
   (interactive)
   (when (and (bound-and-true-p evil-mode)
@@ -1337,16 +1337,16 @@ For consistency, the ~tab-width~ in all Elisp modes is set to eight.
       :map emacs-lisp-mode-map
       :localleader
       "x" #'*elisp-macroexpand-last-sexp)
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (map! :after macrostep
       :map macrostep-keymap
       :n "c" #'macrostep-collapse)
-#+END_SRC
+#+end_src
 
 *** Smartparens
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (after! smartparens
   (defun *sp-emacs-lisp-after-char-quote-p (id action context)
     (unless (eq context 'string)
@@ -1356,81 +1356,81 @@ For consistency, the ~tab-width~ in all Elisp modes is set to eight.
    (sp-local-pair '(emacs-lisp-mode lisp-interaction-mode)
                   delim nil
                   :unless '(:add *sp-emacs-lisp-after-char-quote-p))))
-#+END_SRC
+#+end_src
 
 *** WAIT Fix Path in Elisp Module Header ([[doom-repo:pull/3684][#3684]])
 This fix can be removed if my PR is merged.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defadvice! *file-templates-short-path-in-doomdir-a (path)
   :filter-return #'+file-templates-get-short-path
   (if (and (file-name-absolute-p path)
            (file-in-directory-p path doom-private-dir))
       (file-relative-name path doom-private-dir)
     path))
-#+END_SRC
+#+end_src
 
 ** Fennel :Lisp:Lua:
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (add-hook 'fennel-mode-hook #'lisp-mode-common-hook)
-#+END_SRC
+#+end_src
 
 ** Haskell
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq-hook! 'haskell-mode-hook indent-level 2)
-#+END_SRC
+#+end_src
 
 Doom Emacs uses this hook which seems not to exist.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (add-hook! 'haskell-mode-hook
   (defun *haskell--run-mode-local-vars-hook ()
     (run-hooks 'haskell-mode-local-vars-hook)))
-#+END_SRC
+#+end_src
 
 These bindings are used by many modes with an inferior REPL.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (map! :after haskell-mode
       :map haskell-mode-map
       "C-c C-c" #'haskell-process-load-file
       "C-c C-k" #'haskell-process-load-file
       "C-c C-z" #'haskell-interactive-switch)
-#+END_SRC
+#+end_src
 
 Flycheck raises a "Suspicious State" error when the linter exits with a nonzero
 error code. Using =--no-exit-code= prevents this.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq flycheck-hlint-args '("--no-exit-code"))
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (after! (dante flycheck)
   (flycheck-add-next-checker 'haskell-dante '(warning . haskell-hlint)))
-#+END_SRC
+#+end_src
 
 ** Hy :Lisp:Python:
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (add-hook 'hy-mode-hook #'lisp-mode-common-hook)
-#+END_SRC
+#+end_src
 
 ** JavaScript
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defvaralias 'js-indent-level 'indent-level)
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq-hook! 'js-mode-hook
   indent-level 2
   tab-width 2
   indent-tabs-mode t)
-  #+END_SRC
+  #+end_src
 
-  #+BEGIN_SRC emacs-lisp
+  #+begin_src emacs-lisp
 (when (featurep! :editor fmt)
   (setq-hook! 'js-mode-hook
     +fmt-formatter #'prettier-format-region))
-#+END_SRC
+#+end_src
 
 ** LaTeX
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (after! which-key
   (which-key-add-major-mode-key-based-replacements 'latex-mode
     "C-c C-p"     '("preview" . "Inline formula preview")
@@ -1438,16 +1438,16 @@ error code. Using =--no-exit-code= prevents this.
     "C-c C-o"     "fold"
     "C-c C-q"     "fill"
     "C-c C-t"     "toggle"))
-#+END_SRC
+#+end_src
 
 Let Smartparens handle insertion of =$=.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (map! :after tex-mode :map LaTeX-mode-map "$" nil)
-#+END_SRC
+#+end_src
 
 Some Smartparens settings for LaTeX pairs.
 Letting Smartparens handle these works best in my experience.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (after! smartparens
   (sp-with-modes '(tex-mode plain-tex-mode latex-mode)
     (sp-local-pair "\"`" "\"'"          ; German quotes
@@ -1458,70 +1458,70 @@ Letting Smartparens handle these works best in my experience.
                    :post-handlers '(sp-latex-skip-double-quote))
     (sp-local-pair "\\(" "\\)" :post-handlers '(("||\n[i]" "RET") ("| " "SPC")))
     (sp-local-pair "\\[" "\\]" :post-handlers '(("||\n[i]" "RET") ("| " "SPC")))))
-#+END_SRC
+#+end_src
 
 Using =dvipng= is faster than =png= and is even recommended
 in the [[info:preview-latex#Requirements][manual]] of =preview-latex=.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (when (executable-find "dvipng") (setq preview-image-type 'dvipng))
-#+END_SRC
+#+end_src
 
 *** NOTE Electric Env Pairs
 Maybe add ~latex-electric-env-pair-mode~ to ~LaTeX-mode-hook~.
 
 ** Lisp
 A common hook for all lisp modes.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defvar lisp-mode-common-hook nil
   "Hook called by all Lisp modes for common initialization.")
 
 (defun lisp-mode-common-hook (&rest args)
   "Run all functions in `lisp-mode-common-hook' with ARGS."
   (apply #'run-hook-with-args 'lisp-mode-common-hook args))
-#+END_SRC
+#+end_src
 
 Improve the comment insertion of ~comment-dwim~.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq-hook! 'lisp-mode-common-hook
   comment-start "; "
   comment-start-skip ";+\\s-*")
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (when (featurep! :editor fmt)
   (setq-hook! 'lisp-mode-common-hook
     +fmt-formatter #'indent-region))
-#+END_SRC
+#+end_src
 
 ** Lua
 Doom has already set a value for ~lua-indent-level~, so we have to unset it.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (makunbound 'lua-indent-level)
 (defvaralias 'lua-indent-level 'indent-level)
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq-hook! 'lua-mode-hook
   indent-level 2
   tab-width 2
   indent-tabs-mode t)
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (when (featurep! :editor fmt)
   (setq-hook! 'lua-mode-hook
     +fmt-formatter #'luaformatter-format-region))
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq company-lua-interpreter 'lua53)
-#+END_SRC
+#+end_src
 
 *** Indentation in Comments
 Doom advises ~newline-and-indent~ to continue comments using the value of
 ~comment-line-break-function~. The standard value is ~comment-indent-new-line~,
 which is broken in Lua's multiline comments.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun *lua-comment-indent-new-line (&optional soft)
   "Break line at point and indent, continuing a series of line comments."
   (interactive)
@@ -1534,12 +1534,12 @@ which is broken in Lua's multiline comments.
     (delete-horizontal-space t)
     (newline nil t)
     (indent-according-to-mode)))
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq-hook! 'lua-mode-hook
   comment-line-break-function #'*lua-comment-indent-new-line)
-#+END_SRC
+#+end_src
 
 *** NOTE Comment deletion broken
 The advice ~+default--delete-backward-char-a~ to ~backward-delete-char~ behaves
@@ -1548,30 +1548,30 @@ yet found a fix for this.
 
 ** MoonScript :Lua:
 Consolidate indentation.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defvaralias 'moonscript-indent-offset 'indent-level)
-#+END_SRC
+#+end_src
 
 We are currently limited by ~moonscript-indent-line~, which doesn’t
 respect ~indent-tabs-mode~.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq-hook! 'moonscript-mode-hook
   indent-level 2
   tab-width 8
   indent-tabs-mode nil)
-#+END_SRC
+#+end_src
 
 Doom Emacs, annoyingly, sets ~moonscript-indent-offset~ to ~tab-width~ by default.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (after! moonscript
   (remove-hook 'moonscript-mode-hook
                #'doom--setq-moonscript-indent-offset-for-moonscript-mode-h))
-#+END_SRC
+#+end_src
 
 *** TODO Test this advice for indenting with tabs.
 This might fix the issue with ~moonscript-indent-line~.
 This should not be used with =Janfel/moonscript-mode=.
-#+BEGIN_SRC emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle no
 (defadvice! *moonscript--run-untabified-a (orig-fn &rest args)
   :around '(moonscript-indent-line moonscript-indent-level)
   (if (not indent-tabs-mode)
@@ -1581,143 +1581,143 @@ This should not be used with =Janfel/moonscript-mode=.
       (apply orig-fn args)
       (tabify (line-beginning-position)
               (save-excursion (back-to-indentation) (point))))))
-#+END_SRC
+#+end_src
 
 ** Pascal
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defvaralias 'pascal-indent-level  'indent-level)
 (defvaralias 'pascal-case-indent   'indent-level)
 (defvaralias 'opascal-indent-level 'indent-level)
 (defvaralias 'opascal-case-indent  'indent-level)
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq-hook! '(pascal-mode-hook opascal-mode-hook)
   indent-level 3
   tab-width 3
   indent-tabs-mode t)
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (when (featurep! :editor fmt)
   (setq-hook! '(pascal-mode-hook opascal-mode-hook)
     +fmt-formatter #'ptop-format-region))
-#+END_SRC
+#+end_src
 
 We have to remove ~company-capf~ from ~company-backends~, because completion
 would be unusable otherwise.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (when (featurep! :completion company)
   (setq-hook! '(pascal-mode-hook opascal-mode-hook)
     company-backends (remq 'company-capf company-backends)))
-#+END_SRC
+#+end_src
 
 ** Perl
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defvaralias 'perl-indent-level  'indent-level)
 (defvaralias 'cperl-indent-level 'indent-level)
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq-hook! '(perl-mode-hook cperl-mode-hook)
   indent-tabs-mode t)
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (when (featurep! :editor fmt)
   (setq-hook! '(perl-mode-hook cperl-mode-hook)
     +fmt-formatter #'perltidy-format-region))
-#+END_SRC
+#+end_src
 
 ** PHP
 This allows me to not load the entire =:lang/php= module.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (unless (featurep! :lang php) (use-package! php-mode :defer t))
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq-hook! 'php-mode-hook
   indent-tabs-mode t)
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (when (featurep! :editor fmt)
   (setq-hook! 'php-mode-hook
     +fmt-formatter #'prettier-format-region))
-#+END_SRC
+#+end_src
 
 ** Python
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defvaralias 'python-indent-offset 'indent-level)
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq-hook! 'python-mode-hook
   indent-tabs-mode nil)
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (when (featurep! :editor fmt)
   (setq-hook! 'python-mode-hook
     +fmt-formatter #'black-format-buffer))
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (after! which-key
   (which-key-add-major-mode-key-based-replacements 'python-mode
     "C-c C-p" "pipenv"
     "C-c C-t" "skeleton"))
-#+END_SRC
+#+end_src
 
 *** Company Jedi
 [[https://jedi.readthedocs.io/en/latest/][Jedi]] gives the best (non LSP) autocompletion for python.
 [[https://github.com/syohex/emacs-company-jedi][=company-jedi=]] is a backend for =company= that interfaces with Jedi.
 This adds =company-jedi= to =company-backends= in Python buffers.
 The package will load when =company-jedi= is invoked by =company=.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package! company-jedi
   :when (featurep! :completion company)
   :after company
   :commands company-jedi
   :init (set-company-backend! 'python-mode 'company-jedi))
-#+END_SRC
+#+end_src
 
 *** _Backup
 :PROPERTIES:
 :header-args+: :tangle no :noweb-ref :noweb no-export
 :END:
 Use system =mspyls= for =lsp-python-ms=.
-#+BEGIN_SRC emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle no
 (when (featurep! :lang python +lsp)
   (after! lsp-python-ms
     (setq lsp-python-ms-dir "/usr/lib/microsoft-python-language-server"
           lsp-python-ms-executable "/usr/bin/mspyls")))
-#+END_SRC
+#+end_src
 
 ** Rust
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defvaralias 'rustic-indent-offset 'indent-level)
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq-hook! '(rustic-mode-hook rustic-macro-expansion-mode-hook)
   indent-tabs-mode t)
-  #+END_SRC
+  #+end_src
 
-  #+BEGIN_SRC emacs-lisp
+  #+begin_src emacs-lisp
 (when (featurep! :editor fmt)
   (setq-hook! '(rustic-mode-hook rustic-macro-expansion-mode-hook)
     +fmt-formatter #'rustic-format-buffer))
-#+END_SRC
+#+end_src
 
 The [[https://github.com/rust-analyzer/rust-analyzer][rust-analyzer]] is an experimental language server and is to become
 the successor to RLS.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (when (executable-find "rust-analyzer")
   (setq rustic-lsp-server 'rust-analyzer))
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defadvice! *rustic--rustfmt-respect-indent-tabs-mode-a (orig-fn &rest args)
   "Make `rustic-format-buffer' respect `indent-tabs-mode'."
   :around #'rustic-format-buffer
@@ -1725,11 +1725,11 @@ the successor to RLS.
          (cons (cons 'hard_tabs indent-tabs-mode)
                rustic-rustfmt-config-alist)))
     (apply orig-fn args)))
-#+END_SRC
+#+end_src
 
 Make ~lsp-rust~ respect the =CARGO_HOME= and =RUSTUP_HOME= environment
 variables.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defconst CARGO-HOME
   (-> (getenv "CARGO_HOME")
       (string-or "~/.cargo/")
@@ -1745,73 +1745,73 @@ variables.
 (setq lsp-rust-library-directories
       (list (expand-file-name "registry/src/" CARGO-HOME)
             (expand-file-name "toolchains/" RUSTUP-HOME)))
-#+END_SRC
+#+end_src
 
 ** Scheme :Lisp:
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (add-hook 'scheme-mode-hook #'lisp-mode-common-hook)
-#+END_SRC
+#+end_src
 
 *** Geiser
 Make =geiser= read init files from ~doom-private-dir~ instead of ~$HOME~.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (let ((config-dir (expand-file-name "geiser/" doom-private-dir)))
   (cl-dolist (s '(guile chez chicken racket))
     (set (intern (format "geiser-%s-init-file" s))
          (expand-file-name (format "init-%s.scm" s) config-dir))))
-#+END_SRC
+#+end_src
 
 On Arch, the [[https://www.call-cc.org/][Chicken Scheme]] binaries are called =chicken-csi= and =chicken-csc=.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (when (executable-find "chicken-csi")
   (setq geiser-chicken-binary "chicken-csi"))
-#+END_SRC
+#+end_src
 
 ** Shell
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defvaralias 'sh-basic-offset 'indent-level)
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq-hook! 'sh-mode-hook
   indent-tabs-mode t)
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (when (featurep! :editor fmt)
   (setq-hook! 'sh-mode-hook
     +fmt-formatter #'shfmt-format-region))
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (set-file-template! "\\.sh\\'"
   :trigger "__sh"
   :mode 'sh-mode)
-#+END_SRC
+#+end_src
 
 ** XML
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq-hook! 'nxml-mode-hook
   indent-level 2
   tab-width 8
   indent-tabs-mode nil)
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (when (featurep! :editor fmt)
   (setq-hook! 'nxml-mode-hook
     +fmt-formatter #'tidy-format-region))
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defadvice! *nxml--parameter-soft-not-being-optional-a (&optional soft)
   "Make the parameter SOFT optional to follow the spec of `comment-line-break-function'."
   :filter-args #'nxml-newline-and-indent
   (list soft))
-#+END_SRC
+#+end_src
 
 Make the indentation inside of comments respect ~nxml-child-indent~.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defadvice! *nxml--indent-correctly-inside-comments-a
   (orig-fn pos open-delim close-delim)
   :around #'nxml-compute-indent-in-delimited-token
@@ -1824,30 +1824,30 @@ Make the indentation inside of comments respect ~nxml-child-indent~.
       (goto-char xmltok-start)
       (setq indent (+ (current-column) nxml-child-indent)))
     indent))
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (after! nxml-mode
   (modify-syntax-entry ?\" "\"" nxml-mode-syntax-table)
   (modify-syntax-entry ?<  "(>" nxml-mode-syntax-table)
   (modify-syntax-entry ?>  ")<" nxml-mode-syntax-table))
-#+END_SRC
+#+end_src
 
 Disable ~smartparens-mode~ because it it kind of useless in ~nxml-mode~.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (add-hook 'nxml-mode-hook #'turn-off-smartparens-mode)
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (after! smartparens
   (sp-with-modes '(nxml-mode)
     (sp-local-pair "<" ">" :actions nil)
     (sp-local-pair "'" "'" :actions nil)
     (sp-local-pair "\"" "\"" :unless '(:rem sp-point-after-word-p))))
-#+END_SRC
+#+end_src
 
 Replace the original ~nxml-mode~ rules with ones that aren’t broken.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (after! hideshow
   (assq-delete-all 'nxml-mode hs-special-modes-alist)
   (push! hs-special-modes-alist
@@ -1857,38 +1857,38 @@ Replace the original ~nxml-mode~ rules with ones that aren’t broken.
            "<!--"
            sgml-skip-tag-forward
            nil)))
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq lsp-xml-server-work-dir (expand-file-name "lsp4xml/" XDG-CACHE-HOME))
-#+END_SRC
+#+end_src
 
 * Keybindings
 ** Translations
 Translate the real minus into the ASCII minus character.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (map! :map key-translation-map "−" "-")
-#+END_SRC
+#+end_src
 
 ** Ä/Ö/Ü
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (map! "C-ü" #'execute-extended-command)
 (map! :map key-translation-map
       "C-ö" (kbd "C-x")
       "C-ä" (kbd "C-c"))
-#+END_SRC
+#+end_src
 
 ** Copy/Paste
 Use C-p to paste.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (map! :i "C-p" #'yank
       :i "C-S-p" #'yank-pop)
-#+END_SRC
+#+end_src
 
 ** Folding
 Completely remap the ~+fold~ commands, making use of =h= as a prefix.
 This frees up =z r= =z m=.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (map! :when (and (featurep! :editor evil)
                  (featurep! :editor fold))
       :n "z O" #'+fold/open-all
@@ -1904,61 +1904,61 @@ This frees up =z r= =z m=.
       :n "h C" #'+fold/close-all
       :m "h n" #'+fold/next
       :m "h p" #'+fold/previous)
-#+END_SRC
+#+end_src
 
 ** Leader Extensions
 It is handy to have ~negative-argument~ on a binding
 similar to that of ~universal-argument~.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (map! :leader
       :desc "Negative Argument" "-" #'negative-argument)
-#+END_SRC
+#+end_src
 
 Bind ~shell-command~ in a similar way to =M-x= and =M-;=.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (map! :leader
       :desc "Shell command" "!" #'shell-command
       :desc "Async command" "&" #'async-shell-command)
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (map! :leader :prefix "b"
       :desc "Rename buffer" "R" #'rename-buffer)
-#+END_SRC
+#+end_src
 
 Bind ~indent-region~.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (map! :leader :prefix "c"
       :desc "Indent buffer/region" "i" #'indent-region
       ;; We need to move this out of the way.
       (:when (featurep! :tools lsp)
        :desc "LSP Organize imports" "I" #'lsp-organize-imports))
-#+END_SRC
+#+end_src
 
 Bind mnemonics for =git add=.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (map! :leader :prefix "g"
       (:when (featurep! :ui vc-gutter)
        :desc "Git add hunk" "a" #'git-gutter:stage-hunk
        :desc "Diff hunk"    "d" #'git-gutter:popup-hunk)
       (:when (featurep! :tools magit)
        :desc "Git add file" "A" #'magit-stage-file))
-#+END_SRC
+#+end_src
 
 Bind ~auto-fill-mode~.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (map! :leader :prefix "t"
       :desc "Hard line wrapping" "W" #'auto-fill-mode)
-#+END_SRC
+#+end_src
 
 ** _Backup
 :PROPERTIES:
 :header-args+: :tangle no
 :END:
 Some stuff I don't use anymore.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (map! :leader :desc "List buffers" "b L" #'list-buffers)
 (map! "<mouse-8>" #'backward-page
       "<mouse-9>" #'forward-page)
 (map! :m "C-e" nil)
-#+END_SRC
+#+end_src
