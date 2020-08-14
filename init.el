@@ -174,6 +174,7 @@
          arduino
          basic
          (cc +lsp)
+         meson
          clojure
          common-lisp
          elixir
@@ -186,6 +187,7 @@
          scheme)
         ((eq SYSTEM 'Tesla)
          (cc +lsp)
+         meson
          python))
 
        :email
