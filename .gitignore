@@ -12,3 +12,7 @@
 
 # Tangled config.el
 /config.el
+
+# Archive files
+*.tar
+*.tar.*
