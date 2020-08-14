@@ -463,40 +463,6 @@ On =Tesla=, ~display-line-numbers-mode~ causes noticeable slowdown.
     #'display-line-numbers-mode))
 #+end_src
 
-** Literate Configuration
-Make use of =async.el= to tangle =config.org= in a separate process without
-blocking the main thread.
-#+begin_src emacs-lisp
-(when (featurep! :config literate)
-  (defun *literate-tangle-async-h ()
-    "Compile `+literate-config-file' in an async process."
-    (message "Compiling your literate config...")
-    (let* ((start (current-time))
-           (org   (expand-file-name +literate-config-file doom-private-dir))
-           (dest  (concat (file-name-sans-extension org) ".el"))
-           (cache +literate-config-cache-file))
-      (async-start
-       (lambda ()
-         (let (org-mode-hook)
-           (require 'ob-tangle)
-           (require 'ox)
-           (set-buffer (find-file-noselect org))
-           (org-export-expand-include-keyword)
-           (org-babel-tangle nil dest)
-           (with-temp-file cache)))
-       (lambda (_)
-         (when-let* ((buf (find-buffer-visiting dest)))
-           (with-current-buffer buf (revert-buffer 'ignore-auto 'noconfirm)))
-         (message "Compilation finished in %.02f seconds."
-                  (float-time (time-since start)))))))
-
-  (defadvice! *literate-recompile-async-a (orig-fn &rest args)
-    "Make `+literate-recompile-maybe-h' use `*literate-tangle-async-h'."
-    :around #'+literate-recompile-maybe-h
-    (cl-letf (((symbol-function '+literate-tangle-h) #'*literate-tangle-async-h))
-      (apply orig-fn args))))
-#+end_src
-
 ** Spell Checking
 *** Ispell
 #+begin_src emacs-lisp
