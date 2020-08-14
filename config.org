@@ -296,7 +296,7 @@ This advice unhighlights the current line before ~face-at-point~ is called.
 ** Info
 Treat ~info~ buffers as real buffers.
 #+begin_src emacs-lisp
-(after! info (set-popup-rule! "^\\*info\\*$" :ignore))
+(after! info (set-popup-rule! "^\\*info\\*$" :ignore t))
 #+end_src
 
 ** Theme
