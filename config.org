@@ -1951,6 +1951,13 @@ Bind ~auto-fill-mode~.
       :desc "Hard line wrapping" "W" #'auto-fill-mode)
 #+end_src
 
+** Help Map
+#+begin_src emacs-lisp
+(map! :map help-map
+      ;; Doom replaces this binding with `doom/help-news'.
+      "n" #'view-emacs-news)
+#+end_src
+
 ** _Backup
 :PROPERTIES:
 :header-args+: :tangle no
