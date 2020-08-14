@@ -620,6 +620,21 @@ Bind keys for ~redo~.
 
 * Packages
 ** Company
+*** Box
+:PROPERTIES:
+:header-args+: :tangle no
+:END:
+#+begin_src emacs-lisp
+(when (featurep! :completion company +childframe)
+  (defadvice! *company-box-line-numbers-a (&rest _)
+    :after #'company-box--render-buffer
+    (with-current-buffer (company-box--get-buffer)
+      (setq display-line-numbers company-show-numbers
+            display-line-numbers-width 1)
+      (face-remap-add-relative
+       'line-number :foreground "#bbc2cf"))))
+#+end_src
+
 *** Quickhelp
 #+begin_src emacs-lisp
 (use-package! company-quickhelp
