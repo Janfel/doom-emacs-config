@@ -1353,6 +1353,8 @@ This fix can be removed if my PR is merged.
 :PROPERTIES:
 :header-args+: :tangle no
 :END:
+This is an idea from the [[https://lists.gnu.org/archive/html/emacs-devel/2019-10/msg00736.html][emacs-devel]] mailing list.
+
 Maybe ~def-project-mode!~?
 #+begin_src emacs-lisp
 (define-derived-mode emacs-lisp-data-mode prog-mode "Emacs-Lisp-Data"
