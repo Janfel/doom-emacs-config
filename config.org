@@ -1348,6 +1348,46 @@ This fix can be removed if my PR is merged.
     path))
 #+end_src
 
+** Emacs Lisp Data :Lisp:Data:
+:PROPERTIES:
+:header-args+: :tangle no
+:END:
+Maybe ~def-project-mode!~?
+#+begin_src emacs-lisp
+(define-derived-mode emacs-lisp-data-mode prog-mode "Emacs-Lisp-Data"
+  "Major mode for buffers holding data written in Emacs Lisp syntax."
+  :group 'lisp
+  (lisp-mode-variables nil nil 'elisp)
+  (setq-local electric-quote-string t)
+  (setq imenu-case-fold-search nil)
+    (if (boundp 'electric-pair-text-pairs)
+      (setq-local electric-pair-text-pairs
+                  (append '((?\` . ?\') (?‘ . ?’))
+                          electric-pair-text-pairs))
+    (add-hook 'electric-pair-mode-hook #'emacs-lisp-set-electric-text-pairs))
+
+  )
+#+end_src
+
+#+begin_src emacs-lisp
+(defun elisp-data--form-quoted-p (pos)
+  (save-excursion
+    (or
+     (not ;; Inside eval form.
+      (cl-dolist (ppos (nth 9 (syntax-ppss pos)))
+        (goto-char ppos)
+        (when (looking-at-p "(eval") (cl-return t))))
+     (elisp--form-quoted-p pos))))
+#+end_src
+
+#+begin_src emacs-lisp
+(push! auto-mode-alist
+       '("\\`\\.#" . emacs-lisp-data-mode)
+       '("\\`\\.dir-locals\\.el\\'" . emacs-lisp-data-mode)
+       (cons (lambda (fname) (string= dir-locals-file fname))
+             'emacs-lisp-data-mode))
+#+end_src
+
 ** Fennel :Lisp:Lua:
 #+begin_src emacs-lisp
 (add-hook 'fennel-mode-hook #'lisp-mode-common-hook)
