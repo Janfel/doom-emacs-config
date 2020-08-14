@@ -1,0 +1,6 @@
+# -*- snippet -*-
+# contributor: Jan Felix Langenbach <o.hase3@gmail.com>
+# name: XML Doctype
+# key: doctype
+# --
+<!DOCTYPE ${1:$$(*yas-choose-xml-doctype)}>
