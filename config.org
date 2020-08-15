@@ -1191,6 +1191,13 @@ The file extension =.cl= is sometimes used.
          '(sbcl ("sbcl") :coding-system utf-8-unix)))
 #+end_src
 
+#+begin_src emacs-lisp
+(map! :after sly
+      :map sly-mrepl-mode-map
+      "C-<up>" #'sly-mrepl-previous-input-or-button
+      "C-<down>" #'sly-mrepl-next-input-or-button)
+#+end_src
+
 ** Elixir
 #+begin_src emacs-lisp
 (defvaralias 'elixir-basic-offset      'indent-level)
