@@ -1163,6 +1163,12 @@ Add automatic bracket spacing in ~sp-c-modes~, which is removed in =smartparens-
 #+end_src
 
 ** Common Lisp :Lisp:
+In accordance with the [[https://lisp-lang.org/style-guide/][Common Lisp Style Guide]].
+#+begin_src emacs-lisp
+(setq-hook! 'lisp-mode-hook
+  fill-column 100)
+#+end_src
+
 The file extension =.cl= is sometimes used.
 #+begin_src emacs-lisp
 (push '("\\.cl\\'" . lisp-mode) auto-mode-alist)
