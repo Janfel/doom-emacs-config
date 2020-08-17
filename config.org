@@ -931,6 +931,12 @@ Bind ~sp-raise-sexp~, which I use quite often.
 (map! :n "z r" #'sp-raise-sexp)
 #+end_src
 
+#+begin_src emacs-lisp
+(after! smartparens
+  (setcar (assoc "M-<up>"   sp-paredit-bindings) "C-<up>")
+  (setcar (assoc "M-<down>" sp-paredit-bindings) "C-<down>"))
+#+end_src
+
 *** DONE Closing paren deleted twice ([[https://github.com/hlissner/doom-emacs/issues/3268][#3268]])
 This is currently broken, in that two closing delimiters are deleted instead of
 one. When the linked issue is resolved, this fix can be removed.
