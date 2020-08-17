@@ -1924,8 +1924,7 @@ Use C-p to paste.
 Completely remap the ~+fold~ commands, making use of =h= as a prefix.
 This frees up =z r= =z m=.
 #+begin_src emacs-lisp
-(map! :when (and (featurep! :editor evil)
-                 (featurep! :editor fold))
+(map! :when (featurep! :editor fold)
       :n "z O" #'+fold/open-all
       :n "z C" #'+fold/close-all
 
@@ -1939,6 +1938,18 @@ This frees up =z r= =z m=.
       :n "h C" #'+fold/close-all
       :m "h n" #'+fold/next
       :m "h p" #'+fold/previous)
+
+(map! :after org
+      :map org-mode-map
+      :n "h h" #'+org/toggle-fold
+      :n "h t" #'+org/toggle-fold
+      :n "h a" #'+org/toggle-fold
+      :n "h o" #'+org/open-fold
+      :n "h O" #'+org/open-all-folds
+      :n "h c" #'+org/close-fold
+      :n "h C" #'+org/close-all-folds
+      :m "h n" #'+org/show-next-fold-level
+      :m "h p" #'+org/hide-next-fold-level)
 #+end_src
 
 ** Leader Extensions
