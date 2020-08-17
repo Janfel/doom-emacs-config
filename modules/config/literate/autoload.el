@@ -49,7 +49,7 @@
          (with-temp-file cache)
          (if (zerop (length targets))
              (print! (success "No files to tangle"))
-           (print! (success "Tangled %s files in %.02f seconds"
+           (print! (success "Tangled %s file(s) in %.02f seconds"
                             (length targets)
                             (float-time (time-since start))))))))))
 
