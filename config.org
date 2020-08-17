@@ -1200,8 +1200,11 @@ The file extension =.cl= is sometimes used.
 #+begin_src emacs-lisp
 (map! :after sly
       :map sly-mrepl-mode-map
+      "C-<down>" #'sly-mrepl-next-input-or-button
       "C-<up>" #'sly-mrepl-previous-input-or-button
-      "C-<down>" #'sly-mrepl-next-input-or-button)
+      :i "<down>" #'sly-mrepl-next-input-or-button
+      :i "<up>" #'sly-mrepl-previous-input-or-button
+      "<mouse-2>" #'sly-mrepl-insert-input)
 #+end_src
 
 ** Elixir
