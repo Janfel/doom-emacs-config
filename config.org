@@ -1208,7 +1208,7 @@ The file extension =.cl= is sometimes used.
   (push! sly-lisp-implementations
          '(clisp ("clisp"))
          '(cmucl ("cmucl"))
-         '(sbcl ("sbcl") :coding-system utf-8-unix)))
+         '(sbcl ("sbcl" "--inferior") :coding-system utf-8-unix)))
 #+end_src
 
 #+begin_src emacs-lisp
