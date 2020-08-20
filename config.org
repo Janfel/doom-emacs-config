@@ -1199,7 +1199,8 @@ The file extension =.cl= is sometimes used.
 
 *** Sly
 #+begin_src emacs-lisp
-(setq sly-default-lisp 'sbcl)
+(setq sly-default-lisp 'sbcl
+      sly-common-lisp-style-default 'modern)
 #+end_src
 
 #+begin_src emacs-lisp
