@@ -1184,6 +1184,14 @@ The file extension =.cl= is sometimes used.
 (add-hook 'lisp-mode-hook #'lisp-mode-common-hook)
 #+end_src
 
+#+begin_src emacs-lisp
+(setq-hook! 'lisp-mode-hook
+  rotate-text-local-symbols
+  '(("defvar" "defparameter" "defconstant")
+    ("when" "unless")
+    ("+nil" "-nil")))
+#+end_src
+
 *** Sly
 #+begin_src emacs-lisp
 (setq sly-default-lisp 'sbcl)
