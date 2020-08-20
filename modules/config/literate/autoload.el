@@ -1,6 +1,7 @@
 ;;; config/literate/autoload.el -*- lexical-binding: t; -*-
 
-(defvar +literate-config-files '("config.org")
+(defvar +literate-config-files
+  (list (expand-file-name "config.org" doom-private-dir))
   "A list of `org-mode' files to be tangled automatically.")
 
 (defvar +literate-config-cache-file
@@ -20,11 +21,10 @@
      (require 'ob-tangle)
      (require 'ox)
      (let* ((start (current-time))
-            (default-directory doom-private-dir)
             (targets
              (seq-filter
               (lambda (f) (file-newer-than-file-p f +literate-config-cache-file))
-              (mapcar #'expand-file-name +literate-config-files))))
+              +literate-config-files)))
        (let ((cache +literate-config-cache-file)
              ;; Prevent unwanted entries in recentf, or formatters, or
              ;; anything that could be on these hooks, really. Nothing
@@ -59,11 +59,10 @@
 Use this function when in interactive mode."
   (require 'async)
   (let* ((start (current-time))
-         (default-directory doom-private-dir)
          (files
           (seq-filter
            (lambda (f) (file-newer-than-file-p f +literate-config-cache-file))
-           (mapcar #'expand-file-name +literate-config-files)))
+           +literate-config-files))
          (counter (length files)))
     (cl-dolist (file files)
       (async-start
