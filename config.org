@@ -1192,6 +1192,11 @@ The file extension =.cl= is sometimes used.
     ("+nil" "-nil")))
 #+end_src
 
+#+begin_src emacs-lisp
+(after! smartparens
+  (sp-local-pair 'lisp-mode "\"" nil :unless '(:rem sp-point-after-word-p)))
+#+end_src
+
 *** Sly
 #+begin_src emacs-lisp
 (setq sly-default-lisp 'sbcl)
