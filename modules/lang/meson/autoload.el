@@ -13,16 +13,19 @@
       (or ?\( ?` eol)))
 
 (defun +meson--find-in-reference-manual (identifier)
+  (goto-char (point-min))
   (and (re-search-forward (+meson--lookup-regexp identifier) nil t)
        (line-beginning-position)))
 
 ;;;###autoload
 (defun +meson-lookup-doc (identifier)
+  (interactive (list (thing-at-point 'symbol)))
   (when-let* ((refman (+meson--find-reference-manual))
               (buf (find-file-noselect refman))
               (pos (with-current-buffer buf
                      (+meson--find-in-reference-manual identifier))))
     (pop-to-buffer buf)
+    (rename-buffer "*Meson Reference Manual*" 'unique)
     (markdown-view-mode)
     (read-only-mode)
     (local-set-key (kbd "q") 'bury-buffer)
