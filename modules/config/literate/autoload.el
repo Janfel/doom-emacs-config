@@ -67,8 +67,17 @@
        (org-babel-tangle nil file)))
    (or callback #'ignore)))
 
+(defun +literate-tangle-file-h ()
+  "Tangle `buffer-file-name' asynchronously."
+  (interactive)
+  (let ((start (current-time))
+        (file (or (buffer-file-name) (user-error "Not visiting a file"))))
+    (+literate-tangle-file-async
+     file (lambda (_) (message "Tangling %s finished in %.02f seconds"
+                               file (float-time (time-since start)))))))
+
 ;;;###autoload
-(defun +literate-tangle-async-h ()
+(defun +literate-tangle-config-files-h ()
   "Tangle `+literate-config-files' asynchronously.
 Use this function when in interactive mode."
   (let* ((start (current-time))
@@ -88,13 +97,24 @@ Use this function when in interactive mode."
                     (float-time (time-since start)))))))))
 
 ;;;###autoload
-(defun +literate-maybe-enable-tangle-on-save-h ()
-  "Enable tangling on save in `+literate-config-files'."
-  (when (and buffer-file-name (member buffer-file-name +literate-config-files))
-    (add-hook 'after-save-hook #'+literate-tangle-async-h nil 'local)))
+(defun +literate-tangle-on-save-h ()
+  "Add local hook to tangle `buffer-file-name' asynchronously on save."
+  (when (and buffer-file-name
+             (not (memq #'+literate-tangle-config-files-h after-save-hook)))
+    (add-hook 'after-save-hook #'+literate-tangle-file-h nil 'local)))
+
+;;;###autoload
+(defun +literate-maybe-tangle-config-files-on-save-h ()
+  "Add local hook to tangle `+literate-config-files'.
+This is only done when `buffer-file-name' is a `member' of this list."
+  (when (and buffer-file-name
+             (member buffer-file-name +literate-config-files))
+    (when (memq #'literate-tangle-file-h after-save-hook)
+      (remove-hook 'after-save-hook #'literate-tangle-file-h 'local))
+    (add-hook 'after-save-hook #'+literate-tangle-config-files-h nil 'local)))
 
 ;;;###autoload
 (defalias '+literate/reload #'doom/reload)
 
 ;;;###autoload
-(add-hook 'org-mode-hook #'+literate-maybe-enable-tangle-on-save-h)
+(add-hook 'org-mode-hook #'+literate-maybe-tangle-config-files-on-save-h)
