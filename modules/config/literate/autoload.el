@@ -80,6 +80,7 @@
 (defun +literate-tangle-config-files-h ()
   "Tangle `+literate-config-files' asynchronously.
 Use this function when in interactive mode."
+  (interactive)
   (let* ((start (current-time))
          (files
           (seq-filter
