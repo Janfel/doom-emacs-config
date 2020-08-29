@@ -2,10 +2,9 @@
 
 (defun +meson--find-reference-manual ()
   (let ((default-directory meson-markdown-docs-dir))
-    (expand-file-name
-     (seq-find #'file-exists-p
-               '("Reference-manual.md"
-                 "Reference-manual.md.gz")))))
+    (when-let (manual (seq-find #'file-exists-p '("Reference-manual.md"
+                                                  "Reference-manual.md.gz")))
+      (expand-file-name manual))))
 
 (defun +meson--lookup-regexp (identifier)
   (rx bol (or (+ ?#) ?-) ?  (? ?`)
