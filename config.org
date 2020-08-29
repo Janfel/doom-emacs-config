@@ -467,12 +467,34 @@ On =Tesla=, ~display-line-numbers-mode~ causes noticeable slowdown.
 ** Spell Checking
 *** Ispell
 #+begin_src emacs-lisp
-(setq ispell-dictionary "en_US")
+(setq ispell-dictionary "en_US"
+      ispell-extra-args
+      '("--sug-mode=ultra"
+        "--run-together"
+        "--dont-tex-check-comments"))
+#+end_src
+
+#+begin_src emacs-lisp
+(after! ispell
+  (pushnew! ispell-skip-region-alist
+            '(":\\(PROPERTIES\\|LOGBOOK\\):" . ":END:")
+            '("#\\+BEGIN_SRC"     . "#\\+END_SRC")
+            '("#\\+begin_src"     . "#\\+end_src")
+            '("#\\+BEGIN_EXAMPLE" . "#\\+END_EXAMPLE")
+            '("#\\+begin_example" . "#\\+end_example")))
+#+end_src
+
+#+begin_src emacs-lisp
+(unless (featurep! :checkers spell)
+  (add-hook! 'text-mode-hook
+    (defun +spell-remove-run-together-switch-for-aspell-h ()
+      (setq-local ispell-extra-args (remove "--run-together" ispell-extra-args)))))
 #+end_src
 
 *** Flyspell
 #+begin_src emacs-lisp
-(remove-hook 'prog-mode-hook #'flyspell-mode)
+(when (featurep! :checkers spell +flyspell)
+  (remove-hook 'prog-mode-hook #'flyspell-mode))
 #+end_src
 
 ** Tab Bar :27:
