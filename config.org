@@ -498,6 +498,14 @@ The new =+everywhere= flag has made this unnecessary.
   (remove-hook 'prog-mode-hook #'flyspell-mode))
 #+end_src
 
+*** Spell Fu
+#+begin_src emacs-lisp
+(when (and (featurep! :checkers spell)
+           (not (featurep! :checkers spell +flyspell)))
+  (after! spell-fu
+    (push 'org-document-info (alist-get 'org-mode +spell-excluded-faces-alist))))
+#+end_src
+
 ** Tab Bar :27:
 For ~tab-line~ configuration, steal from [[https://gitlab.com/andreyorst/dotfiles/-/blob/master/.config/emacs/init.el][andreyorst]].
 
