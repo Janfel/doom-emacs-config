@@ -53,11 +53,24 @@
                             (length targets)
                             (float-time (time-since start))))))))))
 
+(defun +literate-tangle-file-async (file &optional callback)
+  "Tangle FILE asynchronously, then invoke CALLBACK with the result."
+  (require 'async)
+  (async-start
+   (lambda ()
+     (require 'ob-tangle)
+     (require 'ox)
+     (let ((org-mode-hook nil)
+           (org-inhibit-startup t))
+       (set-buffer (find-file-noselect file))
+       (org-export-expand-include-keyword)
+       (org-babel-tangle nil file)))
+   (or callback #'ignore)))
+
 ;;;###autoload
 (defun +literate-tangle-async-h ()
   "Tangle `+literate-config-files' asynchronously.
 Use this function when in interactive mode."
-  (require 'async)
   (let* ((start (current-time))
          (files
           (seq-filter
@@ -65,15 +78,8 @@ Use this function when in interactive mode."
            +literate-config-files))
          (counter (length files)))
     (cl-dolist (file files)
-      (async-start
-       (lambda ()
-         (require 'ob-tangle)
-         (require 'ox)
-         (let ((org-mode-hook nil)
-               (org-inhibit-startup t))
-           (set-buffer (find-file-noselect file))
-           (org-export-expand-include-keyword)
-           (org-babel-tangle nil file)))
+      (+literate-tangle-file-async
+       file
        (lambda (_)
          (when (zerop (cl-decf counter))
            (with-temp-file +literate-config-cache-file)
