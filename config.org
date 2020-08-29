@@ -492,7 +492,8 @@ On =Tesla=, ~display-line-numbers-mode~ causes noticeable slowdown.
 #+end_src
 
 *** Flyspell
-#+begin_src emacs-lisp
+The new =+everywhere= flag has made this unnecessary.
+#+begin_src emacs-lisp :tangle no
 (when (featurep! :checkers spell +flyspell)
   (remove-hook 'prog-mode-hook #'flyspell-mode))
 #+end_src
