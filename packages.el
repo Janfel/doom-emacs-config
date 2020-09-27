@@ -2,6 +2,8 @@
 
 ;; The elided SHA1 hashes are caused by `+emacs-lisp-truncate-pin'.
 
+;; Major mode for Meson build files.
+(package! meson-mode)
 ;; My own verson of `moonscript-mode'.
 (package! moonscript
   :pin "ac5d35d3a1970db958c687991a1f2c49f7921150"

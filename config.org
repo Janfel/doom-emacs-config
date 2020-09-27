@@ -1127,6 +1127,12 @@ When this PR is accepted and Doom is updated, these files can be removed:
 *** Meson Mode
 Major mode for the [[https://mesonbuild.com][Meson Build System]].
 
+Integrate =meson-mode= with the Doom lookup system.
+#+begin_src emacs-lisp
+(set-lookup-handlers! 'meson-mode
+  :documentation #'meson-lookup-doc)
+#+end_src
+
 Specify where to find the Meson documentation, if installed.
 #+begin_src emacs-lisp
 (after! meson-mode
