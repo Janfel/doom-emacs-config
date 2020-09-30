@@ -44,6 +44,30 @@
         :desc "Renumber lines" "r" #'basic-renumber
         :desc "Delete line numbers" "d" #'+basic/denumber)
 
+  (defadvice! +basic-indent-line ()
+    "Just go to `line-end-position' instead of calculating something weird."
+    :override #'basic-indent-line
+    ;; "Indent the current line of code, see function `basic-calculate-indent'."
+    (interactive)
+    ;; If line needs indentation
+    (when (or (not (basic-line-number-indented-correctly-p))
+              (not (basic-code-indented-correctly-p)))
+      ;; Set basic-line-number-cols to reflect the actual code
+      (let* ((actual-line-number-cols
+              (if (not (basic-has-line-number-p))
+                  0
+                (let ((line-number (basic-current-line-number)))
+                  (1+ (length (number-to-string line-number))))))
+             (basic-line-number-cols
+              (max actual-line-number-cols basic-line-number-cols)))
+        ;; Calculate new indentation
+        (let* ((original-col (- (current-column) basic-line-number-cols))
+               (original-indent-col (basic-current-indent))
+               (calculated-indent-col (basic-calculate-indent)))
+          (basic-indent-line-to calculated-indent-col)
+          ;; Just go to `line-end-position' instead of calculating something.
+          (goto-char (line-end-position))))))
+
   (defadvice! +basic--current-indent-respect-tabs-a (&rest _)
     "Make `basic-current-indent' calculate the correct indent when using tabs."
     :override #'basic-current-indent
