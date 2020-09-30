@@ -289,7 +289,7 @@ This advice unhighlights the current line before ~face-at-point~ is called.
 #+begin_src emacs-lisp
 (after! hl-line
   (defadvice! *hl-line--fix-face-at-point-a (orig-fn &rest args)
-    :before #'face-at-point
+    :before '(describe-char face-at-point)
     (when hl-line-mode
       (hl-line-unhighlight))))
 #+end_src
