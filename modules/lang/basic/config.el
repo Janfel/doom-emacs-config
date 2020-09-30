@@ -89,4 +89,18 @@
   (after! smartparens
     (sp-local-pair 'basic-mode "'" nil :actions nil)
     (sp-local-pair 'basic-mode "/'" "'/"
-                   :post-handlers '(("||\n[i]" "RET") ("| " "SPC")))))
+                   :post-handlers '(("||\n[i]" "RET") ("| " "SPC"))))
+
+  (after! highlight-numbers
+    (puthash 'basic-mode
+             (rx (? (or "+" "-"))
+                 (or (seq (or (+ digit)
+                              (seq "&H" (+ xdigit))
+                              (seq "&O" (+ (any "0-7")))
+                              (seq "&B" (+ (or "0" "1"))))
+                          (? (or "%" "U" "L" "&" "UL" "LL" "ULL")))
+                     (seq (or (seq (+ digit) (? "." (* digit)))
+                              (seq "." (+ digit)))
+                          (? (or "D" "E") (? (or "+" "-")) (* digit))
+                          (? (or "!" "F" "#" "D")))))
+             highlight-numbers-modelist)))
