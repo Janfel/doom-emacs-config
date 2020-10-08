@@ -629,7 +629,7 @@ Bind keys for ~redo~.
 
 ** Workspaces
 #+begin_src emacs-lisp
-(defadvice! *workspace/display ()
+(defadvice! *workspace-transient-map-on-display-a ()
   :after #'+workspace/display
   (set-transient-map doom-leader-workspace-map))
 #+end_src
