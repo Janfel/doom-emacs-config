@@ -1821,6 +1821,12 @@ the successor to RLS.
 #+end_src
 
 #+begin_src emacs-lisp
+(after! rustic
+  (when (boundp rustic-format-warning-buffer-name)
+    (set-popup-rule! (rx string-start (literal rustic-format-warning-buffer-name)))))
+#+end_src
+
+#+begin_src emacs-lisp
 (defadvice! *rustic--rustfmt-respect-indent-tabs-mode-a (orig-fn &rest args)
   "Make `rustic-format-buffer' respect `indent-tabs-mode'."
   :around #'rustic-format-buffer
