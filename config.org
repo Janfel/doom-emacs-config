@@ -592,6 +592,15 @@ the keypad keycodes into the corresponding keyboard keycodes.
     args))
 #+end_src
 
+** Todo Keywords
+#+begin_src emacs-lisp
+(after! hl-todo
+  (push! hl-todo-keyword-faces
+         '("CONF" success bold)
+         '("MAYBE" font-lock-keyword-face bold)
+         '("WIP" font-lock-constant-face bold)))
+#+end_src
+
 ** Tree View
 *** Neotree
 #+begin_src emacs-lisp
