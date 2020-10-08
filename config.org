@@ -1062,6 +1062,7 @@ This only works with a *patched* Arduino runtime.
 ** BASIC
 #+begin_src emacs-lisp
 (defvaralias 'basic-indent-offset 'indent-level)
+(defvaralias 'fbasic-indent-level 'indent-level)
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1070,9 +1071,16 @@ This only works with a *patched* Arduino runtime.
 #+end_src
 
 #+begin_src emacs-lisp
+(setq-hook! 'fbasic-mode-hook
+  indent-tabs-mode t)
+#+end_src
+
+#+begin_src emacs-lisp
 (when (featurep! :editor fmt)
   (setq-hook! 'basic-mode-hook
-    +fmt-formatter #'basic-format-code))
+    +fmt-formatter #'basic-format-code)
+  (setq-hook! 'fbasic-mode-hook
+    +fmt-formatter #'indent-region))
 #+end_src
 
 ** C/C++
