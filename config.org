@@ -405,6 +405,15 @@ Allows jumping from =^L= to =^L=.
       "C-M-<prior>" #'backward-page)
 #+end_src
 
+** Help Buffers
+Some help texts and function definitions contain tab character that are assumed
+to be eight spaces wide.
+#+begin_src emacs-lisp
+(setq-hook! '(help-mode-hook helpful-mode-hook)
+  tab-width 8
+  x-stretch-cursor nil)
+#+end_src
+
 ** Indentation
 *** Indent Guides
 The package [[https://github.com/DarthFennec/highlight-indent-guides][highlight-indent-guides]] draws a line for each indentation level.
@@ -795,15 +804,6 @@ More Evil-related packages that I might try out some time.
        (:prefix ("!" . "flycheck") "" flycheck-command-map))
       (:map flycheck-mode-map :prefix "C-c"
        (:prefix ("!" . "flycheck") "" flycheck-command-map)))
-#+end_src
-
-** Helpful
-Some function definitions contain tab character that are
-assumed to be eight spaces wide.
-#+begin_src emacs-lisp
-(setq-hook! 'helpful-mode-hook
-  tab-width 8
-  x-stretch-cursor nil)
 #+end_src
 
 ** Hungry Delete
