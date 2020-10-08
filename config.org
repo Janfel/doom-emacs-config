@@ -634,6 +634,12 @@ Bind keys for ~redo~.
   (set-transient-map doom-leader-workspace-map))
 #+end_src
 
+#+begin_src emacs-lisp
+(defadvice! *persp-dont-prevent-kill-emacs (_)
+  :filter-return #'persp-kill-emacs-query-function
+  t)
+#+end_src
+
 * Packages
 ** Company
 *** Box
