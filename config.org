@@ -968,6 +968,18 @@ Bind ~sp-raise-sexp~, which I use quite often.
   (setcar (assoc "M-<down>" sp-paredit-bindings) "C-<down>"))
 #+end_src
 
+*** NOTE Smartparens matching character literals ([[github:Fuco1/smartparens/issues/1045][#1045]])
+This is caused by [[doom-modules:config/default/config.el][=config.el=]] on lines 80–86 defining
+~doom-disable-smartparens-navigate-skip-match-h~ which sets
+~sp-navigate-skip-match~ to ~nil~ for performance reasons.
+Doom offers ~show-paren-mode~ and Evil’s =%= as replacement.
+
+This behavior can be deactivated with the advice below.
+#+begin_src emacs-lisp :tangle no
+(defadvice! *doom-dont-disable-smartparens-navigate-skip-match-a ()
+  :override #'doom-disable-smartparens-navigate-skip-match-h)
+#+end_src
+
 *** DONE Closing paren deleted twice ([[https://github.com/hlissner/doom-emacs/issues/3268][#3268]])
 This is currently broken, in that two closing delimiters are deleted instead of
 one. As the linked issue is resolved, this fix is no longer necessary.
