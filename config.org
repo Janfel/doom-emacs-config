@@ -707,6 +707,11 @@ right before ~+evil-collection-init~ first called.
            'calc 'tetris '2084-game 'haskell-error-mode)))
 #+end_src
 
+Until [[github:emacs-evil/evil-collection/issues/386][#386]] is fixed, this disables the faulty =hungry-delete= module.
+#+begin_src emacs-lisp
+(provide 'evil-collection-hungry-delete)
+#+end_src
+
 *** Evil Matchit
 #+begin_src emacs-lisp
 (use-package! evil-matchit
