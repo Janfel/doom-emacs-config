@@ -36,6 +36,3 @@
   (package! company-quickhelp)
   ;; Python completion using company and jedi.
   (package! company-jedi))
-
-(when (featurep! :completion company +childframe)
-  (package! company-box :pin "914fefd391f183672ca5eb1a49cabab3aa5736d2"))
