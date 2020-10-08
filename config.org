@@ -672,7 +672,8 @@ Bind keys for ~redo~.
 *** Quickhelp
 #+begin_src emacs-lisp
 (use-package! company-quickhelp
-  :when (featurep! :completion company)
+  :when (and (featurep! :completion company)
+             (not (featurep! :completion company +childframe)))
   :after company
   :hook (company-mode-hook . company-quickhelp-local-mode)
   :config (setq company-quickhelp-use-propertized-text nil))
