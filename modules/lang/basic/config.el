@@ -3,6 +3,20 @@
 (use-package! basic-mode
   :mode ("\\.bas\\'" "\\.bi\\'")
   :config
+  (defun +basic-denumber (beg end)
+    "Remove line number from every line in the region BEG to END."
+    (save-excursion
+      (goto-char beg)
+      (while (< (point) end)
+        (basic-remove-line-number)
+        (forward-line 1))))
+
+  (defun +basic/denumber ()
+    "Remove line number from every line in current buffer/region."
+    (interactive "*")
+    (if (doom-region-active-p)
+        (+basic-denumber (doom-region-beginning) (doom-region-end))
+      (+basic-denumber (point-min) (point-max))))
   ;; Syntax rules for FreeBASIC block comments.
   (modify-syntax-entry ?' "< 23"   basic-mode-syntax-table)
   (modify-syntax-entry ?/ "_ 14cn" basic-mode-syntax-table)
