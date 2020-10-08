@@ -629,6 +629,10 @@ Bind keys for ~redo~.
 
 ** Workspaces
 #+begin_src emacs-lisp
+(defvaralias '+workspace-list 'persp-names-cache)
+#+end_src
+
+#+begin_src emacs-lisp
 (defadvice! *workspace-ask-before-deleting-a (&rest _)
   :before-while #'+workspace/delete
   (if current-prefix-arg t
