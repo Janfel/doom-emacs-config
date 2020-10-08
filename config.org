@@ -629,6 +629,14 @@ Bind keys for ~redo~.
 
 ** Workspaces
 #+begin_src emacs-lisp
+(defadvice! *workspace-ask-before-deleting-a (&rest _)
+  :before-while #'+workspace/delete
+  (if current-prefix-arg t
+    (y-or-n-p
+     (format "Really delete workspace (%s): " (+workspace-current-name)))))
+#+end_src
+
+#+begin_src emacs-lisp
 (defadvice! *workspace-transient-map-on-display-a ()
   :after #'+workspace/display
   (set-transient-map doom-leader-workspace-map))
