@@ -118,3 +118,17 @@
                           (? (or "D" "E") (? (or "+" "-")) (* digit))
                           (? (or "!" "F" "#" "D")))))
              highlight-numbers-modelist)))
+
+(use-package! fbasic-mode
+  :commands fbasic-mode
+  :config
+  (after! smartparens
+    (sp-local-pair 'fbasic-mode "'" nil :actions nil)
+    (sp-local-pair 'fbasic-mode "/'" "'/"
+                   :actions '(insert wrap autoskip navigate)
+                   :unless '(sp-point-before-same-p sp-in-string-p)
+                   :post-handlers '(("||\n[i]" "RET") ("| " "SPC"))))
+  (after! highlight-numbers
+    (puthash 'basic-mode fbasic-number-regexp highlight-numbers-modelist))
+  (setq-hook! 'fbasic-mode-hook
+    evilmi-quote-chars (string-to-list "\"/")))
