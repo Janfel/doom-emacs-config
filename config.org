@@ -1587,7 +1587,6 @@ A common hook for all lisp modes.
 Improve the comment insertion of ~comment-dwim~.
 #+begin_src emacs-lisp
 (setq-hook! 'lisp-mode-common-hook
-  comment-start "; "
   comment-start-skip ";+\\s-*")
 #+end_src
 
