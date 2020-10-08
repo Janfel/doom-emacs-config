@@ -970,7 +970,7 @@ Bind ~sp-raise-sexp~, which I use quite often.
 
 *** DONE Closing paren deleted twice ([[https://github.com/hlissner/doom-emacs/issues/3268][#3268]])
 This is currently broken, in that two closing delimiters are deleted instead of
-one. When the linked issue is resolved, this fix can be removed.
+one. As the linked issue is resolved, this fix is no longer necessary.
 #+begin_src emacs-lisp :tangle no
 (setq sp-autodelete-pair nil)
 #+end_src
