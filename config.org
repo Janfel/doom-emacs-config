@@ -1082,6 +1082,12 @@ In ~snippet-mode~, whitespace has significant meaning.
     "C-c &" "snippet"))
 #+end_src
 
+#+begin_src emacs-lisp
+(defadvice! *yas-evil-insert-state-on-expand-snippet-a (&rest _)
+  :before #'yas-expand-snippet
+  (evil-insert-state))
+#+end_src
+
 * Languages
 ** Arduino
 #+begin_src emacs-lisp
