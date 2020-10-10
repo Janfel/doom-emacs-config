@@ -122,6 +122,9 @@
 (use-package! fbasic-mode
   :mode ("\\.b\\(as\\|i\\)\\'")
   :config
+  (when (featurep! :checkers syntax)
+    (add-hook 'fbasic-mode-hook #'flycheck-mode)
+    (after! flycheck (require 'fbasic-mode-flycheck)))
   (after! smartparens
     (sp-local-pair 'fbasic-mode "'" nil :actions nil)
     (sp-local-pair 'fbasic-mode "/'" "'/"
