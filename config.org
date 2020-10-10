@@ -2047,10 +2047,10 @@ Translate the real minus into the ASCII minus character.
 ** Copy/Paste
 Use C-v to paste.
 #+begin_src emacs-lisp
-(map! :i "C-S-c" #'evil-yank
-      :i "C-S-x" #'evil-delete
-      :i "C-v" #'evil-paste-before
-      :i "C-S-v" #'evil-paste-pop)
+(map! :i "C-S-c" #'kill-ring-save
+      :i "C-S-x" #'kill-region
+      :i "C-v"   #'yank
+      :i "C-S-v" #'yank-pop)
 #+end_src
 
 ** Folding
