@@ -633,6 +633,12 @@ Bind keys for ~redo~.
 #+end_src
 
 #+begin_src emacs-lisp
+(map! :map doom-leader-workspace-map
+      "<left>" #'+workspace/switch-left
+      "<right>" #'+workspace/switch-right)
+#+end_src
+
+#+begin_src emacs-lisp
 (defadvice! *workspace-ask-before-deleting-a (&rest _)
   :before-while #'+workspace/delete
   (if current-prefix-arg t
