@@ -1,7 +1,7 @@
 ;;; lang/basic/config.el -*- lexical-binding: t; -*-
 
 (use-package! basic-mode
-  :mode ("\\.bas\\'" "\\.bi\\'")
+  :commands basic-mode
   :config
   (defun +basic-denumber (beg end)
     "Remove line number from every line in the region BEG to END."
@@ -120,7 +120,7 @@
              highlight-numbers-modelist)))
 
 (use-package! fbasic-mode
-  :commands fbasic-mode
+  :mode ("\\.b\\(as\\|i\\)\\'")
   :config
   (after! smartparens
     (sp-local-pair 'fbasic-mode "'" nil :actions nil)
