@@ -659,6 +659,7 @@ Bind keys for ~redo~.
   t)
 #+end_src
 
+*** TODO Rework the workspaces module to use =tab-bar=
 * Packages
 ** Company
 *** Box
