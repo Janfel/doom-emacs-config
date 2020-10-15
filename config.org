@@ -29,18 +29,9 @@ Acquire focus after a restart because [[github:iqbalansari/restart-emacs][restar
 (x-focus-frame nil)
 #+end_src
 
-** Requires
-*** [[https://github.com/magnars/dash.el][dash.el]]
-A modern list library inspired by Clojure.
+Require [[https://github.com/magnars/dash.el][dash.el]], a modern list library inspired by Clojure.
 #+begin_src emacs-lisp
 (require 'dash)
-#+end_src
-
-*** [[https://github.com/purcell/reformatter.el][reformatter.el]]
-A library for creating formatting functions.
-#+begin_src emacs-lisp :tangle no
-(when (featurep! :editor fmt)
-  (require 'reformatter))
 #+end_src
 
 ** Snippets
