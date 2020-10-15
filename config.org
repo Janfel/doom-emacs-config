@@ -629,23 +629,28 @@ Bind keys for ~redo~.
 #+end_src
 
 #+begin_src emacs-lisp
+(defvar doom-leader-workspace-transient-map (make-sparse-keymap))
 (map! :map doom-leader-workspace-map
       "<left>" #'+workspace/switch-left
-      "<right>" #'+workspace/switch-right)
+      "<right>" #'+workspace/switch-right
+      :map doom-leader-workspace-transient-map
+      "<left>"   #'+workspace/switch-left
+      "<right>"  #'+workspace/switch-right
+      "["        #'+workspace/switch-left
+      "]"        #'+workspace/switch-right)
 #+end_src
 
 #+begin_src emacs-lisp
-(defadvice! *workspace-ask-before-deleting-a (&rest _)
+(defadvice! *workspace--ask-before-deleting-a (&rest _)
   :before-while #'+workspace/delete
   (if current-prefix-arg t
-    (y-or-n-p
-     (format "Really delete workspace (%s): " (+workspace-current-name)))))
+    (y-or-n-p (format "Really delete workspace (%s): " (+workspace-current-name)))))
 #+end_src
 
 #+begin_src emacs-lisp
-(defadvice! *workspace-transient-map-on-display-a ()
+(defadvice! *workspace--transient-map-on-switch-a ()
   :after #'+workspace/display
-  (set-transient-map doom-leader-workspace-map))
+  (set-transient-map doom-leader-workspace-transient-map))
 #+end_src
 
 #+begin_src emacs-lisp
