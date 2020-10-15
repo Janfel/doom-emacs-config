@@ -779,14 +779,15 @@ Remap the ~inc-at-pt~ functions, so =z == can be used for formatting.
 
 *** Evil Snipe
 Put ~evil-snipe-repeat~ on Comma and Shift-Comma.
-Doesn’t seem to work due to keymap precedences.
 #+begin_src emacs-lisp
 (map! :when (featurep! :editor evil)
       :after evil-snipe
-      :map evil-snipe-parent-transient-map
-      "," #'evil-snipe-repeat
-      "–" #'evil-snipe-repeat-reverse
-      ";" nil)
+      :map (evil-snipe-parent-transient-map
+            evil-snipe-override-mode-map
+            evil-snipe-override-local-mode-map)
+      :m "," #'evil-snipe-repeat
+      :m "–" #'evil-snipe-repeat-reverse
+      :m ";" nil)
 #+end_src
 
 *** Evil Org
