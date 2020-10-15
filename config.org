@@ -413,7 +413,7 @@ to be eight spaces wide.
 ** Indentation
 *** Indent Guides
 The package [[https://github.com/DarthFennec/highlight-indent-guides][highlight-indent-guides]] draws a line for each indentation level.
-#+begin_src emacs-lisp :tangle yes :noweb-ref :noweb no-export
+#+begin_src emacs-lisp :tangle yes
 (use-package! highlight-indent-guides
   ;; Maybe change this to mode-by-mode basis.
   :commands (highlight-indent-guides-mode)
