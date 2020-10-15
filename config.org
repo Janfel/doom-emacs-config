@@ -912,8 +912,11 @@ Add ~company-capf~ as a Company backend.
 
 #+begin_src emacs-lisp
 (after! smartparens
-  (sp-local-pair 'org-mode "=" "=")
-  (sp-local-pair 'org-mode "~" "~"))
+  (cl-dolist (del '("=" "~"))
+    (sp-local-pair 'org-mode del del
+                   :unless '(sp-point-before-word-p
+                             sp-point-after-word-p
+                             sp-point-before-same-p))))
 #+end_src
 
 #+begin_src emacs-lisp
