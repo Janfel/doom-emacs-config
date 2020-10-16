@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: SELECT CASE AS CONST
+# contributor: Jan Felix Langenbach <o.hase3@gmail.com>
+# --
+SELECT CASE AS CONST $1
+CASE $2
+     $0
+END SELECT
