@@ -998,11 +998,6 @@ These values have to be set before ~org-mode~ is loaded.
 #+end_src
 
 ** Smartparens
-Activate ~show-smartparens-mode~ globally to highlight matching pairs.
-#+begin_src emacs-lisp
-(after! smartparens (show-smartparens-global-mode +1))
-#+end_src
-
 Bind ~sp-raise-sexp~, which I use quite often.
 #+begin_src emacs-lisp
 (map! :n "z r" #'sp-raise-sexp)
