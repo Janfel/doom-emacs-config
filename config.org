@@ -937,15 +937,16 @@ Add ~company-capf~ as a Company backend.
 #+end_src
 
 *** Org Indent
-For some reason, ~show-smartparens-mode~ causes visual glitches.
 #+begin_src emacs-lisp
-(add-hook 'org-indent-mode-hook #'turn-off-show-smartparens-mode)
-#+end_src
-
-The indicator doesn’t take the visual indentation into account.
-#+begin_src emacs-lisp
-(when EMACS27+
-  (add-hook 'org-indent-mode-hook #'display-fill-column-indicator--turn-off))
+(add-hook! 'org-mode-local-vars-hook
+  (defun *org-indent--local-init-h ()
+    (when (bound-and-true-p org-indent-mode)
+      ;; For some reason, `show-smartparens-mode' causes visual glitches.
+      (when (bound-and-true-p show-smartparens-mode)
+        (show-smartparens-mode -1))
+      ;; The indicator doesn’t take the visual indentation into account.
+      (when (and EMACS27+ display-fill-column-indicator)
+        (display-fill-column-indicator-mode -1)))))
 #+end_src
 
 *** Org Keys
