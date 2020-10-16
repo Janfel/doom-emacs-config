@@ -189,6 +189,11 @@ Don’t untabify when deleting a tab character.
 (setq backward-delete-char-untabify-method nil)
 #+end_src
 
+Move files to trash instead of deleting them.
+#+begin_src emacs-lisp
+(setq delete-by-moving-to-trash t)
+#+end_src
+
 Make the block cursor stretch to highlight tab characters.
 #+begin_src emacs-lisp
 (setq x-stretch-cursor t)
