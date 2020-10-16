@@ -1185,13 +1185,6 @@ This only works with a *patched* Arduino runtime.
 
 *** C Mode
 *** C++ Mode
-**** WAIT Access Modifier Snippets ([[https://github.com/hlissner/doom-snippets/pull/47][#47]])
-When this PR is accepted and Doom is updated, these files can be removed:
-
-+ [[file:snippets/c++-mode/private][snippets/c++-mode/private]]
-+ [[file:snippets/c++-mode/protected][snippets/c++-mode/protected]]
-+ [[file:snippets/c++-mode/public][snippets/c++-mode/public]]
-
 *** Meson Mode
 Major mode for the [[https://mesonbuild.com][Meson Build System]].
 
