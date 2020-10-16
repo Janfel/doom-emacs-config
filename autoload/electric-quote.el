@@ -26,6 +26,5 @@
 ;;;###autoload
 (defun set-electric-quote-chars (chars-name)
   "Set `electric-quote-chars' to the value named CHARS-NAME in `electric-quote-chars-alist'."
-  (interactive
-   (list (read-electric-quote-chars "Select quote chars: ")))
+  (interactive (list (read-electric-quote-chars "Select quote chars: ")))
   (setq electric-quote-chars (cdr (assoc chars-name electric-quote-chars-alist))))
