@@ -1085,9 +1085,10 @@ In ~snippet-mode~, whitespace has significant meaning.
 #+end_src
 
 #+begin_src emacs-lisp
-(defadvice! *yas-evil-insert-state-on-expand-snippet-a (&rest _)
-  :before #'yas-expand-snippet
-  (evil-insert-state))
+(when (featurep! :editor evil)
+  (defadvice! *yas--evil-insert-state-on-expand-snippet-a (&rest _)
+    :before #'yas-expand-snippet
+    (when evil-mode (evil-insert-state))))
 #+end_src
 
 * Languages
