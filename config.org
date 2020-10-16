@@ -1840,7 +1840,7 @@ The package will load when =company-jedi= is invoked by =company=.
 
 *** _Backup
 :PROPERTIES:
-:header-args+: :tangle no :noweb-ref :noweb no-export
+:header-args+: :tangle no
 :END:
 Use system =mspyls= for =lsp-python-ms=.
 #+begin_src emacs-lisp :tangle no
