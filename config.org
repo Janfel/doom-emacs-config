@@ -2078,7 +2078,8 @@ This frees up =z r= =z m=.
       :n "h c" #'+org/close-fold
       :n "h C" #'+org/close-all-folds
       :m "h n" #'+org/show-next-fold-level
-      :m "h p" #'+org/hide-next-fold-level)
+      :m "h p" #'+org/hide-next-fold-level
+      :m "h s" #'org-show-subtree)
 #+end_src
 
 ** Leader Extensions
