@@ -366,7 +366,7 @@ This variable might be very useful in certain modes.
 ** Fill Column Indicator :27:
 #+begin_src emacs-lisp
 (when EMACS27+
-  (add-hook! '(prog-mode-hook text-mode-hook)
+  (add-hook! '(prog-mode-hook text-mode-hook conf-mode-hook)
              #'display-fill-column-indicator-mode))
 #+end_src
 
