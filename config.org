@@ -259,7 +259,7 @@ the true version of Emacs including any release-candidate specifiers.")
 #+begin_src emacs-lisp
 (setq find-function-C-source-directory
       (let ((dir (expand-file-name
-                  (concat "~/data/share/" source-directory-base "src/"))))
+                  (concat "/usr/local/src/" source-directory-base "src/"))))
         (if (file-accessible-directory-p dir) dir)))
 #+end_src
 
@@ -1202,7 +1202,7 @@ Integrate =meson-mode= with the Doom lookup system.
 Specify where to find the Meson documentation, if installed.
 #+begin_src emacs-lisp
 (after! meson-mode
-  (let ((dir (expand-file-name "~/data/share/meson-0.55.0/doc/")))
+  (let ((dir (expand-file-name "/usr/local/share/doc/meson-0.55.0/")))
     (when (file-accessible-directory-p dir)
       (setq meson-markdown-docs-dir dir))))
 #+end_src
