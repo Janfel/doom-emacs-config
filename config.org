@@ -1211,7 +1211,7 @@ Add the =meson.build= file to the files that projectile looks for when
 determining the project root directory.
 #+begin_src emacs-lisp
 (after! projectile
-  (push "meson.build" projectile-project-root-files-top-down-recurring))
+  (push "meson.build" projectile-project-root-files))
 #+end_src
 
 *** LSP
