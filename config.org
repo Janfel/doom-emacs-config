@@ -704,6 +704,11 @@ Automatic conversion of tabs seems to be broken.
 (setq evil-indent-convert-tabs nil)
 #+end_src
 
+The =smart= option sometimes upcases the entire replacement string.
+#+begin_src emacs-lisp
+(setq evil-ex-substitute-case 'sensitive)
+#+end_src
+
 We can’t use ~defvaralias~ here, because ~evil-mode~ is already running
 which causes ~evil-shift-width~ to be a localized variable.
 #+begin_src emacs-lisp
