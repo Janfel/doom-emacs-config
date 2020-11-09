@@ -710,6 +710,12 @@ which causes ~evil-shift-width~ to be a localized variable.
 ;; (defvaralias 'evil-shift-width 'indent-level)
 #+end_src
 
+Make the WORD motion functions use syntactic symbols instead of WORDs.
+#+begin_src emacs-lisp
+(after! evil
+  (defalias #'forward-evil-word #'forward-evil-symbol))
+#+end_src
+
 #+begin_src emacs-lisp
 (map! :when (featurep! :editor evil)
       :after evil
