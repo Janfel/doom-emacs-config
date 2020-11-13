@@ -1992,6 +1992,17 @@ On Arch, the [[https://www.call-cc.org/][Chicken Scheme]] binaries are called =c
   :mode 'sh-mode)
 #+end_src
 
+** Web
+#+begin_src emacs-lisp
+(setq web-mode-markup-indent-offset 2)
+#+end_src
+
+#+begin_src emacs-lisp
+(when (featurep! :editor fmt)
+  (setq-hook! 'web-mode-hook
+    +fmt-formatter #'prettier-format-region))
+#+end_src
+
 ** XML
 #+begin_src emacs-lisp
 (setq-hook! 'nxml-mode-hook
