@@ -1,8 +1,7 @@
 ;;; lang/fennel/config.el -*- lexical-binding: t; -*-
 
 (use-package! fennel-mode
-  :mode "\\.fnl\\'"
-  :interpreter "fennel"
+  :defer t
   :config
   ;; HACK: Disable `lisp-mode-hook' when starting `fennel-mode'.
   (add-hook! 'prog-mode-hook
@@ -16,7 +15,7 @@
   (put 'local  'fennel-indent-function 'defun)
   (put 'global 'fennel-indent-function 'defun)
 
-  (when! (featurep! :tools eval)
+  (when (featurep! :tools eval)
    (defadvice! +fennel--return-repl-buffer-from-fennel-repl-a (&rest _)
      "Make `fennel-repl' return the buffer it switches to.
 This enables `fennel-repl' to be used with `set-repl-handler!'."
@@ -24,7 +23,7 @@ This enables `fennel-repl' to be used with `set-repl-handler!'."
      (get-buffer inferior-lisp-buffer))
    (set-repl-handler! 'fennel-mode #'fennel-repl))
 
-  (when! (featurep! :tools lookup)
+  (when (featurep! :tools lookup)
     (defadvice! +fennel--simplify-fennel-find-definition-a ()
       "Remove code that is made obsolete by `set-lookup-handlers!'."
       :override #'fennel-find-definition
