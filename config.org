@@ -735,8 +735,37 @@ which causes ~evil-shift-width~ to be a localized variable.
 
 Make the WORD motion functions use syntactic symbols instead of WORDs.
 #+begin_src emacs-lisp
-(after! evil
-  (defalias #'forward-evil-word #'forward-evil-symbol))
+(defalias #'forward-evil-WORD #'forward-evil-symbol)
+#+end_src
+
+Alias for consistency.
+#+begin_src emacs-lisp
+(defalias #'evil-forward-WORD #'forward-evil-WORD)
+#+end_src
+
+Define =evil-word= and =evil-WORD= as =thingatpt.el= things.
+#+begin_src emacs-lisp :tangle no
+(put 'evil-word 'forward-op   #'evil-forward-word)
+(put 'evil-word 'beginning-op #'evil-forward-word-begin)
+(put 'evil-word 'end-op       #'evil-forward-word-end)
+(put 'evil-WORD 'forward-op   #'evil-forward-WORD)
+(put 'evil-WORD 'beginning-op #'evil-forward-WORD-begin)
+(put 'evil-WORD 'end-op       #'evil-forward-WORD-end)
+;;(setq evil-mouse-word 'evil-word)
+#+end_src
+
+Fix double-click selection in ~evil-mode~.
+#+begin_src emacs-lisp
+(when (featurep! :editor evil)
+  (defadvice! *evil--fix-mouse-start-end-a (orig-fn start end mode)
+    "Make `mouse-start-end' handle the `evil-mode' point/region convention.
+Without this, double-click selection in `evil-mode' extends one
+character too far."
+    :around #'mouse-start-end
+    (if (and (= mode 1) (bound-and-true-p evil-mode) (not (evil-emacs-state-p)))
+        (cl-destructuring-bind (start end) (funcall orig-fn start end mode)
+          (list start (1- end)))
+      (funcall orig-fn start end mode))))
 #+end_src
 
 #+begin_src emacs-lisp
