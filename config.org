@@ -416,6 +416,24 @@ to be eight spaces wide.
 #+end_src
 
 ** Indentation
+*** Indent Buffer Function
+#+begin_src emacs-lisp
+(defun *indent-buffer-or-region (&optional arg)
+  (interactive "P")
+  (if (doom-region-active-p)
+      (indent-region (doom-region-beginning) (doom-region-end) arg)
+    (indent-region (point-min) (point-max) arg)))
+#+end_src
+
+Bind ~indent-region~.
+#+begin_src emacs-lisp
+(map! :leader :prefix "c"
+      :desc "Indent buffer/region" "i" #'*indent-buffer-or-region
+      ;; We need to move this out of the way.
+      (:when (featurep! :tools lsp)
+       :desc "LSP Organize imports" "I" #'lsp-organize-imports))
+#+end_src
+
 *** Indent Guides
 The package [[https://github.com/DarthFennec/highlight-indent-guides][highlight-indent-guides]] draws a line for each indentation level.
 #+begin_src emacs-lisp :tangle yes
@@ -2123,15 +2141,6 @@ Bind ~shell-command~ in a similar way to =M-x= and =M-;=.
 #+begin_src emacs-lisp
 (map! :leader :prefix "b"
       :desc "Rename buffer" "R" #'rename-buffer)
-#+end_src
-
-Bind ~indent-region~.
-#+begin_src emacs-lisp
-(map! :leader :prefix "c"
-      :desc "Indent buffer/region" "i" #'indent-region
-      ;; We need to move this out of the way.
-      (:when (featurep! :tools lsp)
-       :desc "LSP Organize imports" "I" #'lsp-organize-imports))
 #+end_src
 
 Bind mnemonics for =git add=.
