@@ -183,7 +183,8 @@
          (lua +moonscript)
          (python +lsp)
          (rust +lsp)
-         scheme)
+         scheme
+         web)
         ((eq SYSTEM 'Tesla)
          (cc +lsp)
          python))
