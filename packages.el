@@ -12,10 +12,6 @@
 ;; Major mode for simple PHP editing.
 (unless (featurep! :lang php) (package! php-mode))
 
-;; This commit fixes warnings from rustfmt.
-;; Unpin when Doom has caught up.
-(package! rustic :pin "ee541d6247b48e1cc103eee8f8e7d93c88fb0a2a")
-
 ;; This commit fixes errors with hungry-delete.
 ;; Unpin when Doom has caught up.
 (package! evil-collection :pin "034124fb09e7a5f57e23bafb08d3d9135d272d90")
