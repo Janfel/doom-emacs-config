@@ -9,7 +9,7 @@
 
 (defun tidy-compute-args ()
   "Compute arguments for `tidy-format-buffer'."
-  (when indent-tabs-mode (warn "HTML Tidy doesn't support indent-tabs-mode"))
+  (when indent-tabs-mode (warn "HTML Tidy doesn’t support indent-tabs-mode"))
   (nconc
    (when (memq major-mode tidy-xml-mode-list) '("-xml"))
    (when (and tidy-config-file (file-readable-p tidy-config-file))
@@ -18,8 +18,8 @@
     "--quiet"            "yes"
     "--tidy-mark"        "no"
     "--indent"           "yes"
-    "--indent-with-tabs" "no"
-    "--indent-spaces"    (number-to-string indent-level)
+    "--indent-with-tabs" (if indent-tabs-mode "yes" "no")
+    "--indent-spaces"    (if indent-tabs-mode "1" (number-to-string indent-level))
     "--wrap"             (number-to-string fill-column)
     "--tab-size"         (number-to-string tab-width))))
 
