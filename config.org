@@ -762,7 +762,9 @@ Fix double-click selection in ~evil-mode~.
 Without this, double-click selection in `evil-mode' extends one
 character too far."
     :around #'mouse-start-end
-    (if (and (= mode 1) (bound-and-true-p evil-mode) (not (evil-emacs-state-p)))
+    (if (and (= mode 1)
+             (bound-and-true-p evil-local-mode)
+             (not (or (evil-insert-state-p) (evil-emacs-state-p))))
         (cl-destructuring-bind (start end) (funcall orig-fn start end mode)
           (list start (1- end)))
       (funcall orig-fn start end mode))))
