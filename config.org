@@ -773,6 +773,9 @@ character too far."
 #+begin_src emacs-lisp
 (map! :when (featurep! :editor evil)
       :after evil
+      ;; Use the default `mouse-drag-region'.
+      :m "<mouse-down-1>" #'mouse-drag-region
+
       ;; Remap the document scroll motions to something more sensible.
       :m "z+" nil
       :m "z-" nil
