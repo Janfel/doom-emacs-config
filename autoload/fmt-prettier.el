@@ -36,7 +36,7 @@ If this is the symbol “none”, Prettier will not search for a config file.")
 (defun prettier-compute-args ()
   "Compute arguments for `prettier-format-region'."
   (let ((parser (or prettier-format-parser
-                    (assq major-mode prettier-format-parser-alist))))
+                    (cdr (assq major-mode prettier-format-parser-alist)))))
     (nconc
      (-some->> buffer-file-name (list "--stdin-filepath"))
      (-some->> parser           (list "--parser"))
