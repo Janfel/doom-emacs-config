@@ -10,6 +10,6 @@
 
 ;;;###autoload (autoload 'shfmt-format-buffer "autoload/fmt-shfmt" nil t)
 ;;;###autoload (autoload 'shfmt-format-region "autoload/fmt-shfmt" nil t)
-(formatter-define! shfmt
+(+fmt-define shfmt
   :program "shfmt"
   :args (shfmt-compute-args))

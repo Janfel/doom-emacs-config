@@ -19,6 +19,6 @@
 
 ;;;###autoload (autoload 'luaformatter-format-buffer "autoload/fmt-luaformatter" nil t)
 ;;;###autoload (autoload 'luaformatter-format-region "autoload/fmt-luaformatter" nil t)
-(formatter-define! luaformatter
+(+fmt-define luaformatter
   :program "lua-format"
   :args (luaformatter-compute-args))

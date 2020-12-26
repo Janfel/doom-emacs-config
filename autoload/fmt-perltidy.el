@@ -18,6 +18,6 @@
 
 ;;;###autoload (autoload 'perltidy-format-buffer "autoload/fmt-perltidy" nil t)
 ;;;###autoload (autoload 'perltidy-format-region "autoload/fmt-perltidy" nil t)
-(formatter-define! perltidy
+(+fmt-define perltidy
   :program "perltidy"
   :args (perltidy-compute-args))

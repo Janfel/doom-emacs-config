@@ -18,6 +18,6 @@
 
 ;;;###autoload (autoload 'ptop-format-buffer "autoload/fmt-ptop" nil t)
 ;;;###autoload (autoload 'ptop-format-region "autoload/fmt-ptop" nil t)
-(formatter-define! ptop
+(+fmt-define ptop
   :program "ptop"
   :args (ptop-compute-args))

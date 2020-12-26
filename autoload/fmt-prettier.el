@@ -52,6 +52,6 @@ If this is the symbol “none”, Prettier will not search for a config file.")
 
 ;;;###autoload (autoload 'prettier-format-buffer "autoload/fmt-prettier" nil t)
 ;;;###autoload (autoload 'prettier-format-region "autoload/fmt-prettier" nil t)
-(formatter-define! prettier
+(+fmt-define prettier
     :program "prettier"
     :args (prettier-compute-args))

@@ -25,7 +25,7 @@
 
 ;;;###autoload (autoload 'tidy-format-buffer "autoload/fmt-tidy" nil t)
 ;;;###autoload (autoload 'tidy-format-region "autoload/fmt-tidy" nil t)
-(formatter-define! tidy
+(+fmt-define tidy
   :program "tidy"
   :args (tidy-compute-args)
   :exit-code-success-p (lambda (x) (memq x '(0 1))))

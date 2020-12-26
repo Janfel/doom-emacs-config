@@ -13,6 +13,6 @@
 
 ;;;###autoload (autoload 'black-format-buffer "autoload/fmt-black" nil t)
 ;;;###autoload (autoload 'black-format-region "autoload/fmt-black" nil t)
-(formatter-define! black
+(+fmt-define black
   :program "black"
   :args (black-compute-args))
