@@ -19,7 +19,7 @@
     "--tidy-mark"        "no"
     "--indent"           "yes"
     "--indent-with-tabs" (if indent-tabs-mode "yes" "no")
-    "--indent-spaces"    (if indent-tabs-mode "1" (number-to-string indent-level))
+    "--indent-spaces"    (if indent-tabs-mode "1" (number-to-string standard-indent))
     "--wrap"             (number-to-string fill-column)
     "--tab-size"         (number-to-string tab-width))))
 

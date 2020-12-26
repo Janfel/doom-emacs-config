@@ -730,7 +730,7 @@ The =smart= option sometimes upcases the entire replacement string.
 We can’t use ~defvaralias~ here, because ~evil-mode~ is already running
 which causes ~evil-shift-width~ to be a localized variable.
 #+begin_src emacs-lisp
-;; (defvaralias 'evil-shift-width 'indent-level)
+;; (defvaralias 'evil-shift-width 'standard-indent)
 #+end_src
 
 Make the WORD motion functions use syntactic symbols instead of WORDs.
@@ -1184,8 +1184,8 @@ This only works with a *patched* Arduino runtime.
 
 ** BASIC
 #+begin_src emacs-lisp
-(defvaralias 'basic-indent-offset 'indent-level)
-(defvaralias 'fbasic-indent-level 'indent-level)
+(defvaralias 'basic-indent-offset 'standard-indent)
+(defvaralias 'fbasic-indent-level 'standard-indent)
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1209,7 +1209,7 @@ This only works with a *patched* Arduino runtime.
 ** C/C++
 *** Code Style
 #+begin_src emacs-lisp
-(defvaralias 'c-basic-offset 'indent-level)
+(defvaralias 'c-basic-offset 'standard-indent)
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1391,16 +1391,16 @@ The file extension =.cl= is sometimes used.
 
 ** Elixir
 #+begin_src emacs-lisp
-(defvaralias 'elixir-basic-offset      'indent-level)
-(defvaralias 'elixir-smie-indent-basic 'indent-level)
+(defvaralias 'elixir-basic-offset      'standard-indent)
+(defvaralias 'elixir-smie-indent-basic 'standard-indent)
 #+end_src
 
 The Elixir formatter =mix format= sadly has very strong conventions. I might be
 able to work around this when I implement my own =fmt-mix= functions, using
 ~doom/retab~ or =unexpand= after formatting, but for now we just set
-~indent-level~ to =2=.
+~standard-indent~ to =2=.
 #+begin_src emacs-lisp
-(setq-hook! 'elixir-mode-hook indent-level 2)
+(setq-hook! 'elixir-mode-hook standard-indent 2)
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1603,7 +1603,7 @@ Maybe ~def-project-mode!~?
 
 ** Haskell
 #+begin_src emacs-lisp
-(setq-hook! 'haskell-mode-hook indent-level 2)
+(setq-hook! 'haskell-mode-hook standard-indent 2)
 #+end_src
 
 Doom Emacs uses this hook which seems not to exist.
@@ -1635,12 +1635,12 @@ error code. Using =--no-exit-code= prevents this.
 
 ** HTML/CSS
 #+begin_src emacs-lisp
-(defvaralias 'css-indent-offset 'indent-level)
+(defvaralias 'css-indent-offset 'standard-indent)
 #+end_src
 
 #+begin_src emacs-lisp
 (setq-hook! '(html-mode-hook mhtml-mode-hook css-mode-hook)
-  indent-level 2)
+  standard-indent 2)
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1660,12 +1660,12 @@ error code. Using =--no-exit-code= prevents this.
 
 ** JavaScript
 #+begin_src emacs-lisp
-(defvaralias 'js-indent-level 'indent-level)
+(defvaralias 'js-indent-level 'standard-indent)
 #+end_src
 
 #+begin_src emacs-lisp
 (setq-hook! 'js-mode-hook
-  indent-level 2
+  standard-indent 2
   tab-width 2
   indent-tabs-mode t)
   #+end_src
@@ -1743,12 +1743,12 @@ Improve the comment insertion of ~comment-dwim~.
 Doom has already set a value for ~lua-indent-level~, so we have to unset it.
 #+begin_src emacs-lisp
 (makunbound 'lua-indent-level)
-(defvaralias 'lua-indent-level 'indent-level)
+(defvaralias 'lua-indent-level 'standard-indent)
 #+end_src
 
 #+begin_src emacs-lisp
 (setq-hook! 'lua-mode-hook
-  indent-level 2
+  standard-indent 2
   tab-width 2
   indent-tabs-mode t)
 #+end_src
@@ -1795,14 +1795,14 @@ yet found a fix for this.
 ** MoonScript :Lua:
 Consolidate indentation.
 #+begin_src emacs-lisp
-(defvaralias 'moonscript-indent-offset 'indent-level)
+(defvaralias 'moonscript-indent-offset 'standard-indent)
 #+end_src
 
 We are currently limited by ~moonscript-indent-line~, which doesn’t
 respect ~indent-tabs-mode~.
 #+begin_src emacs-lisp
 (setq-hook! 'moonscript-mode-hook
-  indent-level 2
+  standard-indent 2
   tab-width 8
   indent-tabs-mode nil)
 #+end_src
@@ -1831,15 +1831,15 @@ This should not be used with =Janfel/moonscript-mode=.
 
 ** Pascal
 #+begin_src emacs-lisp
-(defvaralias 'pascal-indent-level  'indent-level)
-(defvaralias 'pascal-case-indent   'indent-level)
-(defvaralias 'opascal-indent-level 'indent-level)
-(defvaralias 'opascal-case-indent  'indent-level)
+(defvaralias 'pascal-indent-level  'standard-indent)
+(defvaralias 'pascal-case-indent   'standard-indent)
+(defvaralias 'opascal-indent-level 'standard-indent)
+(defvaralias 'opascal-case-indent  'standard-indent)
 #+end_src
 
 #+begin_src emacs-lisp
 (setq-hook! '(pascal-mode-hook opascal-mode-hook)
-  indent-level 3
+  standard-indent 3
   tab-width 3
   indent-tabs-mode t)
 #+end_src
@@ -1860,8 +1860,8 @@ would be unusable otherwise.
 
 ** Perl
 #+begin_src emacs-lisp
-(defvaralias 'perl-indent-level  'indent-level)
-(defvaralias 'cperl-indent-level 'indent-level)
+(defvaralias 'perl-indent-level  'standard-indent)
+(defvaralias 'cperl-indent-level 'standard-indent)
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1894,7 +1894,7 @@ This allows me to not load the entire =:lang/php= module.
 
 ** Python
 #+begin_src emacs-lisp
-(defvaralias 'python-indent-offset 'indent-level)
+(defvaralias 'python-indent-offset 'standard-indent)
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1942,7 +1942,7 @@ Use system =mspyls= for =lsp-python-ms=.
 
 ** Rust
 #+begin_src emacs-lisp
-(defvaralias 'rustic-indent-offset 'indent-level)
+(defvaralias 'rustic-indent-offset 'standard-indent)
 #+end_src
 
 #+begin_src emacs-lisp
@@ -2021,7 +2021,7 @@ On Arch, the [[https://www.call-cc.org/][Chicken Scheme]] binaries are called =c
 
 ** Shell
 #+begin_src emacs-lisp
-(defvaralias 'sh-basic-offset 'indent-level)
+(defvaralias 'sh-basic-offset 'standard-indent)
 #+end_src
 
 #+begin_src emacs-lisp
@@ -2044,7 +2044,7 @@ On Arch, the [[https://www.call-cc.org/][Chicken Scheme]] binaries are called =c
 ** XML
 #+begin_src emacs-lisp
 (setq-hook! 'nxml-mode-hook
-  indent-level 2
+  standard-indent 2
   tab-width 8
   indent-tabs-mode nil)
 #+end_src

@@ -48,7 +48,7 @@ If this is the symbol “none”, Prettier will not search for a config file.")
       ;; TODO: Use --cursor-offset --range-start --range-end.
       (if indent-tabs-mode "--use-tabs" "--no-use-tabs")
       "--print-width" (number-to-string fill-column)
-      "--tab-width"   (number-to-string indent-level)))))
+      "--tab-width"   (number-to-string standard-indent)))))
 
 ;;;###autoload (autoload 'prettier-format-buffer "autoload/fmt-prettier" nil t)
 ;;;###autoload (autoload 'prettier-format-region "autoload/fmt-prettier" nil t)

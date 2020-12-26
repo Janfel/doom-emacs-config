@@ -12,7 +12,7 @@
    (when (and ptop-config-file (file-readable-p ptop-config-file))
      (list "-c" ptop-config-file))
    (list
-    "-i" (number-to-string indent-level)
+    "-i" (number-to-string standard-indent)
     "-l" (number-to-string fill-column)
     "/dev/stdin" "/dev/stdout")))
 

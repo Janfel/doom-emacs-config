@@ -11,7 +11,7 @@
      (list (format "--profile=%s" perltidy-config-file)))
    (list
     (if indent-tabs-mode "--tabs" "--notabs")
-    "--indent-columns"      (number-to-string indent-level)
+    "--indent-columns"      (number-to-string standard-indent)
     "--default-tabsize"     (number-to-string tab-width)
     "--maximum-line-length" (number-to-string fill-column)
     "--standard-output" "--standard-error-output")))

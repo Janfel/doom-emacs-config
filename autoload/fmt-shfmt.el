@@ -6,7 +6,7 @@
   (nconc
    (when (and (derived-mode-p 'sh-mode) (bound-and-true-p 'sh-shell))
      (list "-ln" (symbol-name sh-shell)))
-   (list "-i" (number-to-string (if indent-tabs-mode 0 indent-level)))))
+   (list "-i" (number-to-string (if indent-tabs-mode 0 standard-indent)))))
 
 ;;;###autoload (autoload 'shfmt-format-buffer "autoload/fmt-shfmt" nil t)
 ;;;###autoload (autoload 'shfmt-format-region "autoload/fmt-shfmt" nil t)

@@ -6,8 +6,8 @@
 
 (defun luaformatter-compute-args ()
   "Compute arguments for `luaformatter-format-region'."
-  (let ((indent      (if indent-tabs-mode 1 indent-level))
-        (cont-indent (if indent-tabs-mode 1 indent-level)))
+  (let ((indent      (if indent-tabs-mode 1 standard-indent))
+        (cont-indent (if indent-tabs-mode 1 standard-indent)))
     (nconc
      (when (and luaformatter-config-file (file-readable-p luaformatter-config-file))
        (list "--config" luaformatter-config-file))
