@@ -1633,6 +1633,16 @@ error code. Using =--no-exit-code= prevents this.
   (flycheck-add-next-checker 'haskell-dante '(warning . haskell-hlint)))
 #+end_src
 
+** HTML/CSS
+#+begin_src emacs-lisp
+(defvaralias 'css-indent-offset 'indent-level)
+#+end_src
+
+#+begin_src emacs-lisp
+(setq-hook! '(html-mode-hook mhtml-mode-hook css-mode-hook)
+  indent-level 2)
+#+end_src
+
 ** Hy :Lisp:Python:
 #+begin_src emacs-lisp
 (add-hook 'hy-mode-hook #'lisp-mode-common-hook)
