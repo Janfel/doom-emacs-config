@@ -1643,6 +1643,16 @@ error code. Using =--no-exit-code= prevents this.
   indent-level 2)
 #+end_src
 
+#+begin_src emacs-lisp
+(setq web-mode-markup-indent-offset 2)
+#+end_src
+
+#+begin_src emacs-lisp
+(when (featurep! :editor fmt)
+  (setq-hook! '(web-mode-hook html-mode-hook mhtml-mode-hook css-mode-hook)
+    +fmt-formatter #'prettier-format-region))
+#+end_src
+
 ** Hy :Lisp:Python:
 #+begin_src emacs-lisp
 (add-hook 'hy-mode-hook #'lisp-mode-common-hook)
@@ -2029,17 +2039,6 @@ On Arch, the [[https://www.call-cc.org/][Chicken Scheme]] binaries are called =c
 (set-file-template! "\\.sh\\'"
   :trigger "__sh"
   :mode 'sh-mode)
-#+end_src
-
-** Web
-#+begin_src emacs-lisp
-(setq web-mode-markup-indent-offset 2)
-#+end_src
-
-#+begin_src emacs-lisp
-(when (featurep! :editor fmt)
-  (setq-hook! 'web-mode-hook
-    +fmt-formatter #'prettier-format-region))
 #+end_src
 
 ** XML
