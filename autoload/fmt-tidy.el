@@ -1,5 +1,5 @@
 ;;; autoload/fmt-tidy.el -*- lexical-binding: t; -*-
-;;;###if (featurep! :editor fmt +define)
+;;;###if (featurep! :editor fmt)
 
 (defvar tidy-config-file nil
   "The configuration file for `tidy-format-buffer'.")

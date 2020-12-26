@@ -1,5 +1,5 @@
 ;;; autoload/fmt-org-mode.el -*- lexical-binding: t; -*-
-;;;###if (featurep! :editor fmt +define)
+;;;###if (featurep! :editor fmt)
 
 (require 'org)
 

@@ -1,5 +1,5 @@
 ;;; autoload/fmt-prettier.el -*- lexical-binding: t; -*-
-;;;###if (featurep! :editor fmt +define)
+;;;###if (featurep! :editor fmt)
 
 (defvar prettier-config-file nil
   "The configuration file for `prettier-format-buffer'.

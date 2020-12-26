@@ -1,5 +1,5 @@
 ;;; autoload/fmt-perltidy.el -*- lexical-binding: t; -*-
-;;;###if (featurep! :editor fmt +define)
+;;;###if (featurep! :editor fmt)
 
 (defvar perltidy-config-file nil
   "The configuration file for `perltidy-format-region'.")

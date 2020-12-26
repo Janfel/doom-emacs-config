@@ -1,5 +1,5 @@
 ;;; autoload/fmt-black.el -*- lexical-binding: t; -*-
-;;;###if (featurep! :editor fmt +define)
+;;;###if (featurep! :editor fmt)
 
 ;; Autoload `format-all--buffer-extension-p'.
 (use-package! format-all :commands (format-all--buffer-extension-p))
