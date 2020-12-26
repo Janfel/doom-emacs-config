@@ -450,16 +450,6 @@ The package [[https://github.com/DarthFennec/highlight-indent-guides][highlight-
   (setq highlight-indent-guides-responsive 'top))
 #+end_src
 
-*** Indent Level
-Indentation in Emacs is a mess currently. Each mode defines its own variables.
-This consolidates indentation into one single variable.
-#+begin_src emacs-lisp
-(defvar-local indent-level 4
-  "Indentation level for all major-modes.")
-
-(defvaralias 'standard-indent 'indent-level)
-#+end_src
-
 *** Tabs for Indentation
 Disable tab insertion by default. It will be enabled manually for each mode.
 #+begin_src emacs-lisp
