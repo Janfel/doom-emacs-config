@@ -4,6 +4,7 @@
 (defun shfmt-compute-args ()
   "Compute arguments for `shfmt-format-region'."
   (nconc
+   (and buffer-file-name (list "-filename" buffer-file-name))
    (when (and (derived-mode-p 'sh-mode) (bound-and-true-p sh-shell))
      (list "-ln" (symbol-name sh-shell)))
    (list "-i" (number-to-string (if indent-tabs-mode 0 standard-indent)))))
