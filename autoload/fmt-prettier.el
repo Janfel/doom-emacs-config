@@ -38,8 +38,8 @@ If this is the symbol “none”, Prettier will not search for a config file.")
   (let ((parser (or prettier-format-parser
                     (cdr (assq major-mode prettier-format-parser-alist)))))
     (nconc
-     (-some->> buffer-file-name (list "--stdin-filepath"))
-     (-some->> parser           (list "--parser"))
+     (and buffer-file-name (list "--stdin-filepath" buffer-file-name))
+     (and parser           (list "--parser"         parser))
      (when prettier-config-file
        (cond ((eq prettier-config-file 'none) (list "--no-config"))
              ((file-readable-p prettier-config-file)
