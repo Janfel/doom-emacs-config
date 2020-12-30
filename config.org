@@ -1953,9 +1953,10 @@ the successor to RLS.
   (setq rustic-lsp-server 'rust-analyzer))
 #+end_src
 
-#+begin_src emacs-lisp
+This is currently not working because the variable has been removed.
+#+begin_src emacs-lisp :tangle no
 (after! rustic
-  (when (boundp rustic-format-warning-buffer-name)
+  (when (boundp 'rustic-format-warning-buffer-name)
     (set-popup-rule! (rx string-start (literal rustic-format-warning-buffer-name)))))
 #+end_src
 
