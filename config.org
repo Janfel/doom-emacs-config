@@ -954,7 +954,7 @@ Don’t start ~flyspell-mode~ automatically.
 #+end_src
 
 Enable formatting inside of SRC blocks.
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (setq-hook! 'org-mode-hook +fmt-formatter #'org-mode-format-dwim)
 #+end_src
 

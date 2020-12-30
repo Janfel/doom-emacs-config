@@ -1,10 +1,10 @@
-;;; autoload/fmt-org-mode.el -*- lexical-binding: t; -*-
-;;;###if (featurep! :editor fmt)
+;;; editor/fmt/autoload/fmt-org.el -*- lexical-binding: t; -*-
+;;;###if (featurep! :lang org)
 
 (require 'org)
 
 ;;;###autoload
-(defun org-mode-format-dwim (&optional beg end)
+(defun +org-format-dwim (&optional beg end)
   (interactive
    (if (doom-region-active-p)
        (list (doom-region-beginning) (doom-region-end))
