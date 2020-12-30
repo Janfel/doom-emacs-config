@@ -2185,6 +2185,21 @@ Bind ~shell-command~ in a similar way to =M-x= and =M-;=.
       :desc "Async command" "&" #'async-shell-command)
 #+end_src
 
+Bind a prefix for setting things to values.
+#+begin_src emacs-lisp
+(map! :leader :prefix ("S" . "set")
+      "f" #'set-frame-font
+      "i" #'doom/set-indent-width
+      "o" #'doom/set-frame-opacity
+      "t" #'load-theme
+      "v" #'set-variable)
+#+end_src
+
+Bind a prefix for edebug commands.
+#+begin_src emacs-lisp
+(map! :after edebug :leader :desc "debug" "d" global-edebug-map)
+#+end_src
+
 #+begin_src emacs-lisp
 (map! :leader :prefix "b"
       :desc "Rename buffer" "R" #'rename-buffer)
