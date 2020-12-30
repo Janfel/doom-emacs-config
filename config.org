@@ -2019,6 +2019,13 @@ On Arch, the [[https://www.call-cc.org/][Chicken Scheme]] binaries are called =c
   indent-tabs-mode t)
 #+end_src
 
+Fix indentation of =case= statements.
+#+begin_src emacs-lisp
+(after! smie
+  (setf (alist-get 'sh-mode smie-config)
+        '((0 :after "in" 4))))
+#+end_src
+
 #+begin_src emacs-lisp
 (when (featurep! :editor fmt)
   (setq-hook! 'sh-mode-hook
