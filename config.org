@@ -26,7 +26,7 @@ This header comment ensures that everything in this file is lexically scoped.
 
 Acquire focus after a restart because [[github:iqbalansari/restart-emacs][restart-emacs.el]] does not do this.
 #+begin_src emacs-lisp
-(x-focus-frame nil)
+(when (and (selected-frame) (display-graphic-p)) (x-focus-frame nil))
 #+end_src
 
 Require [[https://github.com/magnars/dash.el][dash.el]], a modern list library inspired by Clojure.
