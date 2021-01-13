@@ -1,0 +1,25 @@
+# -*- mode: snippet -*-
+# name: C/C++ Main Source File for Win32
+# uuid: file-template-cc-mode-winmain
+# group: file templates
+# contributor: Jan Felix Langenbach <o.hase3@gmail.com>
+# --
+#ifndef UNICODE
+#define UNICODE
+#endif
+
+#include <Windows.h>
+
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+
+int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, int nCmdShow)
+{
+    $0
+
+    return 0;
+}
+
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+    return DefWindowProc(hwnd, uMsg, wParam, lParam);
+}

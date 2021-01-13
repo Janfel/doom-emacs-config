@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: C/C++ Header File
+# uuid: file-template-cc-mode-header
+# group: file templates
+# contributor: Jan Felix Langenbach <o.hase3@gmail.com>
+# --
+#ifndef ${1:`(*cc-buffer-header-guard-token)`_$(upcase yas-text)}
+#define $1
+
+$0
+
+#endif // $1

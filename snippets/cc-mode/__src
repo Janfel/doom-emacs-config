@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: C/C++ Source File
+# uuid: file-template-cc-mode-src
+# group: file templates
+# condition: (buffer-file-name)
+# contributor: Jan Felix Langenbach <o.hase3@gmail.com>
+# --
+#include "`(file-name-base buffer-file-name)`.`(replace-regexp-in-string "c" "h" (file-name-extension buffer-file-name) nil t)))`"
+
+$0

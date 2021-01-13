@@ -1,8 +1,0 @@
-# -*- mode: snippet -*-
-# group: file templates
-# contributor: Jan Felix Langenbach
-# --
-`(when-let* ((f buffer-file-name))
-   (format "#include \"%s%s\"" (file-name-base f) (*cc-other-file-extension f)))`
-
-$0

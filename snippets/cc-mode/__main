@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: C/C++ Main Source File
+# uuid: file-template-cc-mode-main
+# group: file templates
+# contributor: Jan Felix Langenbach <o.hase3@gmail.com>
+# --
+
+int main(int argc, char *argv[])
+{
+    $0
+
+    return 0;
+}

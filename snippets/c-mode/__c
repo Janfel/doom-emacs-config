@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# group: file templates
-# contributor: Jan Felix Langenbach
-# --
-`(when-let* ((f buffer-file-name)) (format "#include \"%s.h\"" (file-name-base f)))`
-
-$0
