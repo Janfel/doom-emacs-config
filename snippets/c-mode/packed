@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: __attribute__((__packed__))
+# key: packed
+# uuid: c-mode-attribute-packed
+# contributor: Jan Felix Langenbach <o.hase3@gmail.com>
+# --
+__attribute__((__packed__))

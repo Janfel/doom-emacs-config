@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: std::adjacent_find
+# key: ajf
+# uuid: c++-mode-algorithm-std::adjacent_find
+# contributor: Jan Felix Langenbach <o.hase3@gmail.com>
+# --
+auto ${2:pos} = std::adjacent_find(std::begin(${1:container}), std::end($1));
+if ($2 != std::end($1)) {
+   `%`$0
+}

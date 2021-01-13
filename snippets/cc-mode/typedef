@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: Typedef Operator
+# key: typedef
+# uuid: cc-mode-typedef-operator
+# contributor: Jan Felix Langenbach <o.hase3@gmail.com>
+# --
+typedef ${1:type} ${2:alias};

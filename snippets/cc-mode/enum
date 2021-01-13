@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: enum ... { ... }
+# key: enum
+# uuid: cc-mode-enum
+# contributor: Jan Felix Langenbach <o.hase3@gmail.com>
+# --
+enum ${1:name} {
+    `%`$0
+};

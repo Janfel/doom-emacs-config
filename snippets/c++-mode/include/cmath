@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: #include <cmath>
+# key: <cmath
+# condition: (doom-snippets-bolp)
+# uuid: c++-mode-include-cmath
+# contributor: Jan Felix Langenbach <o.hase3@gmail.com>
+# --
+#include <cmath>

@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: Range-Based for (...) { ... }
+# key: forr
+# uuid: c++-mode-range-based-for-loop
+# contributor: Jan Felix Langenbach <o.hase3@gmail.com>
+# --
+for (${1:init} ${2:const auto& $3} : $4) {
+    `%`$0
+}

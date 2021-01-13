@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: Ternary Operator ... ? ... : ... ;
+# key: ?
+# uuid: cc-mode-ternary-operator
+# contributor: Jan Felix Langenbach <o.hase3@gmail.com>
+# --
+(${1:cond}) ? ${2:`(or % "then")`} : ${3:else};

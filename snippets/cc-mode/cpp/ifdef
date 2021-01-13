@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: #ifdef ... #endif
+# key: ifdef
+# condition: (doom-snippets-bolp)
+# uuid: cc-mode-macro-directive-ifdef
+# contributor: Jan Felix Langenbach <o.hase3@gmail.com>
+# --
+#ifdef ${1:MACRO}
+
+`%`$0
+
+#endif // $1

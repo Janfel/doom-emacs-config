@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: #if ... #endif
+# key: #if
+# condition: (doom-snippets-bolp)
+# uuid: cc-mode-directive-if
+# contributor: Jan Felix Langenbach <o.hase3@gmail.com>
+# --
+#if $1
+
+`%`$0
+
+#endif // $1

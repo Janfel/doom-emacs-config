@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: malloc(sizeof(...))
+# key: malloc
+# uuid: c-mode-malloc
+# contributor: Jan Felix Langenbach <o.hase3@gmail.com>
+# --
+malloc(sizeof(${1:type}));

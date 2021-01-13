@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# name: std::any_of
+# key: ano
+# uuid: c++-mode-algorithm-std::any_of
+# contributor: Jan Felix Langenbach <o.hase3@gmail.com>
+# --
+if (std::any_of(std::begin(${1:container}), std::end($1), []($2) {
+    $3
+})) {
+    `%`$0
+}

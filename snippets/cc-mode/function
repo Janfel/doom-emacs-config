@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# name: function
+# key: fn
+# uuid: cc-mode-function-definition
+# contributor: Jan Felix Langenbach <o.hase3@gmail.com>
+# --
+${2:type} ${1:name}($3) $4
+{
+    `%`$0
+}
+

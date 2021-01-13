@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: std::cin >> ...
+# key: cin
+# uuid: c++-mode-iostream-std::cin
+# contributor: Jan Felix Langenbach <o.hase3@gmail.com>
+# expand-env: ((std:: (if (doom-snippets-c++-using-std-p) "" "std::")))
+# --
+`std::`cin >> ${1:`%`};

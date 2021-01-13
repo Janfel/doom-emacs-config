@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: int main(int argc, char *argv[])
+# uuid: cc-mode-main
+# condition: (doom-snippets-bolp)
+# contributor: Jan Felix Langenbach <o.hase3@gmail.com>
+# --
+int main(${1:int argc, char *argv[]})
+{
+    `%`$0
+
+    return 0;
+}

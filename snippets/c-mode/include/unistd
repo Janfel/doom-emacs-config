@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: #include <unistd.h>
+# key: <uni
+# condition: (doom-snippets-bolp)
+# uuid: c-mode-include-unistd
+# contributor: Jan Felix Langenbach <o.hase3@gmail.com>
+# --
+#include <unistd.h>

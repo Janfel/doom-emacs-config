@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# name: auto function with trailing return type
+# key: afn
+# uuid: c++-mode-auto-function-definition
+# contributor: Jan Felix Langenbach <o.hase3@gmail.com>
+# --
+$4 auto ${1:name}($2) $5 -> $3
+{
+    `%`$0
+}
+

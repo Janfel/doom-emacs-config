@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: std::accumulate
+# key: acm
+# uuid: c++-mode-algorithm-std::accumulate
+# contributor: Jan Felix Langenbach <o.hase3@gmail.com>
+# --
+auto ${2:sum} = std::accumulate(std::begin(${1:container}), std::end($1), 0);

@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: v.begin(), v.end()
+# key: begend
+# uuid: c++-mode-iterator-begin-end
+# contributor: Jan Felix Langenbach <o.hase3@gmail.com>
+# --
+${1:v}.begin(), $1.end

@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: else if (...) { ... }
+# key: elif
+# uuid: cc-mode-else-if-block
+# contributor: Jan Felix Langenbach <o.hase3@gmail.com>
+# --
+else if ($1) {
+    `%`$0
+}

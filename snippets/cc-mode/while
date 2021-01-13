@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: while (...) { ... }
+# key: while
+# uuid: cc-mode-while-loop
+# contributor: Jan Felix Langenbach <o.hase3@gmail.com>
+# --
+while (${1:condition}) {
+    `%`$0
+}

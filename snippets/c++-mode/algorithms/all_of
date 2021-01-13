@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# name: std::all_of
+# key: alo
+# uuid: c++-mode-algorithm-std::all_of
+# contributor: Jan Felix Langenbach <o.hase3@gmail.com>
+# --
+if (std::all_of(std::begin(${1:container}), std::end($1), []($2) {
+    $3
+})) {
+    `%`$0
+}

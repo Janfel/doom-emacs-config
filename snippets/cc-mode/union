@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: union ... { ... }
+# key: union
+# uuid: cc-mode-union
+# contributor: Jan Felix Langenbach <o.hase3@gmail.com>
+# --
+union ${1:name} {
+    `%`$0
+};

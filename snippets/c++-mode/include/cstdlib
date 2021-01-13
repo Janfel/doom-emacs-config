@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: #include <cstdlib>
+# key: <cstd
+# uuid: c++-mode-include-cstdlib
+# contributor: Jan Felix Langenbach <o.hase3@gmail.com>
+# --
+#include <cstdlib>

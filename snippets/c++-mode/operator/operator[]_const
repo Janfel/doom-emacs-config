@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: const operator[]
+# key: c[]
+# uuid: c++-mode-operator[]-const
+# contributor: Jan Felix Langenbach <o.hase3@gmail.com>
+# --
+const ${1:Type}& operator[](${2:int index}) const
+{
+    $0
+}

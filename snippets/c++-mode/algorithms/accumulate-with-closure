@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: std::accumulate with closure
+# key: acl
+# uuid: c++-mode-algorithm-std::accumulate-with-closure
+# contributor: Jan Felix Langenbach <o.hase3@gmail.com>
+# --
+auto ${3:sum} = std::accumulate(std::begin(${1:container}), std::end($1), 0, [](int total, $2) {
+  `%`$0
+});

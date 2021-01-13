@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: calloc(sizeof(...))
+# key: calloc
+# uuid: c-mode-calloc
+# contributor: Jan Felix Langenbach <o.hase3@gmail.com>
+# --
+calloc(${1:num}, sizeof(${2:type}));

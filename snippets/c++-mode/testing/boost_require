@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: boost_require
+# key: req
+# uuid: req
+# group: testing
+# --
+BOOST_REQUIRE( ${1:condition} );

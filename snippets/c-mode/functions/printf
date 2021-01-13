@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: printf
+# key: pf
+# uuid: c-mode-printf
+# contributor: Jan Felix Langenbach <o.hase3@gmail.com>
+# --
+printf("${1:format}"${2:, $3});
