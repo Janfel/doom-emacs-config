@@ -1,7 +1,8 @@
 # -*- mode: snippet -*-
-# name: #+begin_latex block
+# name: #+begin_latex ... #+end_latex
 # key: <l
-# uuid: latex
+# uuid: org-mode-block-begin-latex
+# contributor: Jan Felix Langenbach <o.hase3@gmail.com>
 # --
 #+begin_latex
 `%`$0

@@ -1,7 +1,8 @@
 # -*- mode: snippet -*-
-# name: #+begin_export ... block
+# name: #+begin_export ... #+end_export
 # key: <E
-# uuid: export
+# uuid: org-mode-block-begin-export
+# contributor: Jan Felix Langenbach <o.hase3@gmail.com>
 # --
 #+begin_export ${1:type}
 `%`$0

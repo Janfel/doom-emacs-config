@@ -1,7 +1,8 @@
 # -*- mode: snippet -*-
-# name: #+begin_center block
+# name: #+begin_center ... #+end_center
 # key: <C
-# uuid: center
+# uuid: org-mode-block-begin-center
+# contributor: Jan Felix Langenbach <o.hase3@gmail.com>
 # --
 #+begin_center
 `%`$0

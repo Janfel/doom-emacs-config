@@ -1,7 +1,8 @@
 # -*- mode: snippet -*-
-# name: #+begin_quote block
+# name: #+begin_quote ... #+end_quote
 # key: <q
-# uuid: quote
+# uuid: org-mode-block-begin-quote
+# contributor: Jan Felix Langenbach <o.hase3@gmail.com>
 # --
 #+begin_quote
 `%`$0

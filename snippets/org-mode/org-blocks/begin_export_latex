@@ -1,7 +1,8 @@
 # -*- mode: snippet -*-
-# name: #+begin_export latex block
-# key: <l
-# uuid: export latex
+# name: #+begin_export latex ... #+end_export
+# key: <EL
+# uuid: org-mode-block-begin-export-latex
+# contributor: Jan Felix Langenbach <o.hase3@gmail.com>
 # --
 #+begin_export latex
 `%`$0

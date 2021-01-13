@@ -1,7 +1,8 @@
 # -*- mode: snippet -*-
-# name: #+begin_src block
+# name: #+begin_src ... #+end_src
 # key: <s
-# uuid: src
+# uuid: org-mode-block-begin-src
+# contributor: Jan Felix Langenbach <o.hase3@gmail.com>
 # --
 #+begin_src $1
 `%`$0
