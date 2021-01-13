@@ -1238,6 +1238,19 @@ This only works with a *patched* Arduino runtime.
 
 *** C Mode
 *** C++ Mode
+*** File Templates
+#+begin_src emacs-lisp
+(set-file-templates!
+ '("/main\\.c\\(?:c\\|pp\\)$") '("/win32_\\.c\\(?:c\\|pp\\)$")
+ '("\\.c\\(?:c\\|pp\\)$") '("\\.h\\(?:h\\|pp\\|xx\\)$") '("\\.h$") '(c-mode)
+ '(c-mode :trigger "__src") '(c++-mode :trigger "__src")
+ (list "\\.h\\(?:h\\|pp\\|xx\\|\\+\\+\\)?\\'" :trigger "__hdr_pragma"
+       :when (lambda () (bound-and-true-p *cc-use-pragma-once)))
+ '("\\.h\\(?:h\\|pp\\|xx\\|\\+\\+\\)?\\'" :trigger "__hdr")
+ '("/main\\.c\\(?:c\\|pp\\|xx\\|\\+\\+\\)?\\'" :trigger "__main")
+ '("/win32_main\\.c\\(?:c\\|pp\\)\\'" :trigger "__winmain"))
+#+end_src
+
 *** Meson Mode
 Major mode for the [[https://mesonbuild.com][Meson Build System]].
 

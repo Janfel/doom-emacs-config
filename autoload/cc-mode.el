@@ -1,6 +1,10 @@
 ;;; autoload/cc-mode.el -*- lexical-binding: t; -*-
 
 ;;;###autoload
+(defvar *cc-use-pragma-once t
+  "Prefer “pragma once” over “ifndef” header guards.")
+
+;;;###autoload
 (defun *cc-header-file-p (filename)
   "Return t if FILENAME is a C/C++ header file."
   (declare (pure t) (side-effect-free t))
