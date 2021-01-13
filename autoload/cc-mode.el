@@ -13,9 +13,12 @@
         (string-prefix-p "h" ext 'ignore-case))))
 
 (defun *cc-make-cpp-token (name)
-  "Generate a C preprocessor token based on NAME."
+  "Generate a C preprocessor token based on NAME.
+The token will not contain any leading or double underscores."
   (declare (pure t) (side-effect-free t))
-  (upcase (replace-regexp-in-string "[^[:alnum:]]" "_" name 'fixedcase 'literal)))
+  (upcase
+   (string-remove-prefix
+    "_" (replace-regexp-in-string "[^[:alnum:]]+" "_" name 'fixedcase 'literal))))
 
 ;;;###autoload
 (defun *cc-buffer-header-guard-token (&optional buffer)
