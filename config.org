@@ -2202,6 +2202,7 @@ Bind a prefix for setting things to values.
 #+begin_src emacs-lisp
 (map! :leader :prefix ("S" . "set")
       "f" #'set-frame-font
+      "F" #'menu-set-font
       "i" #'doom/set-indent-width
       "o" #'doom/set-frame-opacity
       "t" #'load-theme
