@@ -1304,7 +1304,7 @@ Activate the =clang-tidy= integration of =clangd=.
     "A list of warnings to be added to `flycheck-clang-warnings' when editing a C/C++ header file.")
   (add-hook! '(c-mode-hook c++-mode-hook)
     (defun *flycheck-maybe-add-gcc-clang-header-warnings-h ()
-      (when (-some-> (buffer-file-name) (*cc-header-file-p))
+      (when (and buffer-file-name (*cc-header-file-p buffer-file-name))
         (setq-local
          flycheck-gcc-warnings
          (append *flycheck-gcc-header-warnings flycheck-gcc-warnings)
