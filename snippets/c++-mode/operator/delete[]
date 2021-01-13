@@ -1,9 +1,7 @@
 # -*- mode: snippet -*-
-# name: doc
-# key: /**
-# uuid: c++-mode-comment-documentation
+# name: delete[]
+# key: dla
+# uuid: c++-mode-operator-delete-array
 # contributor: Jan Felix Langenbach <o.hase3@gmail.com>
 # --
-/**
- * `%`$0
- */
+delete[] ${1:arr};

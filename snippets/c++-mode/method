@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: Class Method
+# key: meth
+# uuid: c++-mode-method-definition
+# contributor: Jan Felix Langenbach <o.hase3@gmail.com>
+# --
+${1:void} ${2:Class}::${3:name}($4)${5: const} {
+    `%`$0
+}

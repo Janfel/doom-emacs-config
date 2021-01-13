@@ -3,4 +3,4 @@
 # key: ignore
 # uuid: ignore
 # --
-${1:std::}cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
