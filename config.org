@@ -810,6 +810,17 @@ character too far."
        "C-l"       nil))
 #+end_src
 
+Workaround for ~evil-buffer-new~ calling ~set-window-buffer~ instead of
+~switch-to-buffer~. See issue [[doom-repo:issues/4514][#4514]].
+#+begin_src emacs-lisp
+(defadvice! +evil--new-buffer-a (orig-fn count file)
+  :around #'evil-buffer-new
+  (if file
+      (funcall orig-fn count file)
+    (with-current-buffer (switch-to-buffer (generate-new-buffer "*new*"))
+      (funcall (default-value 'major-mode)))))
+#+end_src
+
 *** Evil Collection
 Doom Emacs loads the ~evil-collection~ packages manually and needs the
 corresponding variables to be set beforehand. The code below runs
