@@ -482,6 +482,14 @@ On =Tesla=, ~display-line-numbers-mode~ causes noticeable slowdown.
     #'display-line-numbers-mode))
 #+end_src
 
+** Online Lookup
+Add more online search providers.
+#+begin_src emacs-lisp
+(when (featurep! :tools lookup)
+  (push! +lookup-provider-url-alist
+         '("CPP Reference" "https://cppreference.com/w/?search=%s")))
+#+end_src
+
 ** Spell Checking
 *** Ispell
 #+begin_src emacs-lisp
