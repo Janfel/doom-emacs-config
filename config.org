@@ -725,6 +725,12 @@ The =smart= option sometimes upcases the entire replacement string.
 (setq evil-ex-substitute-case 'sensitive)
 #+end_src
 
+Evil should deactivate itself in these modes.
+#+begin_src emacs-lisp
+(after! evil-vars
+  (push! evil-emacs-state-modes 'dired-mode))
+#+end_src
+
 We can’t use ~defvaralias~ here, because ~evil-mode~ is already running
 which causes ~evil-shift-width~ to be a localized variable.
 #+begin_src emacs-lisp
