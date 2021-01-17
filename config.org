@@ -835,6 +835,13 @@ right before ~+evil-collection-init~ first called.
            'calc 'tetris '2084-game 'haskell-error-mode)))
 #+end_src
 
+As of [[github:emacs-evil/evil-collection/commit/e7be9f53a05c81ef9e89c2f053ba62048e6afd69][=e7be9f5=]], ~evil-collection~ throws an error when starting
+~helpful-mode~, because it can’t find ~evil-collection-indent~. This workaround
+disables the message by disabling the entire ~evil-collection-indent~ package.
+#+begin_src emacs-lisp
+(provide 'evil-collection-indent)
+#+end_src
+
 *** Evil Matchit
 #+begin_src emacs-lisp
 (use-package! evil-matchit
