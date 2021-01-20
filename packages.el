@@ -12,10 +12,6 @@
 ;; Major mode for simple PHP editing.
 (unless (featurep! :lang php) (package! php-mode))
 
-;; This commit fixes errors with hungry-delete.
-;; Unpin when Doom has caught up.
-(package! evil-collection :pin "034124fb09e7a5f57e23bafb08d3d9135d272d90")
-
 ;; Library for running async processes.
 (package! async)
 ;; Clang-Tidy integration for flycheck.
