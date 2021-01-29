@@ -1667,7 +1667,7 @@ error code. Using =--no-exit-code= prevents this.
 #+end_src
 
 #+begin_src emacs-lisp
-(setq-hook! '(html-mode-hook mhtml-mode-hook css-mode-hook)
+(setq-hook! '(html-mode-hook mhtml-mode-hook css-mode-hook web-mode-hook)
   standard-indent 2)
 #+end_src
 
