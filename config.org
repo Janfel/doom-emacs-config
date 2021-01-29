@@ -1681,6 +1681,19 @@ error code. Using =--no-exit-code= prevents this.
     +fmt-formatter #'prettier-format-region))
 #+end_src
 
+Add HTML folding rules to ~web-mode~.
+#+begin_src emacs-lisp
+(after! hideshow
+  (assq-delete-all 'web-mode hs-special-modes-alist)
+  (push! hs-special-modes-alist
+         '(web-mode
+           "{\\|<!--\\|<[^/>?][^>]*[^/]>"
+           "}\\|-->\\|</[^>]*[^/]>"
+           "/[*/]\\|<!--"
+           web-mode-forward-sexp
+           nil)))
+#+end_src
+
 ** Hy :Lisp:Python:
 #+begin_src emacs-lisp
 (add-hook 'hy-mode-hook #'lisp-mode-common-hook)
