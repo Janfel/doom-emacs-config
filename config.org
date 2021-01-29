@@ -2257,6 +2257,7 @@ Bind mnemonics for =git add=.
 Bind ~auto-fill-mode~.
 #+begin_src emacs-lisp
 (map! :leader :prefix "t"
+      :desc "Fill column indicator" "c" #'display-fill-column-indicator-mode
       :desc "Hard line wrapping" "W" #'auto-fill-mode)
 #+end_src
 
