@@ -1,5 +1,19 @@
 ;;; init.el -*- lexical-binding: t; -*-
 
+;; This file controls what Doom modules are enabled and what order they load
+;; in. Remember to run 'doom sync' after modifying it!
+
+;; NOTE Press 'SPC h d h' (or 'C-h d h' for non-vim users) to access Doom's
+;;      documentation. There you'll find a "Module Index" link where you'll find
+;;      a comprehensive list of Doom's modules and what flags they support.
+
+;; NOTE Move your cursor over a module's name (or its flags) and press 'K' (or
+;;      'C-c c k' for non-vim users) to view its documentation. This works on
+;;      flags as well (those symbols that start with a plus).
+;;
+;;      Alternatively, press 'gd' (or 'C-c c d') on a module to browse its
+;;      directory (for easy access to its source code).
+
 (defconst SYSTEM
   (let ((sysname (system-name)))
     (cond ((string= sysname "PhantomJFL") 'Phantom)
@@ -10,22 +24,26 @@
 (doom! :input
        ;;chinese                        ;
        ;;japanese                       ;
+       ;;layout                         ; auie,ctsrnm is the superior home row
 
        :completion
        (company +childframe)            ; the ultimate code completion backend
-       ivy                              ; a search engine for love and life
        ;;helm                           ; the *other* search engine for love and life
        ;;ido                            ; the other *other* search engine...
+       ivy                              ; a search engine for love and life
 
        :ui
        ;;deft                           ; notational velocity for Emacs
        doom                             ; what makes DOOM look the way it does
        doom-dashboard                   ; a nifty splash screen for Emacs
        doom-quit                        ; DOOM quit-message prompts when you quit Emacs
+       ;;(emoji +unicode)               ; 🙂
        ;;fill-column                    ; a `fill-column' indicator
        hl-todo                          ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
        ;;hydra                          ;
        ;;indent-guides                  ; highlighted indent columns
+       ;;ligatures                      ; ligatures and symbols to make your code pretty again
+       ;;minimap                        ; show a map of the code on the side
        modeline                         ; snazzy, Atom-inspired modeline, plus API
        nav-flash                        ; blink the current line after jumping
        neotree                          ; a project drawer, like NERDTree for vim
@@ -33,7 +51,6 @@
        (popup                           ; tame sudden yet inevitable temporary windows
         ;;+all                          ; catch all popups that start with an asterix
         +defaults)                      ; default popup rules
-       ;;pretty-code                    ; replace bits of code with pretty symbols
        ;;tabs                           ; a tab bar for Emacs
        ;;treemacs                       ; a project drawer, like neotree but cooler
        ;;unicode                        ; extended unicode support for various languages
@@ -89,16 +106,20 @@
        ;;gist                           ; interacting with github gists
        lookup                           ; helps you navigate your code and documentation
        lsp                              ; serving freshly processed languages
-       ;;macos                          ; MacOS-specific commands
        magit                            ; a git porcelain for Emacs
        make                             ; run make tasks from Emacs
        ;;pass                           ; password manager for nerds
        ;;pdf                            ; pdf enhancements
        ;;prodigy                        ; FIXME managing external services & code builders
        ;;rgb                            ; creating color strings
+       taskrunner                       ; taskrunner for all your projects
        ;;terraform                      ; infrastructure as code
        ;;tmux                           ; an API for interacting with tmux
        ;;upload                         ; map local to remote projects via ssh/ftp
+
+       :os
+       (:if IS-MAC macos)               ; improve compatibility with macOS
+       ;;tty                            ; improve the terminal Emacs experience
 
        :lang
        ;;agda                           ; types of types of types of types...
@@ -121,6 +142,7 @@
        ;;fennel                         ;
        ;;fsharp                         ; ML stands for Microsoft's Language
        ;;fstar                          ; (dependent) types and (monadic) effects and Z3
+       ;;gdscript                       ; the language you waited for
        ;;(go +lsp)                      ; the hipster dialect
        ;;(haskell +dante)               ; a language that's lazier than I am
        ;;hy                             ; readability of scheme w/ speed of python
@@ -148,13 +170,13 @@
        ;;+pandoc                        ; export-with-pandoc support
        ;;+pomodoro                      ; be fruitful with the tomato technique
        ;;+present)                      ; using org-mode for presentations
-       ;;perl                           ; write code no one else can comprehend
        ;;php                            ; perl's insecure younger brother
        ;;plantuml                       ; diagrams for confusing people more
        ;;purescript                     ; javascript, but functional
        ;;(python +lsp)                  ; beautiful is better than ugly
        ;;qt                             ; the 'cutest' gui framework ever
        ;;racket                         ; a DSL for DSLs
+       ;;raku                           ; the artist formerly known as perl6
        ;;rest                           ; Emacs as a REST client
        ;;rst                            ; ReST in peace
        ;;(ruby +rails)                  ; 1.step {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"}
