@@ -333,12 +333,6 @@ Set the color theme. On =Tesla= I currently use light themes.
 #+end_src
 
 * Editor Features
-** Calculator
-#+begin_src emacs-lisp
-(when (featurep! :editor evil)
-  (add-hook! 'calc-mode-hook #'evil-emacs-state))
-#+end_src
-
 ** Electric Quotes
 I have implemented ~set-electric-quote-chars~ in [[file:autoload/electric-quote.el][=autoload/electric-quote.el=]].
 
@@ -728,7 +722,7 @@ The =smart= option sometimes upcases the entire replacement string.
 Evil should deactivate itself in these modes.
 #+begin_src emacs-lisp
 (after! evil-vars
-  (push! evil-emacs-state-modes 'dired-mode))
+  (push! evil-emacs-state-modes 'calc-mode 'dired-mode))
 #+end_src
 
 We can’t use ~defvaralias~ here, because ~evil-mode~ is already running
