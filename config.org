@@ -2179,7 +2179,8 @@ Use C-v to paste.
 (map! :i "C-S-c" #'kill-ring-save
       :i "C-S-x" #'kill-region
       :i "C-v"   #'yank
-      :i "C-S-v" #'yank-pop)
+      :i "C-S-v" #'yank-pop
+      :i "C-s"   #'save-buffer)
 #+end_src
 
 ** Folding
