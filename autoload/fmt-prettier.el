@@ -14,6 +14,8 @@ If this is the symbol “none”, Prettier will not search for a config file.")
 (defvar prettier-format-parser-alist
   '(;; HTML
     (html-mode       . "html")
+    (mhtml-mode      . "html")
+    (web-mode        . "html")
     (markdown-mode   . "markdown")
     ;; CSS
     (css-mode        . "css")
