@@ -21,6 +21,9 @@
           (t 'other)))
   "Which system are we running on?")
 
+(defconst IS-PHANTOM (eq SYSTEM 'Phantom))
+(defconst IS-TESLA   (eq SYSTEM 'Tesla))
+
 (doom! :input
        ;;chinese                        ;
        ;;japanese                       ;
@@ -41,7 +44,7 @@
        ;;fill-column                    ; a `fill-column' indicator
        hl-todo                          ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
        ;;hydra                          ;
-       ;;indent-guides                  ; highlighted indent columns
+       (:if IS-PHANTOM indent-guides)   ; highlighted indent columns
        ;;ligatures                      ; ligatures and symbols to make your code pretty again
        ;;minimap                        ; show a map of the code on the side
        modeline                         ; snazzy, Atom-inspired modeline, plus API
@@ -123,11 +126,11 @@
 
        :lang
        ;;agda                           ; types of types of types of types...
-       ;;arduino                        ;
-       ;;basic                          ;
-       ;;(cc +lsp)                      ; C/C++/Obj-C madness
-       ;;clojure                        ; java with a lisp
-       ;;common-lisp                    ; if you've seen one lisp, you've seen them all
+       (:if IS-PHANTOM arduino)         ; JFL Arduino Mode
+       (:if IS-PHANTOM basic)           ; JFL Basic Mode
+       (:if (or IS-PHANTOM IS-TESLA) (cc +lsp)) ; C/C++/Obj-C madness
+       (:if IS-PHANTOM clojure)         ; java with a lisp
+       (:if IS-PHANTOM common-lisp)     ; if you've seen one lisp, you've seen them all
        ;;coq                            ; proofs-as-programs
        ;;crystal                        ; ruby at the speed of c
        ;;csharp                         ; unity, .NET, and mono shenanigans
@@ -139,12 +142,12 @@
        ;;erlang                         ; an elegant language for a more civilized age
        ;;ess                            ; emacs speaks statistics
        ;;faust                          ; dsp, but you get to keep your soul
-       ;;fennel                         ;
+       (:if IS-PHANTOM fennel)          ; JFL Fennel Mode
        ;;fsharp                         ; ML stands for Microsoft's Language
        ;;fstar                          ; (dependent) types and (monadic) effects and Z3
        ;;gdscript                       ; the language you waited for
        ;;(go +lsp)                      ; the hipster dialect
-       ;;(haskell +dante)               ; a language that's lazier than I am
+       (:if IS-PHANTOM (haskell +dante)) ; a language that's lazier than I am
        ;;hy                             ; readability of scheme w/ speed of python
        ;;idris                          ; idris
        ;;json                           ; At least it ain't XML
@@ -152,12 +155,11 @@
        ;;javascript                     ; all(hope(abandon(ye(who(enter(here))))))
        ;;julia                          ; a better, faster MATLAB
        ;;kotlin                         ; a better, slicker Java(Script)
-       ;;latex                          ; writing papers in Emacs has never been so fun
+       (:if IS-PHANTOM latex)           ; writing papers in Emacs has never been so fun
        ;;lean                           ;
        ;;factor                         ;
        ;;ledger                         ; an accounting system in Emacs
-       ;;(lua                           ; one-based indices? one-based indices
-       ;; +moonscript)                  ;
+       (:if IS-PHANTOM (lua +moonscript)) ; one-based indices? one-based indices
        markdown                         ; writing docs for people to ignore
        ;;nim                            ; python + lisp at the speed of c
        ;;nix                            ; I hereby declare "nix geht mehr!"
@@ -173,43 +175,23 @@
        ;;php                            ; perl's insecure younger brother
        ;;plantuml                       ; diagrams for confusing people more
        ;;purescript                     ; javascript, but functional
-       ;;(python +lsp)                  ; beautiful is better than ugly
+       (:if IS-PHANTOM (python +lsp) python) ; beautiful is better than ugly
        ;;qt                             ; the 'cutest' gui framework ever
        ;;racket                         ; a DSL for DSLs
        ;;raku                           ; the artist formerly known as perl6
        ;;rest                           ; Emacs as a REST client
        ;;rst                            ; ReST in peace
        ;;(ruby +rails)                  ; 1.step {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"}
-       ;;(rust +lsp)                    ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
+       (:if IS-PHANTOM (rust +lsp))     ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
        ;;scala                          ; java, but good
-       ;;scheme                         ; a fully conniving family of lisps
+       (:if IS-PHANTOM scheme)          ; a fully conniving family of lisps
        sh                               ; she sells {ba,z,fi}sh shells on the C xor
        ;;sml                            ; sml
        ;;solidity                       ; do you need a blockchain? No.
        ;;swift                          ; who asked for emoji variables?
        ;;terra                          ; Earth and Moon in alignment for performance.
-       ;;web                            ; the tubes
+       (:if IS-PHANTOM web)             ; the tubes
        yaml                             ; JSON, but readable
-
-       (:cond
-        ((eq SYSTEM 'Phantom)
-         arduino
-         basic
-         (cc +lsp)
-         clojure
-         common-lisp
-         elixir
-         fennel
-         (haskell +dante)
-         latex
-         (lua +moonscript)
-         (python +lsp)
-         (rust +lsp)
-         scheme
-         web)
-        ((eq SYSTEM 'Tesla)
-         (cc +lsp)
-         python))
 
        :email
        ;;(mu4e +gmail)                  ;
