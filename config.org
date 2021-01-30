@@ -100,8 +100,9 @@ This snippet can be used to test the status of ~lexical-binding~ during
 
 ** Commands
 #+begin_src emacs-lisp
-(defun comments-to-column (&optional column)
-  "Move any end-of-line comments to COLUMN or `comment-column'."
+(defun move-comment-to-column (&optional column)
+  "Move any end-of-line comments to COLUMN or `comment-column'.
+Modifies the match data; use `save-match-data' if necessary."
   (interactive "*")
   (let ((beg (if (doom-region-active-p)
                  (doom-region-beginning)
