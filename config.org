@@ -34,22 +34,6 @@ Require [[https://github.com/magnars/dash.el][dash.el]], a modern list library i
 (require 'dash)
 #+end_src
 
-** Snippets
-:PROPERTIES:
-:header-args+: :tangle no :lexical yes
-:END:
-This snippet returns the status of ~lexical-binding~.
-#+begin_src emacs-lisp
-(defun lex-p ()
-  "Return t if lexical binding is in effect."
-  (let (lex _lex-p)
-    (let ((lex t))
-      (setq _lex-p (lambda () lex)))
-    (funcall _lex-p)))
-
-(if (lex-p) "Yes" "No")
-#+end_src
-
 * Definitions
 ** Functions and Macros
 #+begin_src emacs-lisp
@@ -64,6 +48,24 @@ This snippet returns the status of ~lexical-binding~.
   "Return the last component of DIRNAME."
   (declare (pure t) (side-effect-free t))
   (file-name-as-directory (file-name-nondirectory (directory-file-name dirname))))
+#+end_src
+
+This macro returns the status of ~lexical-binding~ at the callsite.
+#+begin_src emacs-lisp
+(defmacro lexical-binding-enabled-p ()
+  "Return t if lexical binding is in effect."
+  (let ((funcsym (make-symbol "func")) (varsym (make-symbol "var")))
+    `(let (,funcsym ,varsym)
+       (let ((,varsym t))
+         (setq ,funcsym (lambda () ,varsym)))
+       (funcall ,funcsym))))
+#+end_src
+
+This snippet can be used to test the status of ~lexical-binding~ during
+~org-mode~ source block evaluation. To test this, add =:lexical yes= or
+=:lexical no= to the =begin_src= line.
+#+begin_src emacs-lisp :tangle no
+(if (lexical-binding-enabled-p) "Yes" "No")
 #+end_src
 
 #+begin_src emacs-lisp
