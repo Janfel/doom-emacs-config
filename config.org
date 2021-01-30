@@ -183,8 +183,7 @@ without lengthy invocation of =getenv=.
   "The value of $XDG_CACHE_HOME where programs place cache files.")
 
 (defconst SYS-FEATURES
-  (mapcar #'intern (-> (getenv "SYS_FEATURES")
-                       (or "") (split-string ":")))
+  (mapcar #'intern (split-string (or (getenv "SYS_FEATURES") "") ":" t))
   "A list of symbols which represent system features.")
 #+end_src
 
