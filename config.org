@@ -24,9 +24,9 @@ This header comment ensures that everything in this file is lexically scoped.
 ;;; config.el -*- lexical-binding: t; -*-
 #+end_src
 
-Acquire focus after a restart because [[github:iqbalansari/restart-emacs][restart-emacs.el]] does not do this.
+Acquire focus when creating a new frame.
 #+begin_src emacs-lisp
-(when (and (selected-frame) (display-graphic-p)) (x-focus-frame nil))
+(add-hook! 'window-setup-hook (x-focus-frame nil))
 #+end_src
 
 Require [[https://github.com/magnars/dash.el][dash.el]], a modern list library inspired by Clojure.
