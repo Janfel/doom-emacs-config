@@ -2235,6 +2235,37 @@ Bind ~shell-command~ in a similar way to =M-x= and =M-;=.
       :desc "Async command" "&" #'async-shell-command)
 #+end_src
 
+*** Buffer Map
+#+begin_src emacs-lisp
+(map! :map doom-leader-buffer-map
+      :desc "Rename buffer" "R" #'rename-buffer)
+#+end_src
+
+*** Debug Map
+Bind a prefix for edebug commands.
+#+begin_src emacs-lisp
+(map! :after edebug :leader :desc "debug" "d" global-edebug-map)
+#+end_src
+
+*** File Map
+Bind a key for switching between two related files.
+#+begin_src emacs-lisp
+(map! :map doom-leader-file-map
+      :desc "Find other file" "o" #'ff-find-other-file)
+#+end_src
+
+*** Git Map
+Bind mnemonics for =git add=.
+#+begin_src emacs-lisp
+(map! :map doom-leader-git-map
+      (:when (featurep! :ui vc-gutter)
+       :desc "Git add hunk" "a" #'git-gutter:stage-hunk
+       :desc "Diff hunk"    "d" #'git-gutter:popup-hunk)
+      (:when (featurep! :tools magit)
+       :desc "Git add file" "A" #'magit-stage-file))
+#+end_src
+
+*** Set Map
 Bind a prefix for setting things to values.
 #+begin_src emacs-lisp
 (map! :leader :prefix ("S" . "set")
@@ -2246,30 +2277,15 @@ Bind a prefix for setting things to values.
       "v" #'set-variable)
 #+end_src
 
-Bind a prefix for edebug commands.
-#+begin_src emacs-lisp
-(map! :after edebug :leader :desc "debug" "d" global-edebug-map)
-#+end_src
-
-#+begin_src emacs-lisp
-(map! :leader :prefix "b"
-      :desc "Rename buffer" "R" #'rename-buffer)
-#+end_src
-
-Bind mnemonics for =git add=.
-#+begin_src emacs-lisp
-(map! :leader :prefix "g"
-      (:when (featurep! :ui vc-gutter)
-       :desc "Git add hunk" "a" #'git-gutter:stage-hunk
-       :desc "Diff hunk"    "d" #'git-gutter:popup-hunk)
-      (:when (featurep! :tools magit)
-       :desc "Git add file" "A" #'magit-stage-file))
-#+end_src
-
+*** Toggle Map
 Bind ~auto-fill-mode~.
 #+begin_src emacs-lisp
-(map! :leader :prefix "t"
-      :desc "Fill column indicator" "c" #'display-fill-column-indicator-mode
+(map! :map doom-leader-toggle-map
+      :desc "Whitespace" "<SPC>" #'whitespace-mode
+      (:when EMACS27+
+       :desc "Fill column indicator" "c" #'display-fill-column-indicator-mode)
+      (:when (fboundp #'highlight-indent-guides-mode)
+       :desc "Indent guides" "G" #'highlight-indent-guides-mode)
       :desc "Hard line wrapping" "W" #'auto-fill-mode)
 #+end_src
 
