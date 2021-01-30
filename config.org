@@ -2004,6 +2004,9 @@ The package will load when =company-jedi= is invoked by =company=.
   :init (set-company-backend! 'python-mode 'company-jedi))
 #+end_src
 
+**** NOTE Replace this by Doom’s choice of anaconda-mode?
+It seems that =anaconda-mode= is no longer actively supported.
+
 *** _Backup
 :PROPERTIES:
 :header-args+: :tangle no
