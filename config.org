@@ -1564,9 +1564,9 @@ For consistency, the ~tab-width~ in all Elisp modes is set to eight.
       (sp--looking-back-p (concat "\\?\\\\?\\(" (regexp-quote id) "\\)?") 5 t)))
 
   (cl-dolist (delim '("(" "\\(" "\\\\("))
-   (sp-local-pair '(emacs-lisp-mode lisp-interaction-mode)
-                  delim nil
-                  :unless '(:add *sp-emacs-lisp-after-char-quote-p))))
+    (sp-local-pair '(emacs-lisp-mode lisp-interaction-mode)
+                   delim nil
+                   :unless '(:add *sp-emacs-lisp-after-char-quote-p))))
 #+end_src
 
 *** WAIT Fix Path in Elisp Module Header ([[doom-repo:pull/3684][#3684]])
@@ -1594,7 +1594,7 @@ Maybe ~def-project-mode!~?
   (lisp-mode-variables nil nil 'elisp)
   (setq-local electric-quote-string t)
   (setq imenu-case-fold-search nil)
-    (if (boundp 'electric-pair-text-pairs)
+  (if (boundp 'electric-pair-text-pairs)
       (setq-local electric-pair-text-pairs
                   (append '((?\` . ?\') (?‘ . ?’))
                           electric-pair-text-pairs))
@@ -1707,9 +1707,9 @@ Add HTML folding rules to ~web-mode~.
   standard-indent 2
   tab-width 2
   indent-tabs-mode t)
-  #+end_src
+#+end_src
 
-  #+begin_src emacs-lisp
+#+begin_src emacs-lisp
 (when (featurep! :editor fmt)
   (setq-hook! 'js-mode-hook
     +fmt-formatter #'prettier-format-region))
@@ -1987,9 +1987,9 @@ Use system =mspyls= for =lsp-python-ms=.
 #+begin_src emacs-lisp
 (setq-hook! '(rustic-mode-hook rustic-macro-expansion-mode-hook)
   indent-tabs-mode t)
-  #+end_src
+#+end_src
 
-  #+begin_src emacs-lisp
+#+begin_src emacs-lisp
 (when (featurep! :editor fmt)
   (setq-hook! '(rustic-mode-hook rustic-macro-expansion-mode-hook)
     +fmt-formatter #'rustic-format-buffer))
