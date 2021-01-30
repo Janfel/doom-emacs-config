@@ -18,7 +18,7 @@ These are some useful links to manuals and other peoples configs.
 + [[http://aaronbedra.com/emacs.d][Aaron Bedra’s Config]]
 + [[https://github.com/KaratasFurkan/.emacs.d][Furkan Karataş’s Config]]
 
-** Header
+** Startup
 This header comment ensures that everything in this file is lexically scoped.
 #+begin_src emacs-lisp
 ;;; config.el -*- lexical-binding: t; -*-
