@@ -100,6 +100,20 @@ This snippet can be used to test the status of ~lexical-binding~ during
 
 ** Commands
 #+begin_src emacs-lisp
+(defun indent-buffer-or-region (&optional arg)
+  (interactive "P")
+  (if (doom-region-active-p)
+      (indent-region (doom-region-beginning) (doom-region-end) arg)
+    (indent-region (point-min) (point-max) arg)))
+
+(map! :leader :prefix "c"
+      :desc "Indent buffer/region" "i" #'indent-buffer-or-region
+      ;; We need to move this out of the way.
+      (:when (featurep! :tools lsp)
+       :desc "LSP Organize imports" "I" #'lsp-organize-imports))
+#+end_src
+
+#+begin_src emacs-lisp
 (defun move-comment-to-column (&optional column)
   "Move any end-of-line comments to COLUMN or `comment-column'.
 Modifies the match data; use `save-match-data' if necessary."
@@ -235,19 +249,42 @@ This bug is triggered by not having =ttf-bitstream-vera= installed.
 #+end_src
 
 ** Doom Emacs
-Don’t turn on ~whitespace-mode~ automatically.
-#+begin_src emacs-lisp
-(defadvice! *doom--disable-automatic-whitespace-mode-a (&rest _)
-  "Don’t turn on `whitespace-mode' on startup."
-  :after #'doom-init-ui-h
-  (remove-hook 'after-change-major-mode-hook
-               #'doom-highlight-non-default-indentation-h))
-#+end_src
-
 Define these variables from =core/autoload/config.el=.
 #+begin_src emacs-lisp
 (setq doom-bin-dir (concat doom-emacs-dir "bin/")
       doom-bin     (concat doom-bin-dir   "doom"))
+#+end_src
+
+*** Fonts
+Doom exposes five (optional) variables for controlling fonts in Doom. Here
+are the three important ones:
+
++ ~doom-font~
++ ~doom-variable-pitch-font~
++ ~doom-big-font~ -- used for ~doom-big-font-mode~; use this for
+  presentations or streaming.
+
+They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
+font string. You generally only need these two:
+#+begin_src emacs-lisp :tangle no
+(setq doom-font (font-spec :family "monospace" :size 12 :weight 'semi-light)
+      doom-variable-pitch-font (font-spec :family "sans" :size 13))
+#+end_src
+
+#+begin_src emacs-lisp
+(setq doom-font (font-spec :family "Source Code Pro" :size 13)
+      doom-serif-font (font-spec :family "Source Serif Pro")
+      doom-variable-pitch-font (font-spec :family "Source Sans Pro"))
+#+end_src
+
+*** Theme
+Set the color theme. On =Tesla= I currently use light themes.
+#+begin_src emacs-lisp
+(setq doom-theme
+      (cl-case SYSTEM
+        ('Phantom 'doom-one)
+        ('Tesla   'doom-one-light)
+        (t        'doom-one)))
 #+end_src
 
 ** Emacs C Source Code
@@ -267,14 +304,98 @@ the true version of Emacs including any release-candidate specifiers.")
         (if (file-accessible-directory-p dir) dir)))
 #+end_src
 
-** Fonts
+** HL Line Mode
+While ~hl-line-mode~ is active, ~face-at-point~ always returns ~hl-line~.
+This advice unhighlights the current line before ~face-at-point~ is called.
 #+begin_src emacs-lisp
-(setq doom-font (font-spec :family "Source Code Pro" :size 13)
-      doom-serif-font (font-spec :family "Source Serif Pro")
-      doom-variable-pitch-font (font-spec :family "Source Sans Pro"))
+(after! hl-line
+  (defadvice! *hl-line--fix-face-at-point-a (orig-fn &rest args)
+    :before '(describe-char face-at-point)
+    (when hl-line-mode
+      (hl-line-unhighlight))))
 #+end_src
 
-** Hideshow
+* Editor Features
+** Automatic Formatting and Indentation
+*** Custom Formatting Engine
+I replace the default formatting function with my own.
+#+begin_src emacs-lisp
+(map! :when (featurep! :editor fmt)
+      :nv "g =" #'+fmt:region
+      :map doom-leader-code-map
+      :desc "Format buffer/region" "f" #'+fmt/dwim)
+#+end_src
+
+*** Indent using Tabs
+Disable tab insertion by default. It will be enabled manually for each mode.
+#+begin_src emacs-lisp
+(setq-default tab-width 4)
+(setq-default indent-tabs-mode nil)
+#+end_src
+
+These functions have a tendency to insert tabs where they don’t belong.
+#+begin_src emacs-lisp
+(defadvice! *emacs--disable-indent-tabs-mode-a (orig-fn &rest args)
+  "Let `indent-tabs-mode' be bound to nil."
+  :around '(align-areas comment-indent indent-relative)
+  (let (indent-tabs-mode) (apply orig-fn args)))
+#+end_src
+
+*** Indent Guides
+The package [[https://github.com/DarthFennec/highlight-indent-guides][highlight-indent-guides]] draws a line for each indentation level.
+#+begin_src emacs-lisp :tangle no
+(use-package! highlight-indent-guides
+  ;; Maybe change this to mode-by-mode basis.
+  :commands (highlight-indent-guides-mode)
+  :config
+  ;; Use bitmap images instead of characters.
+  (setq highlight-indent-guides-method 'bitmap)
+  ;; Use a bitmap of a solid line.
+  (setq highlight-indent-guides-bitmap-function
+        #'highlight-indent-guides--bitmap-line)
+  ;; Highlight the nearest indent guide.
+  (setq highlight-indent-guides-responsive 'top))
+#+end_src
+
+
+** Code Folding
+*** Folding Module
+Completely remap the ~+fold~ commands, making use of =h= as a prefix.
+This frees up =z r= =z m=.
+#+begin_src emacs-lisp
+(map! :when (featurep! :editor fold)
+      :n "z O" #'+fold/open-all
+      :n "z C" #'+fold/close-all
+
+      :mn "h" nil
+      :n "h h" #'+fold/toggle
+      :n "h t" #'+fold/toggle
+      :n "h a" #'+fold/toggle
+      :n "h o" #'+fold/open
+      :n "h O" #'+fold/open-all
+      :n "h c" #'+fold/close
+      :n "h C" #'+fold/close-all
+      :m "h n" #'+fold/next
+      :m "h p" #'+fold/previous)
+#+end_src
+
+*** Org Mode
+#+begin_src emacs-lisp
+(map! :after org
+      :map org-mode-map
+      :n "h h" #'+org/toggle-fold
+      :n "h t" #'+org/toggle-fold
+      :n "h a" #'+org/toggle-fold
+      :n "h o" #'+org/open-fold
+      :n "h O" #'+org/open-all-folds
+      :n "h c" #'+org/close-fold
+      :n "h C" #'+org/close-all-folds
+      :m "h n" #'+org/show-next-fold-level
+      :m "h p" #'+org/hide-next-fold-level
+      :m "h s" #'org-show-subtree)
+#+end_src
+
+*** Hide/Show Mode
 #+begin_src emacs-lisp
 (map! :after hideshow
       :map hs-minor-mode-map
@@ -288,55 +409,6 @@ the true version of Emacs including any release-candidate specifiers.")
       :desc "Hide top comment" "c" #'hs-hide-initial-comment-block)
 #+end_src
 
-** HL Line Mode
-While ~hl-line-mode~ is active, ~face-at-point~ always returns ~hl-line~.
-This advice unhighlights the current line before ~face-at-point~ is called.
-#+begin_src emacs-lisp
-(after! hl-line
-  (defadvice! *hl-line--fix-face-at-point-a (orig-fn &rest args)
-    :before '(describe-char face-at-point)
-    (when hl-line-mode
-      (hl-line-unhighlight))))
-#+end_src
-
-** Info
-Treat ~info~ buffers as real buffers.
-#+begin_src emacs-lisp
-(after! info (set-popup-rule! "^\\*info\\*$" :ignore t))
-#+end_src
-
-** Theme
-Set the color theme. On =Tesla= I currently use light themes.
-#+begin_src emacs-lisp
-(setq doom-theme
-      (cl-case SYSTEM
-        ('Phantom 'doom-one)
-        ('Tesla   'doom-one-light)
-        (t        'doom-one)))
-#+end_src
-
-** Visual Line Mode
-#+begin_src emacs-lisp
-(defun turn-off-visual-line-mode ()
-  (interactive)
-  (visual-line-mode -1))
-#+end_src
-
-** Whitespace Mode
-#+begin_src emacs-lisp
-(after! whitespace
-  (setq whitespace-style
-        '(face
-          indentation
-          lines-tail
-          empty
-          tabs
-          tab-mark
-          space-before-tab
-          space-after-tab)))
-#+end_src
-
-* Editor Features
 ** Electric Quotes
 I have implemented ~set-electric-quote-chars~ in [[file:autoload/electric-quote.el][=autoload/electric-quote.el=]].
 
@@ -365,29 +437,7 @@ This variable might be very useful in certain modes.
 #+begin_src emacs-lisp
 (when EMACS27+
   (add-hook! '(prog-mode-hook text-mode-hook conf-mode-hook)
-             #'display-fill-column-indicator-mode))
-#+end_src
-
-#+begin_src emacs-lisp
-(when EMACS27+
-  (defun display-fill-column-indicator--turn-off ()
-    (interactive)
-    (display-fill-column-indicator-mode -1)))
-#+end_src
-
-** Find Other File
-#+begin_src emacs-lisp
-(map! :leader :prefix "f"
-      :desc "Find other file" "o" #'ff-find-other-file)
-#+end_src
-
-** Formatting Engine
-I replace the default formatting function with my own.
-#+begin_src emacs-lisp
-(map! :when (featurep! :editor fmt)
-      :nv "g =" #'+fmt:region
-      :map doom-leader-code-map
-      :desc "Format buffer/region" "f" #'+fmt/dwim)
+             #'display-fill-column-indicator-mode--turn-on))
 #+end_src
 
 ** Form Feed
@@ -413,57 +463,7 @@ to be eight spaces wide.
   x-stretch-cursor nil)
 #+end_src
 
-** Indentation
-*** Indent Buffer Function
-#+begin_src emacs-lisp
-(defun *indent-buffer-or-region (&optional arg)
-  (interactive "P")
-  (if (doom-region-active-p)
-      (indent-region (doom-region-beginning) (doom-region-end) arg)
-    (indent-region (point-min) (point-max) arg)))
-#+end_src
-
-Bind ~indent-region~.
-#+begin_src emacs-lisp
-(map! :leader :prefix "c"
-      :desc "Indent buffer/region" "i" #'*indent-buffer-or-region
-      ;; We need to move this out of the way.
-      (:when (featurep! :tools lsp)
-       :desc "LSP Organize imports" "I" #'lsp-organize-imports))
-#+end_src
-
-*** Indent Guides
-The package [[https://github.com/DarthFennec/highlight-indent-guides][highlight-indent-guides]] draws a line for each indentation level.
-#+begin_src emacs-lisp :tangle yes
-(use-package! highlight-indent-guides
-  ;; Maybe change this to mode-by-mode basis.
-  :commands (highlight-indent-guides-mode)
-  :config
-  ;; Use bitmap images instead of characters.
-  (setq highlight-indent-guides-method 'bitmap)
-  ;; Use a bitmap of a solid line.
-  (setq highlight-indent-guides-bitmap-function
-        #'highlight-indent-guides--bitmap-line)
-  ;; Highlight the nearest indent guide.
-  (setq highlight-indent-guides-responsive 'top))
-#+end_src
-
-*** Tabs for Indentation
-Disable tab insertion by default. It will be enabled manually for each mode.
-#+begin_src emacs-lisp
-(setq-default tab-width 4)
-(setq-default indent-tabs-mode nil)
-#+end_src
-
-These functions have a tendency to insert tabs where they don’t belong.
-#+begin_src emacs-lisp
-(defadvice! *emacs--disable-indent-tabs-mode-a (orig-fn &rest args)
-  "Let `indent-tabs-mode' be bound to nil."
-  :around '(align-areas comment-indent indent-relative)
-  (let (indent-tabs-mode) (apply orig-fn args)))
-#+end_src
-
-** Language Server Protocol
+** LSP
 *** TODO Try semantic highlighting.
 #+begin_src emacs-lisp :tangle no
 (setq lsp-enable-semantic-highlighting t)
@@ -640,6 +640,29 @@ Bind keys for ~redo~.
 #+begin_src emacs-lisp
 (map! "<redo>" #'redo
       :n "U" #'redo)
+#+end_src
+
+** Whitespace
+Don’t turn on ~whitespace-mode~ automatically.
+#+begin_src emacs-lisp
+(defadvice! *doom--disable-automatic-whitespace-mode-a (&rest _)
+  "Don’t turn on `whitespace-mode' on startup."
+  :after #'doom-init-ui-h
+  (remove-hook 'after-change-major-mode-hook
+               #'doom-highlight-non-default-indentation-h))
+#+end_src
+
+#+begin_src emacs-lisp
+(after! whitespace
+  (setq whitespace-style
+        '(face
+          indentation
+          lines-tail
+          empty
+          tabs
+          tab-mark
+          space-before-tab
+          space-after-tab)))
 #+end_src
 
 ** Workspaces
@@ -927,6 +950,12 @@ These functions delete all whitespace up to the next non-whitespace character.
          ("M-<delete>" . hungry-delete-forward)))
 #+end_src
 
+** Info
+Treat ~info~ buffers as real buffers.
+#+begin_src emacs-lisp
+(after! info (set-popup-rule! "^\\*info\\*$" :ignore t))
+#+end_src
+
 ** Ivy
 Don’t show =../= in file completion buffer.
 #+begin_src emacs-lisp
@@ -968,7 +997,8 @@ experiment a bit with the current system.
 
 Use hard line wrapping to keep all columns shorter than ~fill-column~.
 #+begin_src emacs-lisp
-(add-hook! 'org-mode-hook #'turn-off-visual-line-mode #'auto-fill-mode)
+(add-hook! 'org-mode-hook (visual-line-mode -1))
+(add-hook! 'org-mode-hook #'auto-fill-mode)
 #+end_src
 
 Don’t start ~flyspell-mode~ automatically.
@@ -1151,7 +1181,7 @@ In ~snippet-mode~, whitespace has significant meaning.
 
 #+begin_src emacs-lisp
 (when EMACS27+
-  (add-hook 'snippet-mode-hook #'display-fill-column-indicator--turn-off))
+  (add-hook! 'snippet-mode-hook (display-fill-column-indicator-mode -1)))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1434,6 +1464,7 @@ able to work around this when I implement my own =fmt-mix= functions, using
   :size 0.3 :vslot 2 :ttl nil :quit 'current)
 #+end_src
 
+Why did I do this again?
 #+begin_src emacs-lisp
 (after! alchemist
   (setq +eval-repls (assq-delete-all 'alchemist-mode +eval-repls)))
@@ -1570,8 +1601,8 @@ For consistency, the ~tab-width~ in all Elisp modes is set to eight.
 #+end_src
 
 *** WAIT Fix Path in Elisp Module Header ([[doom-repo:pull/3684][#3684]])
-This fix can be removed if my PR is merged.
-#+begin_src emacs-lisp
+This fix has been removed because my PR has been merged.
+#+begin_src emacs-lisp :tangle no
 (defadvice! *file-templates-short-path-in-doomdir-a (path)
   :filter-return #'+file-templates-get-short-path
   (if (and (file-name-absolute-p path)
@@ -1661,11 +1692,12 @@ error code. Using =--no-exit-code= prevents this.
 
 ** HTML/CSS
 #+begin_src emacs-lisp
+(defvaralias 'sgml-basic-offset 'standard-indent)
 (defvaralias 'css-indent-offset 'standard-indent)
 #+end_src
 
 #+begin_src emacs-lisp
-(setq-hook! '(html-mode-hook mhtml-mode-hook css-mode-hook web-mode-hook)
+(setq-hook! '(sgml-mode-hook html-mode-hook mhtml-mode-hook css-mode-hook web-mode-hook)
   standard-indent 2)
 #+end_src
 
@@ -2169,55 +2201,21 @@ Translate the real minus into the ASCII minus character.
 (map! :map key-translation-map "−" "-")
 #+end_src
 
-** Ä/Ö/Ü
+Translate =C-ä= and =C-ö= for use with the Neo2 layout.
 #+begin_src emacs-lisp
-(map! "C-ü" #'execute-extended-command)
 (map! :map key-translation-map
       "C-ö" (kbd "C-x")
       "C-ä" (kbd "C-c"))
 #+end_src
 
-** Copy/Paste
-Use C-v to paste.
+** Well Known Bindings
+Use well known bindings such as =C-c=, =C-v= in =insert-state=.
 #+begin_src emacs-lisp
 (map! :i "C-S-c" #'kill-ring-save
       :i "C-S-x" #'kill-region
       :i "C-v"   #'yank
       :i "C-S-v" #'yank-pop
       :i "C-s"   #'save-buffer)
-#+end_src
-
-** Folding
-Completely remap the ~+fold~ commands, making use of =h= as a prefix.
-This frees up =z r= =z m=.
-#+begin_src emacs-lisp
-(map! :when (featurep! :editor fold)
-      :n "z O" #'+fold/open-all
-      :n "z C" #'+fold/close-all
-
-      :mn "h" nil
-      :n "h h" #'+fold/toggle
-      :n "h t" #'+fold/toggle
-      :n "h a" #'+fold/toggle
-      :n "h o" #'+fold/open
-      :n "h O" #'+fold/open-all
-      :n "h c" #'+fold/close
-      :n "h C" #'+fold/close-all
-      :m "h n" #'+fold/next
-      :m "h p" #'+fold/previous)
-
-(map! :after org
-      :map org-mode-map
-      :n "h h" #'+org/toggle-fold
-      :n "h t" #'+org/toggle-fold
-      :n "h a" #'+org/toggle-fold
-      :n "h o" #'+org/open-fold
-      :n "h O" #'+org/open-all-folds
-      :n "h c" #'+org/close-fold
-      :n "h C" #'+org/close-all-folds
-      :m "h n" #'+org/show-next-fold-level
-      :m "h p" #'+org/hide-next-fold-level
-      :m "h s" #'org-show-subtree)
 #+end_src
 
 ** Leader Extensions
