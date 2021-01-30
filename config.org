@@ -437,7 +437,7 @@ This variable might be very useful in certain modes.
 #+begin_src emacs-lisp
 (when EMACS27+
   (add-hook! '(prog-mode-hook text-mode-hook conf-mode-hook)
-             #'display-fill-column-indicator-mode--turn-on))
+             #'display-fill-column-indicator-mode))
 #+end_src
 
 ** Form Feed
