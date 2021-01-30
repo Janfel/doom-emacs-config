@@ -343,6 +343,12 @@ These functions have a tendency to insert tabs where they don’t belong.
 
 *** Indent Guides
 The package [[https://github.com/DarthFennec/highlight-indent-guides][highlight-indent-guides]] draws a line for each indentation level.
+This should however not be the default, as it is rather resource heavy.
+#+begin_src emacs-lisp
+(remove-hook! '(prog-mode-hook text-mode-hook conf-mode-hook)
+  #'highlight-indent-guides-mode)
+#+end_src
+
 #+begin_src emacs-lisp :tangle no
 (use-package! highlight-indent-guides
   ;; Maybe change this to mode-by-mode basis.
@@ -356,7 +362,6 @@ The package [[https://github.com/DarthFennec/highlight-indent-guides][highlight-
   ;; Highlight the nearest indent guide.
   (setq highlight-indent-guides-responsive 'top))
 #+end_src
-
 
 ** Code Folding
 *** Folding Module
