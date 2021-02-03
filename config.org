@@ -1238,6 +1238,25 @@ This only works with a *patched* Arduino runtime.
   (and (looking-at "section") 0))
 #+end_src
 
+*** x86 Lookup
+#+begin_src emacs-lisp :tangle no
+(use-package! x86-lookup
+  :defer t
+  :init (set-lookup-handlers! 'asm-mode :documentation #'x86-lookup)
+  :config
+  (setq x86-lookup-pdf "/usr/local/share/doc/intel-x86/325383-sdm-vol-2abcd.pdf")
+  (setq x86-lookup-cache-directory (expand-file-name "x86-lookup" doom-cache-dir)))
+#+end_src
+
+Checking code for =doom doctor=.
+#+begin_src emacs-lisp :tangle no
+(when (require 'x86-lookup nil t)
+  (cond ((null x86-lookup-pdf)
+         (warn! "`x86-lookup-pdf' is not set. Go-to-definition will not work."))
+        ((not (file-exists-p x86-lookup-pdf))
+         (warn! "Couldn't find Intel x86 documentation PDF. Check `x86-lookup-pdf'."))))
+#+end_src
+
 ** BASIC
 #+begin_src emacs-lisp
 (defvaralias 'basic-indent-offset 'standard-indent)
