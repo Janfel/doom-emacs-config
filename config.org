@@ -913,16 +913,24 @@ Doom Emacs changes ~org-cycle~ to skip the =subtree= stage by default when
 #+end_src
 
 Add block jumping to =[= and =]= and remap =z r= and =z m= to =z O= and =z C=.
+Furthermore, =evil-org= rebinds =C-h= in =insert-state=, which is not very
+discoverable. See [[doom-modules:lang/org/config.el][=lang/org/config.el=]] for the concrete bindings; particularly
+the lines 973 to 1026.
 #+begin_src emacs-lisp
 (map! :when (featurep! :editor evil)
       :after evil-org
-      :map evil-org-mode-map
-      :m "[ _" #'org-previous-block
-      :m "] _" #'org-next-block
-      :n "z r" nil
-      :n "z m" nil
-      :n "z O" #'+org/show-next-fold-level
-      :n "z C" #'+org/hide-next-fold-level)
+      (:map evil-org-mode-map
+       :m "[ _" #'org-previous-block
+       :m "] _" #'org-next-block
+       :n "z r" nil
+       :n "z m" nil
+       :n "z O" #'+org/show-next-fold-level
+       :n "z C" #'+org/hide-next-fold-level
+       :i "C-h"   nil :i "C-j"   nil :i "C-k"   nil :i "C-l"   nil
+       :i "C-S-h" nil :i "C-S-j" nil :i "C-S-k" nil :i "C-S-l" nil)
+      (:after org-keys :map org-read-date-minibuffer-local-map
+       :i "C-h"   nil :i "C-j"   nil :i "C-k"   nil :i "C-l"   nil
+       :i "C-S-h" nil :i "C-S-j" nil :i "C-S-k" nil :i "C-S-l" nil))
 #+end_src
 
 *** Operators
@@ -1074,6 +1082,14 @@ Add ~org-babel-map~ to ~:localleader~.
 #+begin_src emacs-lisp
 (map! :after org-keys
       :map org-mode-map
+      "C-<left>"  (cmds! (org-at-table-p) #'org-table-previous-field
+                         #'org-beginning-of-line)
+      "C-<right>" (cmds! (org-at-table-p) #'org-table-next-field
+                         #'org-end-of-line)
+      "C-<up>"    (cmds! (org-at-table-p) #'org-table-previous-field
+                         #'org-beginning-of-line)
+      "C-<down>"  (cmds! (org-at-table-p) #'org-table-next-row
+                         #'org-down-element)
       "C-M-<left>"  #'org-up-element
       "C-M-<right>" #'org-down-element
       "C-M-<up>"    #'org-previous-visible-heading
