@@ -315,6 +315,14 @@ This advice unhighlights the current line before ~face-at-point~ is called.
       (hl-line-unhighlight))))
 #+end_src
 
+** Mouse Behavior
+Doom changes these in a way I don’t like. Set them back to the default values.
+#+begin_src emacs-lisp
+(setq mouse-wheel-scroll-amount
+      '(5 ((shift) . 1) ((control) . text-scale) ((meta) . nil)))
+(setq mouse-wheel-progressive-speed nil)
+#+end_src
+
 * Editor Features
 ** Automatic Formatting and Indentation
 *** Custom Formatting Engine
