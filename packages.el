@@ -26,6 +26,8 @@
 ;;(package! highlight-indent-guides)
 ;; Delete all whitespace in front of point.
 (package! hungry-delete)
+;; Open Intel x86 Developer Manual on x86 commands.
+;;(package! x86-lookup)
 
 (when (featurep! :completion company)
   ;; Display function definitions in popup window.
