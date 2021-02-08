@@ -10,6 +10,7 @@
 These are some useful links to manuals and other peoples configs.
 
 + [[https://www.gnu.org/software/emacs/manual][Emacs Manual]]
++ [[https://www.gnu.org/software/emacs/manual/html_node/elisp/][Emacs Lisp Manual]]
 + [[https://github.com/seagle0128/.emacs.d][Centaur Emacs]]
 + [[https://github.com/hlissner/doom-emacs][Doom Emacs]]
 + [[https://github.com/MatthewZMD/.emacs.d][M-Emacs]]
