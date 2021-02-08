@@ -228,6 +228,12 @@ Move the ~customize~ blocks into =custom.el=.
 (setq custom-file (expand-file-name "custom.el" doom-private-dir))
 #+end_src
 
+** Dashboard
+Enable Henrik Lissners =doom-dashboard= splash image.
+#+begin_src emacs-lisp
+(setq fancy-splash-image (concat doom-private-dir "splash.png"))
+#+end_src
+
 ** Dead Keys
 :PROPERTIES:
 :header-args+: :tangle no
