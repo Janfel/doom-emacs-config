@@ -4,7 +4,8 @@
 #+DESCRIPTION: Doom Emacs configuration of Jan Felix Langenbach
 #+LANGUAGE: en
 #+STARTUP: fold
-#+PROPERTY: header-args :lexical yes :results silent :tangle yes
+#+PROPERTY: header-args            :results silent
+#+PROPERTY: header-args:emacs-lisp :tangle yes :lexical yes
 
 * Introduction
 These are some useful links to manuals and other peoples configs.
@@ -238,7 +239,7 @@ Enable Henrik Lissners =doom-dashboard= splash image.
 
 ** Dead Keys
 :PROPERTIES:
-:header-args+: :tangle no
+:header-args:emacs-lisp+: :tangle no
 :END:
 This is a workaround for when composing using IBus doesn’t work.
 This bug is triggered by not having =ttf-bitstream-vera= installed.
@@ -738,7 +739,7 @@ Don’t turn on ~whitespace-mode~ automatically.
 ** Company
 *** Box
 :PROPERTIES:
-:header-args+: :tangle no
+:header-args:emacs-lisp+: :tangle no
 :END:
 #+begin_src emacs-lisp
 (when (featurep! :completion company +childframe)
@@ -1685,7 +1686,7 @@ This fix has been removed because my PR has been merged.
 
 ** Emacs Lisp Data :Lisp:Data:
 :PROPERTIES:
-:header-args+: :tangle no
+:header-args:emacs-lisp+: :tangle no
 :END:
 This is an idea from the [[https://lists.gnu.org/archive/html/emacs-devel/2019-10/msg00736.html][emacs-devel]] mailing list.
 
@@ -2076,7 +2077,7 @@ It seems that =anaconda-mode= is no longer actively supported.
 
 *** _Backup
 :PROPERTIES:
-:header-args+: :tangle no
+:header-args:emacs-lisp+: :tangle no
 :END:
 Use system =mspyls= for =lsp-python-ms=.
 #+begin_src emacs-lisp :tangle no
@@ -2371,7 +2372,7 @@ Bind ~auto-fill-mode~.
 
 ** _Backup
 :PROPERTIES:
-:header-args+: :tangle no
+:header-args:emacs-lisp+: :tangle no
 :END:
 Some stuff I don't use anymore.
 #+begin_src emacs-lisp
