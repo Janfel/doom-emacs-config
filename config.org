@@ -836,9 +836,8 @@ character too far."
       :m "z S-<right>" #'evil-scroll-right
       :m "z S-<left>" #'evil-scroll-left
 
-      ;; Make DEL remove selected text in evil-visual-state.
-      :v "DEL" #'evil-delete-char
-      :v "<delete>" #'evil-delete-char
+      ;; Make DEL/<backspace> remove text.
+      :n "DEL" #'evil-delete-backward-char
 
       ;; Map the arrow keys in Evils window map.
       (:map evil-window-map
