@@ -13,6 +13,7 @@ These are some useful links to manuals and other peoples configs.
 + [[https://github.com/seagle0128/.emacs.d][Centaur Emacs]]
 + [[https://github.com/hlissner/doom-emacs][Doom Emacs]]
 + [[https://github.com/MatthewZMD/.emacs.d][M-Emacs]]
++ [[github:Townk/doom-emacs-private][Townk’s Config]]
 + [[https://github.com/poncie/.emacs.d][Poncie’s Config]]
 + [[http://pages.sachachua.com/.emacs.d/Sacha.html][Sacha Chua’s Config]]
 + [[http://aaronbedra.com/emacs.d][Aaron Bedra’s Config]]
