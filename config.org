@@ -1784,12 +1784,6 @@ error code. Using =--no-exit-code= prevents this.
 (setq web-mode-markup-indent-offset 2)
 #+end_src
 
-#+begin_src emacs-lisp
-(when (featurep! :editor fmt)
-  (setq-hook! '(web-mode-hook html-mode-hook mhtml-mode-hook css-mode-hook)
-    +fmt-formatter #'prettier-format-region))
-#+end_src
-
 Add HTML folding rules to ~web-mode~.
 #+begin_src emacs-lisp
 (after! hideshow
@@ -1818,12 +1812,6 @@ Add HTML folding rules to ~web-mode~.
   standard-indent 2
   tab-width 2
   indent-tabs-mode t)
-#+end_src
-
-#+begin_src emacs-lisp
-(when (featurep! :editor fmt)
-  (setq-hook! 'js-mode-hook
-    +fmt-formatter #'prettier-format-region))
 #+end_src
 
 ** LaTeX
@@ -2025,7 +2013,7 @@ This allows me to not load the entire =:lang/php= module.
 #+end_src
 
 #+begin_src emacs-lisp
-(when (featurep! :editor fmt)
+(when (and (featurep! :editor fmt) (not (featurep! :lang php)))
   (setq-hook! 'php-mode-hook
     +fmt-formatter #'prettier-format-region))
 #+end_src
