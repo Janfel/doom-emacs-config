@@ -1,6 +1,9 @@
 ;;; autoload/fmt-luaformatter.el -*- lexical-binding: t; -*-
 ;;;###if (featurep! :editor fmt)
 
+;;; LuaFormatter - Code formatter for Lua
+;;; https://github.com/Koihik/LuaFormatter
+
 (defvar luaformatter-config-file nil
   "The configuration file for `luaformatter-format-region'.")
 
