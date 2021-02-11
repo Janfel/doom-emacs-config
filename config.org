@@ -1063,11 +1063,6 @@ Don’t start ~flyspell-mode~ automatically.
 (remove-hook 'org-mode-hook #'flyspell-mode)
 #+end_src
 
-Enable formatting inside of SRC blocks.
-#+begin_src emacs-lisp :tangle no
-(setq-hook! 'org-mode-hook +fmt-formatter #'org-mode-format-dwim)
-#+end_src
-
 Add ~company-capf~ as a Company backend.
 #+begin_src emacs-lisp
 (set-company-backend! 'org-mode 'company-capf)
