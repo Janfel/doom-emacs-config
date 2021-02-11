@@ -4,6 +4,9 @@
 ;;; LuaFormatter - Code formatter for Lua
 ;;; https://github.com/Koihik/LuaFormatter
 
+(defvar luaformatter-program "lua-format"
+  "The executable for `luaformatter-format-region'.")
+
 (defvar luaformatter-config-file nil
   "The configuration file for `luaformatter-format-region'.")
 
@@ -23,5 +26,5 @@
 ;;;###autoload (autoload 'luaformatter-format-buffer "autoload/fmt-luaformatter" nil t)
 ;;;###autoload (autoload 'luaformatter-format-region "autoload/fmt-luaformatter" nil t)
 (+fmt-define luaformatter
-  :program "lua-format"
+  :program luaformatter-program
   :args (luaformatter-compute-args))
