@@ -5,6 +5,7 @@
   (expand-file-name "pascal/ptop.cfg" XDG-CONFIG-HOME)
   "The configuration file for `ptop-format-buffer'.")
 
+;; TODO: Use :stdin/:stdout instead of /dev/ on Windows.
 (defun ptop-compute-args ()
   "Compute arguments for `ptop-format-region'."
   (when IS-WINDOWS (error "PTOP can't be used on Windows"))
