@@ -1977,9 +1977,7 @@ This should not be used with =Janfel/moonscript-mode=.
 #+end_src
 
 #+begin_src emacs-lisp
-(when (featurep! :editor fmt)
-  (setq-hook! '(pascal-mode-hook opascal-mode-hook)
-    +fmt-formatter #'ptop-format-region))
+(setq +fmt-ptop-config-file (expand-file-name "pascal/ptop.cfg" XDG-CONFIG-HOME))
 #+end_src
 
 We have to remove ~company-capf~ from ~company-backends~, because completion
