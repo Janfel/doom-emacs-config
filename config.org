@@ -869,6 +869,17 @@ character too far."
        "C-l"       nil))
 #+end_src
 
+#+begin_src emacs-lisp
+(map! :when (featurep! :editor evil)
+      :after evil
+      :map evil-motion-state-map
+      "<home>" #'move-beginning-of-line
+      "<end>"  #'move-end-of-line
+      "gh"     #'beginning-of-defun
+      "g["     #'backward-page
+      "g]"     #'forward-page)
+#+end_src
+
 Workaround for ~evil-buffer-new~ calling ~set-window-buffer~ instead of
 ~switch-to-buffer~. See issue [[doom-repo:issues/4514][#4514]].
 #+begin_src emacs-lisp
