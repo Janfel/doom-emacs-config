@@ -2198,12 +2198,6 @@ Fix indentation of =case= statements.
 #+end_src
 
 #+begin_src emacs-lisp
-(when (featurep! :editor fmt)
-  (setq-hook! 'nxml-mode-hook
-    +fmt-formatter #'tidy-format-region))
-#+end_src
-
-#+begin_src emacs-lisp
 (defadvice! *nxml--parameter-soft-not-being-optional-a (&optional soft)
   "Make the parameter SOFT optional to follow the spec of `comment-line-break-function'."
   :filter-args #'nxml-newline-and-indent
