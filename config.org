@@ -1898,12 +1898,6 @@ Doom has already set a value for ~lua-indent-level~, so we have to unset it.
 #+end_src
 
 #+begin_src emacs-lisp
-(when (featurep! :editor fmt)
-  (setq-hook! 'lua-mode-hook
-    +fmt-formatter #'+fmt-luaformatter-format-region))
-#+end_src
-
-#+begin_src emacs-lisp
 (setq company-lua-interpreter 'lua53)
 #+end_src
 
