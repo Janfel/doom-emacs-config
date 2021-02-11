@@ -780,6 +780,15 @@ Switch to the new window after splitting.
       evil-vsplit-window-right t)
 #+end_src
 
+Some variables to try out. I’m tempted to enable ~evil-visual-region-expanded~,
+but I fear that might break some things.
+#+begin_src emacs-lisp
+(setq evil-move-beyond-eol        nil
+      evil-move-cursor-back       nil
+      evil-kill-on-visual-paste   nil
+      evil-visual-region-expanded nil)
+#+end_src
+
 The =smart= option sometimes upcases the entire replacement string.
 #+begin_src emacs-lisp
 (setq evil-ex-substitute-case 'sensitive)
