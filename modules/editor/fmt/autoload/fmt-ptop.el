@@ -1,5 +1,4 @@
 ;;; autoload/fmt-ptop.el -*- lexical-binding: t; -*-
-;;;###if (featurep! :editor fmt)
 
 (defvar ptop-config-file
   (expand-file-name "pascal/ptop.cfg" XDG-CONFIG-HOME)
