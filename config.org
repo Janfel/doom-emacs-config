@@ -2190,12 +2190,6 @@ Fix indentation of =case= statements.
 #+end_src
 
 #+begin_src emacs-lisp
-(when (featurep! :editor fmt)
-  (setq-hook! 'sh-mode-hook
-    +fmt-formatter #'shfmt-format-region))
-#+end_src
-
-#+begin_src emacs-lisp
 (set-file-template! "\\.sh\\'"
   :trigger "__sh"
   :mode 'sh-mode)
