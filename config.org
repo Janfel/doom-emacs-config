@@ -2018,12 +2018,6 @@ would be unusable otherwise.
   indent-tabs-mode t)
 #+end_src
 
-#+begin_src emacs-lisp
-(when (featurep! :editor fmt)
-  (setq-hook! '(perl-mode-hook cperl-mode-hook)
-    +fmt-formatter #'perltidy-format-region))
-#+end_src
-
 ** PHP
 This allows me to not load the entire =:lang/php= module.
 #+begin_src emacs-lisp
