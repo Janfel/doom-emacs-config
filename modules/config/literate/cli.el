@@ -2,5 +2,5 @@
 
 (load! "autoload")
 
-;; Tangle the user's config.org before 'doom sync' runs
-(add-hook 'doom-sync-pre-hook #'+literate-tangle-sync-h)
+;; Tangle the user's config.org before 'doom sync' runs.
+(add-hook 'doom-sync-pre-hook #'+literate-tangle-config-sync-h)

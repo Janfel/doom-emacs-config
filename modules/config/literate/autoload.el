@@ -1,7 +1,7 @@
 ;;; config/literate/autoload.el -*- lexical-binding: t; -*-
 
 (defvar +literate-config-files
-  (list (expand-file-name "config.org" doom-private-dir))
+  (list (concat doom-private-dir "config.org"))
   "A list of `org-mode' files to be tangled automatically.")
 
 (defvar +literate-config-cache-file
@@ -10,118 +10,105 @@
 
 (defvar org-mode-hook)
 (defvar org-inhibit-startup)
+(defvar org-babel-pre-tangle-hook)
+(defvar org-babel-tangle-body-hook)
+(defvar org-babel-post-tangle-hook)
 
 
-;;;###autoload
-(defun +literate-tangle-sync-h ()
-  "Tangles `+literate-config-file' if it has changed."
-  (unless (getenv "__NOTANGLE")
-    (print! (start "Compiling your literate config..."))
-    (let* ((start (current-time))
-           (targets
-            (seq-filter
-             (lambda (f) (file-newer-than-file-p f +literate-config-cache-file))
-             +literate-config-files)))
-      (if (zerop (length targets))
-          (print! (success "No files to tangle"))
-        (require 'ob-tangle)
-        (require 'ox)
-        (print-group!
-         (let ((cache +literate-config-cache-file)
-               ;; Prevent unwanted entries in recentf, or formatters, or
-               ;; anything that could be on these hooks, really. Nothing
-               ;; else should be touching these files (particularly in
-               ;; interactive sessions).
-               (write-file-functions nil)
-               (before-save-hook nil)
-               (after-save-hook nil)
-               ;; Prevent infinite recursion due to recompile-on-save
-               ;; hooks later, and speed up `org-mode' init.
-               (org-mode-hook nil)
-               (org-inhibit-startup t))
-           ;; Ensure output conforms to the formatting of all doom CLIs
-           (letf! ((defun message (msg &rest args)
-                     (when msg (print! (info "%s") (apply #'format msg args)))))
-             (cl-dolist (target targets)
-               (set-buffer (find-file-noselect target))
-               ;; Tangling won't ordinarily expand #+INCLUDE directives,
-               ;; so I do it myself.
-               (org-export-expand-include-keyword)
-               (org-babel-tangle)))
-           (with-temp-file cache)
-           (if (zerop (length targets))
-               (print! (success "No files to tangle"))
-             (print! (success "Tangled %s file(s) in %.02f seconds"
-                              (length targets)
-                              (float-time (time-since start)))))))
-        (unless doom-interactive-p
-          (print! (start "Restarting..."))
-          (throw 'exit "__NOTANGLE=1 $@"))))))
-
-(defun +literate-tangle-file-async (file &optional callback)
-  "Tangle FILE asynchronously, then invoke CALLBACK with the result."
-  (require 'async)
-  (async-start
-   (lambda ()
-     (require 'ob-tangle)
-     (require 'ox)
-     (let ((org-mode-hook nil)
-           (org-inhibit-startup t)
-           (org-babel-pre-tangle-hook nil))
-       (set-buffer (find-file-noselect file))
-       (org-export-expand-include-keyword)
-       (org-babel-tangle nil file)))
-   (or callback #'ignore)))
-
-(defun +literate-tangle-file-h ()
-  "Tangle `buffer-file-name' asynchronously."
-  (interactive)
-  (let ((start (current-time))
-        (file (or (buffer-file-name) (user-error "Not visiting a file"))))
-    (+literate-tangle-file-async
-     file (lambda (_) (message "Tangling %s finished in %.02f seconds"
-                               file (float-time (time-since start)))))))
+(defun +literate--tangle-lambda (file)
+  (lambda ()
+    (let ((write-file-functions nil)
+          (before-save-hook nil)
+          (after-save-hook nil)
+          ;; Speed up org-mode startup.
+          (org-mode-hook nil)
+          (org-inhibit-startup t)
+          ;; Do not overwrite the original file with `save-buffer'.
+          (org-babel-pre-tangle-hook  nil)
+          (org-babel-tangle-body-hook nil)
+          (org-babel-post-tangle-hook nil))
+      (require 'org)
+      (require 'ob-tangle)
+      ;; (require 'ox)
+      ;; (org-export-expand-include-keyword)
+      (with-temp-buffer
+        (insert-file-contents file 'visit)
+        (org-mode)
+        (cons file (org-babel-tangle))))))
 
 ;;;###autoload
-(defun +literate-tangle-config-files-h ()
+(defun +literate-tangle-file (file &optional callback sync)
+  (interactive
+   (list (or buffer-file-name (user-error "Not visiting a file"))
+         (let ((start (current-time)))
+           (lambda (x) (message "Tangling %s finished in %.02f seconds"
+                                (file-relative-name (car x))
+                                (float-time (time-since start)))))))
+  (unless (file-readable-p file) (user-error "File not accessible"))
+  (let ((func (+literate--tangle-lambda file))
+        (callback (or callback #'ignore)))
+    (if (and (not sync) (require 'async))
+        (async-start func callback)
+      (when doom-interactive-p
+        (error "It is currently not safe to tangle synchronously"))
+      (funcall callback (funcall func)))))
+
+;;;###autoload
+(defun +literate-tangle-file-h () (call-interactively #'+literate-tangle-file))
+
+;;;###autoload
+(defun +literate-tangle-config ()
   "Tangle `+literate-config-files' asynchronously.
 Use this function when in interactive mode."
   (interactive)
   (let* ((start (current-time))
-         (files
-          (seq-filter
-           (lambda (f) (file-newer-than-file-p f +literate-config-cache-file))
-           +literate-config-files))
-         (counter (length files)))
-    (cl-dolist (file files)
-      (+literate-tangle-file-async
-       file
-       (lambda (_)
-         (when (zerop (cl-decf counter))
-           (with-temp-file +literate-config-cache-file)
-           (message "Tangling %s finished in %.02f seconds"
-                    (mapcar #'file-name-nondirectory files)
-                    (float-time (time-since start)))))))))
+         (cache-file +literate-config-cache-file)
+         (files (cl-loop for file in +literate-config-files
+                         if (file-newer-than-file-p file cache-file)
+                         collect file))
+         (counter (length files))
+         (callback (lambda (_)
+                     (when (zerop (cl-decf counter))
+                       (with-temp-file cache-file)
+                       (message "Tangling %s finished in %.02f seconds"
+                                (cl-loop for f in files collect
+                                         (file-relative-name f doom-private-dir))
+                                (float-time (time-since start)))))))
+    (cl-dolist (file files) (+literate-tangle-file file callback))))
+
+(defun +literate-tangle-config-sync-h ()
+  (unless (getenv "__NOTANGLE")
+    (print! (start "Compiling your literate config..."))
+    (let* ((start (current-time))
+           (cache-file +literate-config-cache-file)
+           (files (cl-loop for file in +literate-config-files
+                           if (file-newer-than-file-p file cache-file)
+                           collect file))
+           (count (length files)))
+      (print-group!
+       (if (null files)
+           (print! (success "All files are up-to-date"))
+         (letf! ((defun message (msg &rest args)
+                   (when msg (print! (info "%s") (apply #'format msg args)))))
+           (cl-dolist (file files)
+             (print! (info "Tangling %s...") (file-relative-name file doom-private-dir))
+             (+literate-tangle-file file nil 'sync)))
+         (with-temp-file cache-file)
+         (print! (success "Tangled %s file%s in %.02f seconds")
+                 count
+                 (if (= count 1) "" "s")
+                 (float-time (time-since start)))))
+      (unless (or doom-interactive-p (null files))
+        (print! (start "Restarting..."))
+        (throw 'exit "__NOTANGLE=1 $@")))))
 
 ;;;###autoload
-(defun +literate-tangle-on-save-h ()
-  "Add local hook to tangle `buffer-file-name' asynchronously on save."
-  (when (and buffer-file-name
-             (not (memq #'+literate-tangle-config-files-h after-save-hook)))
+(defun +literate-tangle-config-on-save-h ()
+  (when (and buffer-file-name (member buffer-file-name +literate-config-files))
     (add-hook 'after-save-hook #'+literate-tangle-file-h nil 'local)))
-
-;;;###autoload
-(defun +literate-maybe-tangle-config-files-on-save-h ()
-  "Add local hook to tangle `+literate-config-files'.
-This is only done when `buffer-file-name' is a `member' of this list."
-  (when (and buffer-file-name
-             (member buffer-file-name +literate-config-files))
-    (when (memq #'literate-tangle-file-h after-save-hook)
-      (remove-hook 'after-save-hook #'literate-tangle-file-h 'local))
-    (add-hook 'after-save-hook #'+literate-tangle-config-files-h nil 'local)))
 
 ;;;###autoload
 (defalias '+literate/reload #'doom/reload)
 
 ;;;###autoload
-(add-hook 'org-mode-hook #'+literate-maybe-tangle-config-files-on-save-h)
+(add-hook 'org-mode-hook #'+literate-tangle-config-on-save-h)
