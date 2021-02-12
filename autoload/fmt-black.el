@@ -6,7 +6,7 @@
   (nconc
    (when (and (sys-feature-p 'black/tabs) indent-tabs-mode) '("--use-tabs"))
    (when (string-suffix-p ".pyi" (or buffer-file-name "") t) '("--pyi"))
-   '("--quiet" "-")))
+   (list "--line-length" (number-to-string fill-column) "--quiet" "-")))
 
 ;;;###autoload (autoload 'black-format-buffer "autoload/fmt-black" nil t)
 ;;;###autoload (autoload 'black-format-region "autoload/fmt-black" nil t)
