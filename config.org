@@ -2036,12 +2036,6 @@ This allows me to not load the entire =:lang/php= module.
 #+end_src
 
 #+begin_src emacs-lisp
-(when (featurep! :editor fmt)
-  (setq-hook! 'python-mode-hook
-    +fmt-formatter #'black-format-buffer))
-#+end_src
-
-#+begin_src emacs-lisp
 (after! which-key
   (which-key-add-major-mode-key-based-replacements 'python-mode
     "C-c C-p" "pipenv"
