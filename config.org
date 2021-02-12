@@ -2036,6 +2036,13 @@ This allows me to not load the entire =:lang/php= module.
 #+end_src
 
 #+begin_src emacs-lisp
+(when (sys-feature-p 'black/tabs)
+  (defadvice! *fmt-black-use-tabs-a (args)
+    :filter-return #'+fmt-black-compute-args
+    (if indent-tabs-mode (cons "--use-tabs" args) args)))
+#+end_src
+
+#+begin_src emacs-lisp
 (after! which-key
   (which-key-add-major-mode-key-based-replacements 'python-mode
     "C-c C-p" "pipenv"
