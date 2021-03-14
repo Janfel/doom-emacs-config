@@ -32,8 +32,8 @@ Acquire focus when creating a new frame.
 (add-hook! 'window-setup-hook (x-focus-frame nil))
 #+end_src
 
-Require [[https://github.com/magnars/dash.el][dash.el]], a modern list library inspired by Clojure.
-#+begin_src emacs-lisp
+Require [[https://github.com/magnars/dash.el][dash.el]], a modern list library inspired by Clojure. Not currently used.
+#+begin_src emacs-lisp :tangle no
 (require 'dash)
 #+end_src
 
@@ -179,24 +179,24 @@ These constants allow me to use the correct directories everywhere,
 without lengthy invocation of =getenv=.
 #+begin_src emacs-lisp
 (defconst XDG-DATA-HOME
-  (-> (getenv "XDG_DATA_HOME")
-      (string-or "~/.local/share/")
-      (file-name-as-directory)
-      (expand-file-name))
+  (thread-first (getenv "XDG_DATA_HOME")
+    (string-or "~/.local/share/")
+    (file-name-as-directory)
+    (expand-file-name))
   "The value of $XDG_DATA_HOME where programs store data.")
 
 (defconst XDG-CONFIG-HOME
-  (-> (getenv "XDG_CONFIG_HOME")
-      (string-or "~/.config/")
-      (file-name-as-directory)
-      (expand-file-name))
+  (thread-first (getenv "XDG_CONFIG_HOME")
+    (string-or "~/.config/")
+    (file-name-as-directory)
+    (expand-file-name))
   "The value of $XDG_CONFIG_HOME where programs place configuration files.")
 
 (defconst XDG-CACHE-HOME
-  (-> (getenv "XDG_CACHE_HOME")
-      (string-or "~/.cache/")
-      (file-name-as-directory)
-      (expand-file-name))
+  (thread-first (getenv "XDG_CACHE_HOME")
+    (string-or "~/.cache/")
+    (file-name-as-directory)
+    (expand-file-name))
   "The value of $XDG_CACHE_HOME where programs place cache files.")
 
 (defconst SYS-FEATURES
@@ -449,9 +449,9 @@ This variable might be very useful in certain modes.
     (setq yas-snippet-dirs
           (nconc (when (featurep! :editor snippets) '(+snippets-dir))
                  '(+file-templates-dir)
-                 (->> yas-snippet-dirs
-                      (delq '+snippets-dir)
-                      (delq '+file-templates-dir))
+                 (thread-last yas-snippet-dirs
+                   (delq '+snippets-dir)
+                   (delq '+file-templates-dir))
                  '(+file-templates-fallback-dir)))))
 #+end_src
 
@@ -2121,16 +2121,16 @@ Make ~lsp-rust~ respect the =CARGO_HOME= and =RUSTUP_HOME= environment
 variables.
 #+begin_src emacs-lisp
 (defconst CARGO-HOME
-  (-> (getenv "CARGO_HOME")
-      (string-or "~/.cargo/")
-      (file-name-as-directory)
-      (expand-file-name)))
+  (thread-first (getenv "CARGO_HOME")
+    (string-or "~/.cargo/")
+    (file-name-as-directory)
+    (expand-file-name)))
 
 (defconst RUSTUP-HOME
-  (-> (getenv "RUSTUP_HOME")
-      (string-or "~/.rustup/")
-      (file-name-as-directory)
-      (expand-file-name)))
+  (thread-first (getenv "RUSTUP_HOME")
+    (string-or "~/.rustup/")
+    (file-name-as-directory)
+    (expand-file-name)))
 
 (setq lsp-rust-library-directories
       (list (expand-file-name "registry/src/" CARGO-HOME)
