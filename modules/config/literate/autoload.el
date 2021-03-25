@@ -26,7 +26,11 @@
           ;; Do not overwrite the original file with `save-buffer'.
           (org-babel-pre-tangle-hook  nil)
           (org-babel-tangle-body-hook nil)
-          (org-babel-post-tangle-hook nil))
+          (org-babel-post-tangle-hook nil)
+          ;; Allow evaluation of src blocks at tangle-time (would
+          ;; abort them otherwise). This is a security hazard, but
+          ;; Doom will trust that you know what you're doing!
+          (org-confirm-babel-evaluate nil))
       (require 'org)
       (require 'ob-tangle)
       ;; (require 'ox)
