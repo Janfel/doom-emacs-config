@@ -1089,8 +1089,10 @@ experiment a bit with the current system.
 
 Use hard line wrapping to keep all columns shorter than ~fill-column~.
 #+begin_src emacs-lisp
-(add-hook! 'org-mode-hook (visual-line-mode -1))
-(add-hook! 'org-mode-hook #'auto-fill-mode)
+(add-hook! 'org-mode-hook
+  (defun *org--enable-hard-line-wrapping-h ()
+    (visual-line-mode -1)
+    (auto-fill-mode +1)))
 #+end_src
 
 Don’t start ~flyspell-mode~ automatically.
