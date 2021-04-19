@@ -128,7 +128,8 @@
        ;;agda                           ; types of types of types of types...
        (:if IS-PHANTOM arduino)         ; JFL Arduino Mode
        (:if IS-PHANTOM basic)           ; JFL Basic Mode
-       (:if (or IS-PHANTOM IS-TESLA) (cc +lsp)) ; C/C++/Obj-C madness
+       ;;beancount                      ; mind the GAAP
+       (:if (or IS-PHANTOM IS-TESLA) (cc +lsp)) ; C > C++ == 1
        (:if IS-PHANTOM clojure)         ; java with a lisp
        (:if IS-PHANTOM common-lisp)     ; if you've seen one lisp, you've seen them all
        ;;coq                            ; proofs-as-programs
@@ -141,6 +142,7 @@
        emacs-lisp                       ; drown in parentheses
        ;;erlang                         ; an elegant language for a more civilized age
        ;;ess                            ; emacs speaks statistics
+       ;;factor                         ;
        ;;faust                          ; dsp, but you get to keep your soul
        (:if IS-PHANTOM fennel)          ; JFL Fennel Mode
        ;;fsharp                         ; ML stands for Microsoft's Language
@@ -156,9 +158,8 @@
        ;;julia                          ; a better, faster MATLAB
        ;;kotlin                         ; a better, slicker Java(Script)
        (:if IS-PHANTOM latex)           ; writing papers in Emacs has never been so fun
-       ;;lean                           ;
-       ;;factor                         ;
-       ;;ledger                         ; an accounting system in Emacs
+       ;;lean                           ; for folks with too much to prove
+       ;;ledger                         ; be audit you can be
        (:if IS-PHANTOM (lua +moonscript)) ; one-based indices? one-based indices
        markdown                         ; writing docs for people to ignore
        ;;nim                            ; python + lisp at the speed of c
@@ -192,6 +193,7 @@
        ;;terra                          ; Earth and Moon in alignment for performance.
        (:if IS-PHANTOM web)             ; the tubes
        yaml                             ; JSON, but readable
+       ;;zig                            ; C, but simpler
 
        :email
        ;;(mu4e +gmail)                  ;
