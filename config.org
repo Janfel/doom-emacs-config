@@ -1078,6 +1078,15 @@ experiment a bit with the current system.
 (setq-hook! 'git-commit-setup-hook fill-column 50)
 #+end_src
 
+This fixes an issue where Magit doesn’t unfold the headings in ~org-mode~.
+Reported to Doom as [[doom-repo:issues/4895][#4895]].
+#+begin_src emacs-lisp
+(add-hook! 'org-mode-hook
+  (defun *magit--call-org-reveal-h ()
+    "Add `org-reveal' to `magit-diff-visit-file-hook' to reveal point."
+    (add-hook 'magit-diff-visit-file-hook #'org-reveal nil 'local)))
+#+end_src
+
 ** Org
 *** Org Mode
 #+begin_src emacs-lisp
