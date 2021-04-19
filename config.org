@@ -1816,6 +1816,7 @@ error code. Using =--no-exit-code= prevents this.
 #+end_src
 
 #+begin_src emacs-lisp
+(setq web-mode-attr-indent-offset   2)
 (setq web-mode-markup-indent-offset 2)
 #+end_src
 
