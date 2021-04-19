@@ -53,6 +53,13 @@ Require [[https://github.com/magnars/dash.el][dash.el]], a modern list library i
   (file-name-as-directory (file-name-nondirectory (directory-file-name dirname))))
 #+end_src
 
+#+begin_src emacs-lisp
+(defun flatten-one (list)
+  "Flatten one level of LIST."
+  (declare (pure t) (side-effect-free t))
+  (apply #'append (mapcar #'doom-enlist list)))
+#+end_src
+
 This macro returns the status of ~lexical-binding~ at the callsite.
 #+begin_src emacs-lisp
 (defmacro lexical-binding-enabled-p ()
