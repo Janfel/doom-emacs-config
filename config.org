@@ -605,7 +605,7 @@ This removes the problematic default popup rule for =vterm= buffers and replaces
 it with a sane alternative.
 #+begin_src emacs-lisp
 (after! vterm
-  (setq display-buffer-alist (assoc-delete-all "^vterm" display-buffer-alist))
+  (setq display-buffer-alist (assoc-delete-all "^\\*vterm" display-buffer-alist))
   (set-popup-rule! "^\\*doom:vterm-popup:" :size 0.25 :vslot -4 :select t :quit 'current :ttl nil))
 #+end_src
 
