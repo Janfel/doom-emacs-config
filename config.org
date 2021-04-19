@@ -552,7 +552,7 @@ Add more online search providers.
 #+begin_src emacs-lisp
 (unless (featurep! :checkers spell)
   (add-hook! 'text-mode-hook
-    (defun +spell-remove-run-together-switch-for-aspell-h ()
+    (defun *ispell--remove-run-together-switch-for-aspell-h ()
       (setq-local ispell-extra-args (remove "--run-together" ispell-extra-args)))))
 #+end_src
 
@@ -1470,7 +1470,7 @@ Activate the =clang-tidy= integration of =clangd=.
   (defvar *flycheck-clang-header-warnings '("no-pragma-once-outside-header")
     "A list of warnings to be added to `flycheck-clang-warnings' when editing a C/C++ header file.")
   (add-hook! '(c-mode-hook c++-mode-hook)
-    (defun *flycheck-maybe-add-gcc-clang-header-warnings-h ()
+    (defun *flycheck--maybe-add-gcc-clang-header-warnings-h ()
       (when (and buffer-file-name (*cc-header-file-p buffer-file-name))
         (setq-local
          flycheck-gcc-warnings
