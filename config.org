@@ -1777,13 +1777,6 @@ Maybe ~def-project-mode!~?
 (setq-hook! 'haskell-mode-hook standard-indent 2)
 #+end_src
 
-Doom Emacs uses this hook which seems not to exist.
-#+begin_src emacs-lisp
-(add-hook! 'haskell-mode-hook
-  (defun *haskell--run-mode-local-vars-hook ()
-    (run-hooks 'haskell-mode-local-vars-hook)))
-#+end_src
-
 These bindings are used by many modes with an inferior REPL.
 #+begin_src emacs-lisp
 (map! :after haskell-mode
