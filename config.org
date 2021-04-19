@@ -211,6 +211,18 @@ without lengthy invocation of =getenv=.
   "A list of symbols which represent system features.")
 #+end_src
 
+** Redefinitions
+Rebind some =dash.el= symbols to use native Emacs functions.
+#+begin_src emacs-lisp
+(after! dash
+  (defalias '->    #'thread-first)
+  (defalias '->>   #'thread-last)
+  (defalias '-map  #'mapcar)
+  (defalias '-some #'seq-some)
+  (defalias '-all? #'seq-every-p)
+  (when EMACS27+ (defalias '-flatten #'flatten-tree)))
+#+end_src
+
 * General Configuration
 Don’t untabify when deleting a tab character.
 #+begin_src emacs-lisp
