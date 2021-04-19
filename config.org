@@ -736,6 +736,13 @@ Don’t turn on ~whitespace-mode~ automatically.
 
 *** TODO Rework the workspaces module to use =tab-bar=
 * Packages
+** Avy
+Set ~avy-keys~ to the Neo2 homerow on =PhantomJFL=.
+#+begin_src emacs-lisp
+(when IS-PHANTOM
+  (setq avy-keys (string-to-list "uiaeosnrtdy")))
+#+end_src
+
 ** Company
 *** Box
 :PROPERTIES:
