@@ -185,7 +185,7 @@
        ;;(ruby +rails)                  ; 1.step {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"}
        (:if IS-PHANTOM (rust +lsp))     ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
        ;;scala                          ; java, but good
-       (:if IS-PHANTOM scheme)          ; a fully conniving family of lisps
+       (:if IS-PHANTOM (scheme +chicken)) ; a fully conniving family of lisps
        sh                               ; she sells {ba,z,fi}sh shells on the C xor
        ;;sml                            ; sml
        ;;solidity                       ; do you need a blockchain? No.

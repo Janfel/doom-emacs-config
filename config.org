@@ -2180,17 +2180,32 @@ variables.
 #+end_src
 
 *** Geiser
-Make =geiser= read init files from ~doom-private-dir~ instead of ~$HOME~.
+Make =geiser= read init files from ~doom-private-dir~ instead of ~$HOME~. This
+does not need an ~(after! geiser)~ block because ~geiser-active-implementations~
+is currently filled out in the autoloads file.
 #+begin_src emacs-lisp
 (let ((config-dir (expand-file-name "geiser/" doom-private-dir)))
-  (cl-dolist (s '(guile chez chicken racket))
+  (cl-dolist (s geiser-active-implementations)
     (set (intern (format "geiser-%s-init-file" s))
          (expand-file-name (format "init-%s.scm" s) config-dir))))
 #+end_src
 
+*** Geiser Chicken
+As stated in the [[https://gitlab.com/emacs-geiser/chicken][=geiser-chicken=]] repository, additional steps are needed to
+fully support Chicken Scheme. See [[https://wiki.call-cc.org/eggref/5/chicken-doc]]
+for more information about the =chicken-doc= egg.
+#+begin_src sh
+chicken-install -s apropos chicken-doc srfi-18 srfi-1
+if [ ! -d "$CHICKEN_DOC_REPOSITORY" ]; then
+	cd "$(csi -R chicken.platform -p '(chicken-home)')"
+	curl https://3e8.org/pub/chicken-doc/chicken-doc-repo-5.tgz | sudo tar zx
+	export CHICKEN_DOC_REPOSITORY="$PWD/chicken-doc/"
+fi
+#+end_src
+
 On Arch, the [[https://www.call-cc.org/][Chicken Scheme]] binaries are called =chicken-csi= and =chicken-csc=.
 #+begin_src emacs-lisp
-(when (executable-find "chicken-csi")
+(when (and IS-LINUX (executable-find "chicken-csi"))
   (setq geiser-chicken-binary "chicken-csi"))
 #+end_src
 
