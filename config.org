@@ -505,6 +505,12 @@ to be eight spaces wide.
 #+end_src
 
 ** LSP
+*** Code Lens
+Enable code lenses, which are annotations that are displayed inline.
+#+begin_src emacs-lisp
+(setq lsp-lens-enable t)
+#+end_src
+
 *** TODO Try semantic highlighting.
 #+begin_src emacs-lisp :tangle no
 (setq lsp-enable-semantic-highlighting t)
