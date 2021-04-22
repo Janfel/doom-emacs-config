@@ -28,6 +28,8 @@
 (package! hungry-delete)
 ;; Open Intel x86 Developer Manual on x86 commands.
 ;;(package! x86-lookup)
+;; Disable `latex-preview-pane'.
+(package! latex-preview-pane :disable t)
 
 (when (featurep! :completion company)
   ;; Display function definitions in popup window.
