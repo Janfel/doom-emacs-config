@@ -1914,8 +1914,12 @@ Letting Smartparens handle these works best in my experience.
 
 Using =dvipng= is faster than =png= and is even recommended
 in the [[info:preview-latex#Requirements][manual]] of =preview-latex=.
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (when (executable-find "dvipng") (setq preview-image-type 'dvipng))
+#+end_src
+
+#+begin_src emacs-lisp :tangle no
+(set-popup-rule! "^\\*Latex Preview Pane")
 #+end_src
 
 *** NOTE Electric Env Pairs
