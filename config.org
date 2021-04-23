@@ -1862,6 +1862,27 @@ Add HTML folding rules to ~web-mode~.
 
 ** LaTeX
 #+begin_src emacs-lisp
+(defvaralias 'LaTeX-indent-level 'standard-indent)
+#+end_src
+
+#+begin_src emacs-lisp
+(setq-hook! 'LaTeX-mode-hook
+  fill-column 100
+  standard-indent 2
+  tab-width 2
+  indent-tabs-mode t)
+#+end_src
+
+#+begin_src emacs-lisp
+(setq tex-fontify-script nil)
+(setq font-latex-fontify-script nil)
+(after! latex
+  (push "lstlisting" LaTeX-verbatim-environments)
+  (push "lstlisting" LaTeX-verbatim-macros-with-braces)
+  (push "lstlisting" LaTeX-verbatim-macros-with-delims))
+#+end_src
+
+#+begin_src emacs-lisp
 (after! which-key
   (which-key-add-major-mode-key-based-replacements 'latex-mode
     "C-c C-p"     '("preview" . "Inline formula preview")
