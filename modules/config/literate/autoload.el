@@ -13,10 +13,13 @@
 (defvar org-babel-pre-tangle-hook)
 (defvar org-babel-tangle-body-hook)
 (defvar org-babel-post-tangle-hook)
+(defvar org-confirm-babel-evaluate)
 
 
 (defun +literate--tangle-lambda (file)
   (lambda ()
+    (require 'org)
+    (require 'ob-tangle)
     (let ((write-file-functions nil)
           (before-save-hook nil)
           (after-save-hook nil)
@@ -31,8 +34,6 @@
           ;; abort them otherwise). This is a security hazard, but
           ;; Doom will trust that you know what you're doing!
           (org-confirm-babel-evaluate nil))
-      (require 'org)
-      (require 'ob-tangle)
       ;; (require 'ox)
       ;; (org-export-expand-include-keyword)
       (with-temp-buffer
