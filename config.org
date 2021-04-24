@@ -1868,6 +1868,7 @@ Add HTML folding rules to ~web-mode~.
 #+begin_src emacs-lisp
 (setq-hook! 'LaTeX-mode-hook
   fill-column 100
+  rotate-text-local-symbols '(("iftrue" "iffalse"))
   standard-indent 2
   tab-width 2
   indent-tabs-mode t)
