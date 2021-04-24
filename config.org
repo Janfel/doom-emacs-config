@@ -1085,8 +1085,8 @@ experiment a bit with the current system.
 #+end_src
 
 This fixes an issue where Magit doesn’t unfold the headings in ~org-mode~.
-Reported to Doom as [[doom-repo:issues/4895][#4895]].
-#+begin_src emacs-lisp
+Reported to Doom as [[doom-repo:issues/4895][#4895]] and fixed in [[doom-repo:commit/3e425ab2f2bcc634ea0948c464f98e5120a2176b][3e425ab]].
+#+begin_src emacs-lisp :tangle no
 (add-hook! 'org-mode-hook
   (defun *magit--call-org-reveal-h ()
     "Add `org-reveal' to `magit-diff-visit-file-hook' to reveal point."
