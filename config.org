@@ -835,6 +835,14 @@ so I define such functions myself.
          :auto-newline auto-newline)))
 #+end_src
 
+These bindings allow me to easily surround the selection with empty lines.
+#+begin_src emacs-lisp
+(after! embrace
+  (embrace-add-default-pair ?o "" "\n")
+  (embrace-add-default-pair ?O "\n" "")
+  (embrace-add-default-pair ?\r "\n" "\n"))
+#+end_src
+
 ** Evil
 *** Evil Mode
 Evil uses Vim’s undo increments by default, which are too coarse for me.
