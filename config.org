@@ -54,6 +54,13 @@ Require [[https://github.com/magnars/dash.el][dash.el]], a modern list library i
 #+end_src
 
 #+begin_src emacs-lisp
+(defun *evil-blocky-state-p ()
+  "Return non-nil if `evil-state' is `normal', `motion' or `visual'."
+  (declare (side-effect-free t))
+  (and (boundp 'evil-state) (memq evil-state '(normal motion visual))))
+#+end_src
+
+#+begin_src emacs-lisp
 (defun flatten-one (list)
   "Flatten one level of LIST."
   (declare (pure t) (side-effect-free t))
