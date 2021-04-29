@@ -806,6 +806,35 @@ Set ~avy-keys~ to the Neo2 homerow on =PhantomJFL=.
   :config (setq company-quickhelp-use-propertized-text nil))
 #+end_src
 
+** Embrace
+The standard [[github:cute-jumper/embrace.el][=embrace.el=]] does not provide a way to add global pair definitions,
+so I define such functions myself.
+#+begin_src emacs-lisp
+(defun embrace-add-default-pair (key left right &optional help auto-newline)
+  "Like `embrace-add-pair', but for all major modes."
+  (setf (alist-get key (default-value 'embrace--pairs-list))
+        (make-embrace-pair-struct
+         :key key
+         :left left
+         :right right
+         :left-regexp (regexp-quote left)
+         :right-regexp (regexp-quote right)
+         :help help
+         :auto-newline auto-newline)))
+
+(defun embrace-add-default-pair-regexp
+    (key left-regexp right-regexp read-function &optional help auto-newline)
+  "Like `embrace-add-pair-regexp', but for all major modes."
+  (setf (alist-get key (default-value 'embrace--pairs-list))
+        (make-embrace-pair-struct
+         :key key
+         :read-function read-function
+         :left-regexp left-regexp
+         :right-regexp right-regexp
+         :help help
+         :auto-newline auto-newline)))
+#+end_src
+
 ** Evil
 *** Evil Mode
 Evil uses Vim’s undo increments by default, which are too coarse for me.
