@@ -327,9 +327,15 @@ the true version of Emacs including any release-candidate specifiers.")
 
 #+begin_src emacs-lisp
 (setq find-function-C-source-directory
-      (let ((dir (expand-file-name
-                  (concat "/usr/local/src/" source-directory-base "src/"))))
-        (if (file-accessible-directory-p dir) dir)))
+      (seq-some
+       (lambda (x) (let ((dir (expand-file-name "src/" x)))
+                     (when (file-readable-p (concat dir "emacs.c")) dir)))
+       (nconc
+        (list (expand-file-name "../src/emacs/" invocation-directory))
+        (when (or IS-BSD IS-LINUX IS-MAC)
+          (list (expand-file-name (directory-name-base source-directory) "/usr/local/src/")
+                (expand-file-name (format "emacs-%s" emacs-version)      "/usr/local/src/")))
+        (list source-directory))))
 #+end_src
 
 ** HL Line Mode
