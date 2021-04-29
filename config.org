@@ -966,6 +966,20 @@ Remap the ~inc-at-pt~ functions, so =z == can be used for formatting.
       :v  "z -" #'evil-numbers/dec-at-pt-incremental)
 #+end_src
 
+*** Evil Nerd Commenter
+With ~visual-line-mode~ active, ~evilnc-comment-operator~ uncomments two lines
+instead of one, if the next line begins with a comment sign. This is likely
+caused by ~evilnc-comment-operator~ not handling a region of type =screen-line=
+correctly, which is why we have to fix the region bounds manually.
+It might also just be a bug in =evil= itself, who knows?
+#+begin_src emacs-lisp
+(defadvice! *evilnc-fix-visual-line-mode-a (args)
+  "For ARGS = (BEG END TYPE) decrement END if (eq TYPE 'screen-line)."
+  :filter-args #'evilnc-comment-operator
+  (when (eq (nth 2 args) 'screen-line) (cl-decf (nth 1 args)))
+  args)
+#+end_src
+
 *** Evil Snipe
 Put ~evil-snipe-repeat~ on Comma and Shift-Comma.
 #+begin_src emacs-lisp :tangle no
