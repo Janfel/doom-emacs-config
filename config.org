@@ -1239,6 +1239,14 @@ This behavior can be deactivated with the advice below.
   :override #'doom-disable-smartparens-navigate-skip-match-h)
 #+end_src
 
+*** DONE Smartparens pairing single quotes in minibuffer ([[doom-repo:pull/4944][#4944]])
+Doom already has a fix for this, but only in =minibuffer-inactive-mode=.
+#+begin_src emacs-lisp :tangle no
+(after! smartparens
+  (sp-local-pair 'minibuffer-mode "`" nil :actions nil)
+  (sp-local-pair 'minibuffer-mode "'" nil :actions nil))
+#+end_src
+
 *** DONE Closing paren deleted twice ([[https://github.com/hlissner/doom-emacs/issues/3268][#3268]])
 This is currently broken, in that two closing delimiters are deleted instead of
 one. As the linked issue is resolved, this fix is no longer necessary.
