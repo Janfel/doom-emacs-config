@@ -2470,6 +2470,23 @@ Translate =C-ä= and =C-ö= for use with the Neo2 layout.
       "C-ä" (kbd "C-c"))
 #+end_src
 
+Un-hyperify my Mod-3 keys on =pgtk=.
+#+begin_src emacs-lisp
+(map! :when (and EMACS28+ (eq window-system 'pgtk))
+      :map input-decode-map
+      "H-<up>"        "<up>"
+      "H-<down>"      "<down>"
+      "H-<left>"      "<left>"
+      "H-<right>"     "<right>"
+      "H-<home>"      "<home>"
+      "H-<end>"       "<end>"
+      "H-<backspace>" "<backspace>"
+      "H-<delete>"    "<delete>"
+      "H-<prior>"     "<prior>"
+      "H-<next>"      "<next>"
+      "H-<escape>"    "<escape>")
+#+end_src
+
 ** Well Known Bindings
 Use well known bindings such as =C-c=, =C-v= in =insert-state=.
 #+begin_src emacs-lisp
