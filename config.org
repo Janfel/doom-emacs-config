@@ -1002,13 +1002,32 @@ right before ~+evil-collection-init~ first called.
            'calc 'tetris '2084-game 'haskell-error-mode)))
 #+end_src
 
-*** Evil Matchit
+*** Evil Jump
+The package [[github:redguardtoo/evil-matchit][=evil-matchit=]] allows jumping between language-specific tags, but is
+not very configurable otherwise. Also it relies on dynamic binding.
 #+begin_src emacs-lisp
 (use-package! evil-matchit
   :when (featurep! :editor evil)
-  :after-call pre-command-hook
-  :init (setq evilmi-shortcut "%")
-  :config (global-evil-matchit-mode +1))
+  :commands evilmi--operate-on-item)
+#+end_src
+
+This fantastic command combines all the best aspects of ~*sp-jump-item~,
+~evilmi-jump-items~ and ~evil-jump-items~!
+#+begin_src emacs-lisp
+(evil-define-motion *evil-jump-item (count)
+  "Combine `*sp-jump-item', `evilmi-jump-items' and `evil-jump-item'.
+The best of all aforementioned worlds, so jumping just works™."
+  :jump t
+  :type exclusive
+  (or (when count (evil-jump-item count) t)
+      (when smartparens-mode (*sp-jump-item))
+      (when (fboundp 'evilmi-jump-items) (evilmi--operate-on-item nil))
+      (evil-jump-item)))
+#+end_src
+
+#+begin_src emacs-lisp
+(map! :when (featurep! :editor evil)
+      :m "%" #'*evil-jump-item)
 #+end_src
 
 *** Evil Numbers
