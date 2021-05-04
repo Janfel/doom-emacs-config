@@ -2007,6 +2007,10 @@ Add HTML folding rules to ~web-mode~.
 #+begin_src emacs-lisp
 (setq tex-fontify-script nil)
 (setq font-latex-fontify-script nil)
+(setq-default TeX-output-dir "build")
+#+end_src
+
+#+begin_src emacs-lisp
 (after! latex
   (push "lstlisting" LaTeX-verbatim-environments)
   (push "lstlisting" LaTeX-verbatim-macros-with-braces)
