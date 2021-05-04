@@ -241,6 +241,7 @@ Move files to trash instead of deleting them.
 (setq delete-by-moving-to-trash t)
 #+end_src
 
+** Appearance
 Increase line spacing to make the text more legible. [[https://lists.gnu.org/archive/html/emacs-devel/2021-05/msg00180.html][This message]] on the
 emacs-devel mailing list compares several values for this variable.
 #+begin_src emacs-lisp
@@ -252,7 +253,37 @@ Make the block cursor stretch to highlight tab characters.
 (setq-default x-stretch-cursor t)
 #+end_src
 
+*** Fonts
+Doom exposes five (optional) variables for controlling fonts in Doom. Here
+are the three important ones:
+
++ ~doom-font~
++ ~doom-variable-pitch-font~
++ ~doom-big-font~ -- used for ~doom-big-font-mode~; use this for
+  presentations or streaming.
+
+They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
+font string. You generally only need to specify ~doom-font~ and
+~doom-variable-pitch-font~.
+#+begin_src emacs-lisp :tangle no
+(setq doom-font (font-spec :family "monospace" :size 12 :weight 'semi-light)
+      doom-variable-pitch-font (font-spec :family "sans" :size 13))
+#+end_src
+
 #+begin_src emacs-lisp
+(setq doom-font (font-spec :family "Source Code Pro" :size 13)
+      doom-serif-font (font-spec :family "Source Serif Pro")
+      doom-variable-pitch-font (font-spec :family "Source Sans Pro"))
+#+end_src
+
+*** Theme
+Doom provides a selection of themes from the [[github:hlissner/emacs-doom-themes][=doom-themes=]] repo.
+#+begin_src emacs-lisp
+(setq doom-theme
+      (cl-case SYSTEM
+        ('Phantom 'doom-one)
+        ('Tesla   'doom-one-light)
+        (t        'doom-one)))
 #+end_src
 
 ** Custom.el
@@ -285,45 +316,6 @@ This bug is triggered by not having =ttf-bitstream-vera= installed.
     (cl-dolist (keypair iso-transl-dead-key-alist)
       (define-key key-translation-map
         (vector (cdr keypair) (cdr keypair)) (string (car keypair))))))
-#+end_src
-
-** Doom Emacs
-Define these variables from =core/autoload/config.el=.
-#+begin_src emacs-lisp
-(setq doom-bin-dir (concat doom-emacs-dir "bin/")
-      doom-bin     (concat doom-bin-dir   "doom"))
-#+end_src
-
-*** Fonts
-Doom exposes five (optional) variables for controlling fonts in Doom. Here
-are the three important ones:
-
-+ ~doom-font~
-+ ~doom-variable-pitch-font~
-+ ~doom-big-font~ -- used for ~doom-big-font-mode~; use this for
-  presentations or streaming.
-
-They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
-font string. You generally only need these two:
-#+begin_src emacs-lisp :tangle no
-(setq doom-font (font-spec :family "monospace" :size 12 :weight 'semi-light)
-      doom-variable-pitch-font (font-spec :family "sans" :size 13))
-#+end_src
-
-#+begin_src emacs-lisp
-(setq doom-font (font-spec :family "Source Code Pro" :size 13)
-      doom-serif-font (font-spec :family "Source Serif Pro")
-      doom-variable-pitch-font (font-spec :family "Source Sans Pro"))
-#+end_src
-
-*** Theme
-Set the color theme. On =Tesla= I currently use light themes.
-#+begin_src emacs-lisp
-(setq doom-theme
-      (cl-case SYSTEM
-        ('Phantom 'doom-one)
-        ('Tesla   'doom-one-light)
-        (t        'doom-one)))
 #+end_src
 
 ** Emacs C Source Code
