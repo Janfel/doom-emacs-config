@@ -1349,8 +1349,8 @@ Bind ~sp-raise-sexp~, which I use quite often.
       :n "p" #'sp-previous-sexp
       :n "q" #'sp-indent-defun
       :n "r" #'sp-raise-sexp
-      :n "s" #'sp-splice
-      :n "S" #'sp-split
+      :n "s" #'sp-splice-sexp
+      :n "S" #'sp-split-sexp
       :n "t" #'sp-transpose-sexp
       :n "T" #'sp-transpose-hybrid-sexp
       :n "u" #'sp-unwrap-sexp
