@@ -14,12 +14,12 @@
 
 ;; Library for running async processes.
 (package! async)
-;; Clang-Tidy integration for flycheck.
-(package! flycheck-clang-tidy)
 ;; Disable escaping insert state when typing too fast.
 (package! evil-escape :disable t)
 ;; Improve jumping with %.
 (package! evil-matchit)
+;; Clang-Tidy integration for flycheck.
+(package! flycheck-clang-tidy)
 ;; Display ^L form-feed as horizontal line.
 (package! form-feed)
 ;; Display each indentation level.
