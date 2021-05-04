@@ -243,7 +243,7 @@ Move files to trash instead of deleting them.
 
 Make the block cursor stretch to highlight tab characters.
 #+begin_src emacs-lisp
-(setq x-stretch-cursor t)
+(setq-default x-stretch-cursor t)
 #+end_src
 
 Make the output buffer of ~shell-command~ a popup buffer.
