@@ -1321,7 +1321,9 @@ These values have to be set before ~org-mode~ is loaded.
 ** Smartparens
 Bind ~sp-raise-sexp~, which I use quite often.
 #+begin_src emacs-lisp
-(map! :n "z r" #'sp-raise-sexp
+(map! :n "z +" #'sp-join-sexp
+      :n "z -" #'sp-split-sexp
+      :n "z r" #'sp-raise-sexp
       :n "z s" #'sp-splice-sexp
       :n "z v" #'sp-convolute-sexp)
 #+end_src
