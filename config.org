@@ -246,9 +246,7 @@ Make the block cursor stretch to highlight tab characters.
 (setq-default x-stretch-cursor t)
 #+end_src
 
-Make the output buffer of ~shell-command~ a popup buffer.
 #+begin_src emacs-lisp
-(set-popup-rule! "^\\*Shell Command Output\\*$" :quit t)
 #+end_src
 
 ** Custom.el
@@ -552,6 +550,17 @@ Add more online search providers.
 (when (featurep! :tools lookup)
   (push! +lookup-provider-url-alist
          '("CPP Reference" "https://cppreference.com/w/?search=%s")))
+#+end_src
+
+** Shell Commands
+Make the output buffers of ~shell-command~ and ~async-shell-command~ be popups.
+#+begin_src emacs-lisp
+(set-popup-rule!
+  (rx line-start
+      (or (literal shell-command-buffer-name)
+          (literal shell-command-buffer-name-async))
+      line-end)
+  :quit t)
 #+end_src
 
 ** Spell Checking
