@@ -2517,9 +2517,13 @@ Replace the original ~nxml-mode~ rules with ones that aren’t broken.
 ** Translations
 Translate =C-ä= and =C-ö= for use with the Neo2 layout.
 #+begin_src emacs-lisp
-(map! :map key-translation-map
+(map! :map local-function-key-map
       "C-ö" (kbd "C-x")
       "C-ä" (kbd "C-c"))
+#+end_src
+
+#+begin_src emacs-lisp
+(map! :map local-function-key-map "−" "-")
 #+end_src
 
 ** Fixes for =feature/pgtk= :28:
