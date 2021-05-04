@@ -2488,6 +2488,7 @@ Translate =C-ä= and =C-ö= for use with the Neo2 layout.
       "C-ä" (kbd "C-c"))
 #+end_src
 
+** Fixes for =feature/pgtk= :28:
 Un-hyperify my Mod-3 keys on =pgtk=.
 #+begin_src emacs-lisp
 (map! :when (and EMACS28+ (eq window-system 'pgtk))
