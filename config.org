@@ -703,6 +703,13 @@ the keypad keycodes into the corresponding keyboard keycodes.
 #+end_src
 
 *** Treemacs
+#+begin_src emacs-lisp
+(map! :when (and (featurep! :ui treemacs) (featurep! :editor evil))
+      :after treemacs-evil
+      :map evil-treemacs-state-map
+      "p" #'treemacs-peek)
+#+end_src
+
 ** Undo/Redo
 *** Undo Fu
 *** Undo Tree
