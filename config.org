@@ -241,6 +241,12 @@ Move files to trash instead of deleting them.
 (setq delete-by-moving-to-trash t)
 #+end_src
 
+Increase line spacing to make the text more legible. [[https://lists.gnu.org/archive/html/emacs-devel/2021-05/msg00180.html][This message]] on the
+emacs-devel mailing list compares several values for this variable.
+#+begin_src emacs-lisp
+(setq-default line-spacing 0.10)
+#+end_src
+
 Make the block cursor stretch to highlight tab characters.
 #+begin_src emacs-lisp
 (setq-default x-stretch-cursor t)
