@@ -2591,6 +2591,20 @@ Bind ~auto-fill-mode~.
       "n" #'view-emacs-news)
 #+end_src
 
+** Minibuffer :28:
+Use ~cua-mode~ bindings in ~minibuffer-mode~, where they are most needed.
+#+begin_src emacs-lisp
+(map! :when EMACS28+
+      :after minibuffer
+      :map minibuffer-mode-map
+      "C-c"   #'kill-ring-save
+      "C-v"   #'yank
+      "C-S-v" #'yank-pop
+      "C-x"   #'kill-region
+      "C-z"   #'undo
+      "C-S-z" #'redo)
+#+end_src
+
 ** _Backup
 :PROPERTIES:
 :header-args:emacs-lisp+: :tangle no
