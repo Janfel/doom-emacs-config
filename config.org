@@ -2476,11 +2476,6 @@ Replace the original ~nxml-mode~ rules with ones that aren’t broken.
 
 * Keybindings
 ** Translations
-Translate the real minus into the ASCII minus character.
-#+begin_src emacs-lisp
-(map! :map key-translation-map "−" "-")
-#+end_src
-
 Translate =C-ä= and =C-ö= for use with the Neo2 layout.
 #+begin_src emacs-lisp
 (map! :map key-translation-map
