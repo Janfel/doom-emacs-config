@@ -1321,7 +1321,44 @@ These values have to be set before ~org-mode~ is loaded.
 ** Smartparens
 Bind ~sp-raise-sexp~, which I use quite often.
 #+begin_src emacs-lisp
-(map! :n "z r" #'sp-raise-sexp)
+(map! :n "z r" #'sp-raise-sexp
+      :n "z s" #'sp-splice-sexp
+      :n "z v" #'sp-convolute-sexp)
+#+end_src
+
+#+begin_src emacs-lisp
+(map! :prefix ("ß" . "smartparens")
+      :n ")" #'sp-forward-slurp-sexp
+      :n "C-)" #'sp-slurp-hybrid-sexp
+      :n "<" #'sp-backward-barf-sexp
+      :n ">" #'sp-forward-barf-sexp
+      :n "[" #'sp-add-to-next-sexp
+      :n "]" #'sp-add-to-previous-sexp
+      :n "{" #'sp-splice-sexp-killing-backward
+      :n "}" #'sp-splice-sexp-killing-forward
+      :n "+" #'sp-join-sexp
+      :n "-" #'sp-split-sexp
+      :n "d" #'sp-kill-sexp
+      :n "D" #'sp-kill-hybrid-sexp
+      :n "j" #'sp-down-sexp
+      :n "J" #'sp-join-sexp
+      :n "k" #'sp-up-sexp
+      :n "n" #'sp-next-sexp
+      :n "p" #'sp-previous-sexp
+      :n "q" #'sp-indent-defun
+      :n "r" #'sp-raise-sexp
+      :n "s" #'sp-splice
+      :n "S" #'sp-split
+      :n "t" #'sp-transpose-sexp
+      :n "T" #'sp-transpose-hybrid-sexp
+      :n "u" #'sp-unwrap-sexp
+      :n "v" #'sp-convolute-sexp
+      :n "w(" #'sp-wrap-round
+      :n "w)" #'sp-wrap-round
+      :n "w[" #'sp-wrap-square
+      :n "w]" #'sp-wrap-square
+      :n "w{" #'sp-wrap-curly
+      :n "w}" #'sp-wrap-curly)
 #+end_src
 
 #+begin_src emacs-lisp
