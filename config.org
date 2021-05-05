@@ -946,23 +946,21 @@ Define =evil-word= and =evil-WORD= as =thingatpt.el= things.
 
 Fix double-click selection in ~evil-mode~.
 #+begin_src emacs-lisp
-(when (featurep! :editor evil)
-  (defadvice! *evil--fix-mouse-start-end-a (orig-fn start end mode)
-    "Make `mouse-start-end' handle the `evil-mode' point/region convention.
+(defadvice! *evil--fix-mouse-start-end-a (orig-fn start end mode)
+  "Make `mouse-start-end' handle the `evil-mode' point/region convention.
 Without this, double-click selection in `evil-mode' extends one
 character too far."
-    :around #'mouse-start-end
-    (if (and (= mode 1)
-             (bound-and-true-p evil-local-mode)
-             (not (or (evil-insert-state-p) (evil-emacs-state-p))))
-        (cl-destructuring-bind (start end) (funcall orig-fn start end mode)
-          (list start (1- end)))
-      (funcall orig-fn start end mode))))
+  :around #'mouse-start-end
+  (if (and (= mode 1)
+           (bound-and-true-p evil-local-mode)
+           (not (or (evil-insert-state-p) (evil-emacs-state-p))))
+      (cl-destructuring-bind (start end) (funcall orig-fn start end mode)
+        (list start (1- end)))
+    (funcall orig-fn start end mode)))
 #+end_src
 
 #+begin_src emacs-lisp
-(map! :when (featurep! :editor evil)
-      :after evil
+(map! :after evil
       ;; Use the default `mouse-drag-region'.
       :m "<mouse-down-1>" #'mouse-drag-region
 
@@ -996,8 +994,7 @@ character too far."
 #+end_src
 
 #+begin_src emacs-lisp
-(map! :when (featurep! :editor evil)
-      :after evil
+(map! :after evil
       :map evil-motion-state-map
       "<home>" #'move-beginning-of-line
       "<end>"  #'move-end-of-line
@@ -1055,15 +1052,13 @@ The best of all aforementioned worlds, so jumping just works™."
 #+end_src
 
 #+begin_src emacs-lisp
-(map! :when (featurep! :editor evil)
-      :m "%" #'*evil-jump-item)
+(map! :m "%" #'*evil-jump-item)
 #+end_src
 
 *** Evil Numbers
 Remap the ~inc-at-pt~ functions, so =z == can be used for formatting.
 #+begin_src emacs-lisp
-(map! :when (featurep! :editor evil)
-      :after evil-numbers
+(map! :after evil-numbers
       :nv "g +" #'evil-numbers/inc-at-pt
       :nv "g -" #'evil-numbers/dec-at-pt
       :v  "z +" #'evil-numbers/inc-at-pt-incremental
@@ -1087,8 +1082,7 @@ It might also just be a bug in =evil= itself, who knows?
 *** Evil Snipe
 Put ~evil-snipe-repeat~ on Comma and Shift-Comma.
 #+begin_src emacs-lisp :tangle no
-(map! :when (featurep! :editor evil)
-      :after evil-snipe
+(map! :after evil-snipe
       :map (evil-snipe-parent-transient-map
             evil-snipe-override-mode-map
             evil-snipe-override-local-mode-map)
@@ -1112,8 +1106,7 @@ Furthermore, =evil-org= rebinds =C-h= in =insert-state=, which is not very
 discoverable. See [[doom-modules:lang/org/config.el][=lang/org/config.el=]] for the concrete bindings; particularly
 the lines 973 to 1026.
 #+begin_src emacs-lisp
-(map! :when (featurep! :editor evil)
-      :after evil-org
+(map! :after evil-org
       (:map evil-org-mode-map
        :m "[ _" #'org-previous-block
        :m "] _" #'org-next-block
