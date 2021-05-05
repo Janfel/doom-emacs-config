@@ -811,10 +811,7 @@ Set ~avy-keys~ to the Neo2 homerow on =PhantomJFL=.
 
 ** Company
 *** Box
-:PROPERTIES:
-:header-args:emacs-lisp+: :tangle no
-:END:
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (when (featurep! :completion company +childframe)
   (defadvice! *company-box-line-numbers-a (&rest _)
     :after #'company-box--render-buffer
@@ -1018,7 +1015,7 @@ Workaround for ~evil-buffer-new~ calling ~set-window-buffer~ instead of
 Doom Emacs loads the ~evil-collection~ packages manually and needs the
 corresponding variables to be set beforehand. The code below runs
 right before ~+evil-collection-init~ first called.
-#+begin_src emacs-lisp :noweb no-export
+#+begin_src emacs-lisp
 (when (and (featurep! :editor evil +everywhere)
            doom-interactive-p
            (not doom-reloading-p)
@@ -1392,12 +1389,12 @@ Bind ~sp-raise-sexp~, which I use quite often.
       :n "T" #'sp-transpose-hybrid-sexp
       :n "u" #'sp-unwrap-sexp
       :n "v" #'sp-convolute-sexp
-      :n "w(" #'sp-wrap-round
-      :n "w)" #'sp-wrap-round
-      :n "w[" #'sp-wrap-square
-      :n "w]" #'sp-wrap-square
-      :n "w{" #'sp-wrap-curly
-      :n "w}" #'sp-wrap-curly)
+      :n "w (" #'sp-wrap-round
+      :n "w )" #'sp-wrap-round
+      :n "w [" #'sp-wrap-square
+      :n "w ]" #'sp-wrap-square
+      :n "w {" #'sp-wrap-curly
+      :n "w }" #'sp-wrap-curly)
 #+end_src
 
 #+begin_src emacs-lisp
