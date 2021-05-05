@@ -662,6 +662,11 @@ Wrap everything in a conditional. Disabled because WIP.
 *** EShell
 *** Term
 *** VTerm
+Normal state does not make sense in a terminal buffer.
+#+begin_src emacs-lisp
+(set-evil-initial-state! 'vterm-mode 'insert)
+#+end_src
+
 This removes the problematic default popup rule for =vterm= buffers and replaces
 it with a sane alternative.
 #+begin_src emacs-lisp
@@ -920,9 +925,9 @@ The =smart= option sometimes upcases the entire replacement string.
 
 Evil should deactivate itself in these modes.
 #+begin_src emacs-lisp
-(after! evil-vars
-  (push! evil-emacs-state-modes 'calc-mode 'dired-mode)
-  (push! evil-insert-state-modes 'vterm-mode))
+(after! evil
+  (evil-set-initial-state 'calc-mode  'emacs)
+  (evil-set-initial-state 'dired-mode 'emacs))
 #+end_src
 
 We can’t use ~defvaralias~ here, because ~evil-mode~ is already running
