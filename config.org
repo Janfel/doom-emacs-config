@@ -920,7 +920,8 @@ The =smart= option sometimes upcases the entire replacement string.
 Evil should deactivate itself in these modes.
 #+begin_src emacs-lisp
 (after! evil-vars
-  (push! evil-emacs-state-modes 'calc-mode 'dired-mode))
+  (push! evil-emacs-state-modes 'calc-mode 'dired-mode)
+  (push! evil-insert-state-modes 'vterm-mode))
 #+end_src
 
 We can’t use ~defvaralias~ here, because ~evil-mode~ is already running
