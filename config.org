@@ -544,6 +544,12 @@ On =Tesla=, ~display-line-numbers-mode~ causes noticeable slowdown.
     #'display-line-numbers-mode))
 #+end_src
 
+** Minibuffer :28:
+Enable ~cua-mode~ the minibuffer to give a more seamless editing experience.
+#+begin_src emacs-lisp
+(add-hook 'minibuffer-setup-hook #'cua-mode)
+#+end_src
+
 ** Online Lookup
 Add more online search providers.
 #+begin_src emacs-lisp
@@ -2630,20 +2636,6 @@ Bind ~auto-fill-mode~.
 (map! :map help-map
       ;; Doom replaces this binding with `doom/help-news'.
       "n" #'view-emacs-news)
-#+end_src
-
-** Minibuffer :28:
-Use ~cua-mode~ bindings in ~minibuffer-mode~, where they are most needed.
-#+begin_src emacs-lisp
-(map! :when EMACS28+
-      :after minibuffer
-      :map minibuffer-mode-map
-      "C-c"   #'kill-ring-save
-      "C-v"   #'yank
-      "C-S-v" #'yank-pop
-      "C-x"   #'kill-region
-      "C-z"   #'undo
-      "C-S-z" #'redo)
 #+end_src
 
 ** _Backup
