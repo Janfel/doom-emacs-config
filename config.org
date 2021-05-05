@@ -873,6 +873,13 @@ These bindings allow me to easily surround the selection with empty lines.
 #+end_src
 
 ** Evil
+*** Preamble
+Wrap the whole section into a conditional. I would use =noweb= for this, but the
+=org-babel= implementation is /very/ slow.
+#+begin_src emacs-lisp
+(when (featurep! :editor evil) ;; Intentional missing paren.
+#+end_src
+
 *** Evil Mode
 Evil uses Vim’s undo increments by default, which are too coarse for me.
 #+begin_src emacs-lisp
@@ -1133,10 +1140,39 @@ This operator capitalizes a region similar to ~evil-upcase~ and ~evil-downcase~.
       :v   "C-u" #'*evil-capitalize)
 #+end_src
 
+*** Text Objects
+#+begin_src emacs-lisp
+(evil-define-text-object *evil-inner-defun (count &optional beg end type)
+  (evil-select-inner-object 'defun beg end type count))
+
+(evil-define-text-object *evil-a-defun (count &optional beg end type)
+  (evil-select-an-object 'defun beg end type count 'line))
+
+(map! :textobj "d" #'*evil-inner-defun #'*evil-a-defun)
+#+end_src
+
+#+begin_src emacs-lisp
+(evil-define-text-object *evil-inner-form (count &optional beg end type)
+  (sp-get (sp-get-sexp count)
+    (when (<= :beg (point) :end) (evil-range :beg-in :end-in type))))
+
+(evil-define-text-object *evil-a-form (count &optional beg end type)
+  (sp-get (sp-get-sexp count)
+    (when (<= :beg (point) :end) (evil-range :beg :end type))))
+
+(map! :textobj "f" #'*evil-inner-form #'*evil-a-form)
+#+end_src
+
 *** NOTE Other Packages
 More Evil-related packages that I might try out some time.
 + [[https://github.com/willghatch/emacs-on-parens][on-parens]]
 + [[https://github.com/expez/evil-smartparens][evil-smartparens]]
+
+*** Postamble
+Close the conditional opened in the preamble.
+#+begin_src emacs-lisp
+) ;; (when (featurep! :editor evil))
+#+end_src
 
 ** Flycheck
 #+begin_src emacs-lisp
