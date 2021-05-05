@@ -1838,6 +1838,7 @@ For consistency, the ~tab-width~ in all Elisp modes is set to eight.
 #+begin_src emacs-lisp
 (add-hook 'emacs-lisp-mode-hook       #'lisp-mode-common-hook)
 (add-hook 'lisp-interaction-mode-hook #'lisp-mode-common-hook)
+;; MAYBE: Add `ielm-mode-hook'.
 #+end_src
 
 #+begin_src emacs-lisp
