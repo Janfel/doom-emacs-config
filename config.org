@@ -1020,6 +1020,35 @@ Workaround for ~evil-buffer-new~ calling ~set-window-buffer~ instead of
       (funcall (default-value 'major-mode)))))
 #+end_src
 
+*** Evil Cleverparens
+This package seems like a nice idea, but it has caused me lots of grief on top
+of being abandoned since 2017 and being quite massive. Most of the stuff I
+actually used should be possible to reimplement.
+#+begin_src emacs-lisp :tangle no
+(use-package! evil-cleverparens
+  :when (featurep! :editor evil)
+  :after (evil smartparens)
+  :hook (lisp-mode-common . evil-cleverparens-mode)
+  :init
+  (setq evil-cleverparens-indent-afterwards nil) ; Messes up `comment-column'.
+  (setq evil-cleverparens-move-skip-delimiters nil) ; Maybe try this.
+  (setq evil-cleverparens-use-regular-insert nil) ; Trying this out.
+  (setq evil-cleverparens-use-s-and-S nil) ; We are using `evil-snipe'.
+  ;; These interfere with `macrostep-mode'.
+  (setq evil-cp-regular-movement-keys nil)
+  (setq evil-cp-swapped-movement-keys nil)
+  (map! :textobj "c" #'evil-cp-inner-comment #'evil-cp-a-comment
+        :textobj "d" #'evil-cp-inner-defun   #'evil-cp-a-defun
+        :textobj "f" #'evil-cp-inner-form    #'evil-cp-a-form)
+  ;; These functions are used to populate `evil-cleverparens-mode-map'.
+  ;; (advice-add #'evil-cp-set-movement-keys    :override #'ignore)
+  ;; Unnecessary, since we define the text objects ourselves.
+  ;; (advice-add #'evil-cp--enable-text-objects :override #'ignore)
+  :config
+  (map! :map evil-cleverparens-mode-map :leader :prefix "t"
+        :desc "Balanced yank" "y" #'evil-cp-toggle-balanced-yank))
+#+end_src
+
 *** Evil Collection
 Doom Emacs loads the ~evil-collection~ packages manually and needs the
 corresponding variables to be set beforehand. The code below runs
