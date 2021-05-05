@@ -2620,14 +2620,14 @@ Bind a prefix for setting things to values.
 #+end_src
 
 *** Toggle Map
-Bind ~auto-fill-mode~.
 #+begin_src emacs-lisp
-(map! :map doom-leader-toggle-map
+(map! :leader :prefix "t"
       :desc "Whitespace" "<SPC>" #'whitespace-mode
       (:when EMACS27+
        :desc "Fill column indicator" "c" #'display-fill-column-indicator-mode)
       (:when (fboundp #'highlight-indent-guides-mode)
        :desc "Indent guides" "G" #'highlight-indent-guides-mode)
+      :desc "Variable width fonts" "v" #'variable-pitch-mode
       :desc "Hard line wrapping" "W" #'auto-fill-mode)
 #+end_src
 
