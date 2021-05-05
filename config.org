@@ -150,9 +150,11 @@ Modifies the match data; use `save-match-data' if necessary."
         (when (looking-at ".*\\s-\\(\\s<\\)")
           ;; Go to the last comment starter preceded by whitespace.
           (goto-char (match-beginning 1))
-          ;; Delete all whitespace before point.
-          (delete-char (abs (skip-syntax-backward "\\s-")))
-          (indent-to column 1))
+          (let ((old-column (current-column)))
+           ;; Delete all whitespace before point.
+           (delete-char (abs (skip-syntax-backward "\\s-")))
+           ;; Indent and adjust `end' accordingly.
+           (cl-incf end (- (indent-to column 1) old-column))))
         (forward-line 1)))))
 
 (map! :n "g C" #'move-comment-to-column)
