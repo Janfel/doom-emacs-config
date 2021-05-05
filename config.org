@@ -1097,6 +1097,14 @@ The best of all aforementioned worlds, so jumping just works™."
 (map! :m "%" #'*evil-jump-item)
 #+end_src
 
+*** Evil Multiple Cursors
+#+begin_src emacs-lisp
+(map! :when (featurep! :editor multiple-cursors)
+      :after evil-mc
+      :nv "g z <up>"   #'evil-mc-make-cursor-move-prev-line
+      :nv "g z <down>" #'evil-mc-make-cursor-move-next-line)
+#+end_src
+
 *** Evil Numbers
 Remap the ~inc-at-pt~ functions, so =z == can be used for formatting.
 #+begin_src emacs-lisp
