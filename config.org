@@ -494,8 +494,9 @@ This variable might be very useful in certain modes.
 ** Fill Column Indicator :27:
 #+begin_src emacs-lisp
 (when EMACS27+
-  (add-hook! '(prog-mode-hook text-mode-hook conf-mode-hook)
-             #'display-fill-column-indicator-mode))
+  ;; Customize `global-display-fill-column-indicator-modes' to disable
+  ;; `display-fill-column-indicator-mode' in certain modes.
+  (global-display-fill-column-indicator-mode +1))
 #+end_src
 
 ** Form Feed
