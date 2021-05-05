@@ -546,7 +546,8 @@ On =Tesla=, ~display-line-numbers-mode~ causes noticeable slowdown.
 
 ** Minibuffer :28:
 Enable ~cua-mode~ the minibuffer to give a more seamless editing experience.
-#+begin_src emacs-lisp
+Sadly, this enables ~cua-mode~ everywhere, so we can not do this.
+#+begin_src emacs-lisp :tangle no
 (add-hook 'minibuffer-setup-hook #'cua-mode)
 #+end_src
 
