@@ -742,6 +742,14 @@ Bind keys for ~redo~.
       :n "U" #'redo)
 #+end_src
 
+** Universal Argument
+#+begin_src emacs-lisp
+(map! :map universal-argument-map "<kp-add>" #'universal-argument-more)
+(map! :m "<kp-add>"      #'universal-argument
+      :m "<kp-subtract>" #'negative-argument
+      :m "−"             #'negative-argument) ; Real Minus.
+#+end_src
+
 ** Whitespace
 Don’t turn on ~whitespace-mode~ automatically.
 #+begin_src emacs-lisp
