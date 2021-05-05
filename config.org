@@ -573,7 +573,7 @@ Make the output buffers of ~shell-command~ and ~async-shell-command~ be popups.
 ** Spell Checking
 *** Ispell
 #+begin_src emacs-lisp
-(setq ispell-dictionary "en_US"
+(setq ispell-dictionary "en"
       ispell-extra-args
       '("--sug-mode=ultra"
         "--run-together"
