@@ -256,7 +256,7 @@ Make the block cursor stretch to highlight tab characters.
 #+end_src
 
 *** Fonts
-Doom exposes five (optional) variables for controlling fonts in Doom. Here
+Doom exposes six (optional) variables for controlling fonts in Doom. Here
 are the three important ones:
 
 + ~doom-font~
@@ -268,6 +268,7 @@ They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
 font string. You generally only need to specify ~doom-font~ and
 ~doom-variable-pitch-font~.
 #+begin_src emacs-lisp :tangle no
+;; Example
 (setq doom-font (font-spec :family "monospace" :size 12 :weight 'semi-light)
       doom-variable-pitch-font (font-spec :family "sans" :size 13))
 #+end_src
