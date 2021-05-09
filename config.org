@@ -525,9 +525,17 @@ to be eight spaces wide.
 
 ** LSP
 *** Code Lens
-Enable code lenses, which are annotations that are displayed inline.
+Enable code lenses, which are those “Run | Debug” buttons that appear over
+function definitions.
 #+begin_src emacs-lisp
 (setq lsp-lens-enable t)
+#+end_src
+
+For some reason, Doom hooks ~ccls-code-lens-mode~ onto ~lsp-lens-mode-hook~,
+causing a second “Run | Debug” button to appear. Until I know why this is done,
+it is easiest to just remove this hook.
+#+begin_src emacs-lisp
+(remove-hook 'lsp-lens-mode-hook #'ccls-code-lens-mode)
 #+end_src
 
 *** TODO Try semantic highlighting.
