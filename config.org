@@ -2432,13 +2432,6 @@ Use system =mspyls= for =lsp-python-ms=.
     +fmt-formatter #'rustic-format-buffer))
 #+end_src
 
-The [[https://github.com/rust-analyzer/rust-analyzer][rust-analyzer]] is an experimental language server and is to become
-the successor to RLS.
-#+begin_src emacs-lisp
-(when (executable-find "rust-analyzer")
-  (setq rustic-lsp-server 'rust-analyzer))
-#+end_src
-
 This is currently not working because the variable has been removed.
 #+begin_src emacs-lisp :tangle no
 (after! rustic
@@ -2456,6 +2449,7 @@ This is currently not working because the variable has been removed.
     (apply orig-fn args)))
 #+end_src
 
+*** LSP
 Make ~lsp-rust~ respect the =CARGO_HOME= and =RUSTUP_HOME= environment
 variables.
 #+begin_src emacs-lisp
@@ -2474,6 +2468,15 @@ variables.
 (setq lsp-rust-library-directories
       (list (expand-file-name "registry/src/" CARGO-HOME)
             (expand-file-name "toolchains/" RUSTUP-HOME)))
+#+end_src
+
+The program [[https://github.com/rust-analyzer/rust-analyzer][rust-analyzer]] is an experimental language server and is to become
+the successor to RLS. It supports inlay hints for automatically annotating
+variables with their inferred types.
+#+begin_src emacs-lisp
+(when (executable-find "rust-analyzer")
+  (setq rustic-lsp-server 'rust-analyzer)
+  (setq lsp-rust-analyzer-server-display-inlay-hints t))
 #+end_src
 
 ** Scheme :Lisp:
