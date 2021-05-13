@@ -376,10 +376,10 @@ Doom changes these in a way I don’t like. Set them back to the default values.
 (setq mouse-wheel-progressive-speed nil)
 #+end_src
 
-** Native Compilation
+** Native Compilation :28:
 #+begin_src emacs-lisp
-(setq comp-deferred-compilation t)
-(setq comp-async-report-warnings-errors nil)
+(setq native-comp-deferred-compilation t)
+(setq native-comp-async-report-warnings-errors nil)
 #+end_src
 
 * Editor Features
