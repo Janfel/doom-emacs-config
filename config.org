@@ -355,6 +355,18 @@ This advice unhighlights the current line before ~face-at-point~ is called.
       (hl-line-unhighlight))))
 #+end_src
 
+** Keyboard Input
+
+*** Fixes for =feature/pgtk= :28:
+Deactivate the Hyper modifier on =pgtk=, =pgtk= interprets =mod3= as Hyper,
+which is the same modifier that Neo uses for =ISO_Level5_Shift= aka =Mod4=.
+The fix is taken from [[https://lists.gnu.org/archive/html/bug-gnu-emacs/2021-05/msg00752.html][this mail]] on =bug-gnu-emacs=.
+#+begin_src emacs-lisp
+(when (and EMACS28+ (eq window-system 'pgtk))
+  (put 'none 'modifier-value 0)
+  (setq x-hyper-keysym 'none))
+#+end_src
+
 ** Mouse Behavior
 Doom changes these in a way I don’t like. Set them back to the default values.
 #+begin_src emacs-lisp
