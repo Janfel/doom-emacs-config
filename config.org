@@ -1829,9 +1829,18 @@ The file extension =.cl= is sometimes used.
 #+begin_src emacs-lisp
 (setq-hook! 'lisp-mode-hook
   rotate-text-local-symbols
-  '(("defvar" "defparameter" "defconstant")
-    ("when" "unless")
-    ("+nil" "-nil")))
+  '(("t" "nil")
+    ("defvar" "defparameter" "defconstant")
+    ("when" "unless"))
+  rotate-text-local-patterns
+  '(("#[+-]\\(\\sw\\|\\s_\\)*" *lisp-rotate-text-flip-feature-test)))
+#+end_src
+
+#+begin_src emacs-lisp
+(defun *lisp-rotate-text-flip-feature-test (original arg)
+  (unless (zerop (mod arg 2))
+    (aset original 1 (if (eq (aref original 1) ?+) ?- ?+)))
+  original)
 #+end_src
 
 #+begin_src emacs-lisp
