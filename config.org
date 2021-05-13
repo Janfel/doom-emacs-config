@@ -861,6 +861,16 @@ Set ~avy-keys~ to the Neo2 homerow on =PhantomJFL=.
        'line-number :foreground "#bbc2cf"))))
 #+end_src
 
+Also see [[github:sebastiencs/company-box/issues/138][=company-box/#138=]].
+#+begin_src emacs-lisp
+(when (featurep! :completion company +childframe)
+  (defadvice! *company-box-fixes-a (string on-update)
+    :before #'company-box--render-buffer
+    (unless on-update
+      (with-current-buffer (company-box--get-buffer)
+        (setq line-spacing 0)))))
+#+end_src
+
 *** Quickhelp
 #+begin_src emacs-lisp
 (use-package! company-quickhelp
