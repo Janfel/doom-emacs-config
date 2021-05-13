@@ -584,13 +584,15 @@ Add more online search providers.
 
 ** Shell Commands
 Make the output buffers of ~shell-command~ and ~async-shell-command~ be popups.
+Needs ~EMACS28+~ for ~shell-command-buffer-name~
 #+begin_src emacs-lisp
-(set-popup-rule!
-  (rx line-start
-      (or (literal shell-command-buffer-name)
-          (literal shell-command-buffer-name-async))
-      line-end)
-  :quit t)
+(when EMACS28+
+  (set-popup-rule!
+    (rx line-start
+        (or (literal shell-command-buffer-name)
+            (literal shell-command-buffer-name-async))
+        line-end)
+    :quit t))
 #+end_src
 
 ** Spell Checking
