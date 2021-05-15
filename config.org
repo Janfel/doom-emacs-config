@@ -1440,6 +1440,17 @@ These values have to be set before ~org-mode~ is loaded.
 #+end_src
 
 ** Smartparens
+Add this pair in ~sp-lisp-modes~ for symmetry.
+#+begin_src emacs-lisp
+(after! smartparens
+  (sp-pair "\\\\(" "\\\\)" :actions :rem)
+  (cl-dolist (pair '(("\\(" . "\\)") ("\\[" . "\\]") ("\\{" . "\\}")))
+    (sp-local-pair sp-lisp-modes
+                   (car pair) (cdr pair)
+                   :actions '(insert wrap autoskip navigate)
+                   :when '(:add sp-in-string-p))))
+#+end_src
+
 Bind ~sp-raise-sexp~, which I use quite often.
 #+begin_src emacs-lisp
 (map! :n "z +" #'sp-join-sexp
@@ -1853,11 +1864,6 @@ The file extension =.cl= is sometimes used.
   original)
 #+end_src
 
-#+begin_src emacs-lisp
-(after! smartparens
-  (sp-local-pair 'lisp-mode "\"" nil :unless '(:rem sp-point-after-word-p)))
-#+end_src
-
 *** Sly
 #+begin_src emacs-lisp
 (setq sly-default-lisp 'sbcl
@@ -1887,6 +1893,27 @@ The file extension =.cl= is sometimes used.
       :i "<down>" #'sly-mrepl-next-input-or-button
       :i "<up>" #'sly-mrepl-previous-input-or-button
       "<mouse-2>" #'sly-mrepl-insert-input)
+#+end_src
+
+*** Smartparens
+#+begin_src emacs-lisp
+(defun *sp-common-lisp-skip-match-h (delim beg _end)
+  "Like `sp--elisp-skip-match', but for `lisp-mode'."
+  (when (and delim (> beg 1))
+    (save-excursion
+      (goto-char beg)
+      (save-match-data
+        (and (sp--looking-back "\\\\" 1 t)
+             (not (sp--looking-back "#\\\\\\\\" 3 t)))))))
+#+end_src
+
+#+begin_src emacs-lisp
+(after! smartparens
+  (cl-dolist (pair '(("(" . ")") ("[" . "]") ("{" . "}")))
+    (sp-local-pair '(lisp-mode sly-mrepl-mode)
+                   (car pair) (cdr pair)
+                   :unless '(:add sp-char-escaped-p)
+                   :skip-match #'*sp-common-lisp-skip-match-h)))
 #+end_src
 
 ** Elixir
@@ -2032,17 +2059,17 @@ For consistency, the ~tab-width~ in all Elisp modes is set to eight.
 #+end_src
 
 *** Smartparens
-**** WAIT Workaround for Smartparens matching character literals
 #+begin_src emacs-lisp
 (after! smartparens
-  (defun *sp-emacs-lisp-after-char-quote-p (id action context)
-    (unless (eq context 'string)
-      (sp--looking-back-p (concat "\\?\\\\?\\(" (regexp-quote id) "\\)?") 5 t)))
-
-  (cl-dolist (delim '("(" "\\(" "\\\\("))
-    (sp-local-pair '(emacs-lisp-mode lisp-interaction-mode)
-                   delim nil
-                   :unless '(:add *sp-emacs-lisp-after-char-quote-p))))
+  (sp-local-pair '(emacs-lisp-mode lisp-interaction-mode ielm-mode)
+                 "\\\\(" "\\\\)"
+                 :actions '(insert wrap autoskip navigate)
+                 :when '(sp-in-string-p))
+  (cl-dolist (pair '(("(" . ")") ("[" . "]") ("{" . "}")))
+    (sp-local-pair '(emacs-lisp-mode lisp-interaction-mode ielm-mode)
+                   (car pair) (cdr pair)
+                   :unless '(:add sp-char-escaped-p)
+                   :skip-match #'sp--elisp-skip-match)))
 #+end_src
 
 *** WAIT Fix Path in Elisp Module Header ([[doom-repo:pull/3684][#3684]])
