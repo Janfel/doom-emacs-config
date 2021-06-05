@@ -928,6 +928,7 @@ but I fear that might break some things.
 The =smart= option sometimes upcases the entire replacement string.
 #+begin_src emacs-lisp
 (setq evil-ex-substitute-case 'sensitive)
+(setq evil-ex-substitute-global t)
 #+end_src
 
 Evil should deactivate itself in these modes.
