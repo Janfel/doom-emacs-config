@@ -699,36 +699,9 @@ it with a sane alternative.
   (set-popup-rule! "^\\*doom:vterm-popup:" :size 0.25 :vslot -4 :select t :quit 'current :ttl nil))
 #+end_src
 
-As VTerm uses ~last-input-event~ instead of ~last-command-event~, it does not
-handle keys translated using ~key-translation-map~ correctly. This includes all
-keys on the keypad. This advice manually binds ~last-input-event~ to the value
-of ~last-command-event~ to work around this issue until [[github:akermu/emacs-libvterm/pull/494][PR #404]] is merged.
-#+begin_src emacs-lisp
-(defadvice! *vterm-fix-keypad-a (orig-fn &rest args)
-  :around (list #'vterm--self-insert #'vterm-send-key)
-  (let ((last-input-event last-command-event))
-    (apply orig-fn args)))
-#+end_src
-
-VTerm doesn’t recognize any keypad keys for some reason. This advice translates
-the keypad keycodes into the corresponding keyboard keycodes.
-#+begin_src emacs-lisp :tangle no
-(defadvice! *vterm--add-keypad-keys-a (args)
-  "Make `vterm' recognize `<kp-*>' sequences by translating them."
-  :filter-args #'vterm-send-key
-  (let ((key (car args)))
-    (when (string-prefix-p "<kp-" key)
-      (setq key (substring key 4 -1))
-      (when (> (length key) 1)
-        (setq key (cond ((string= key "add"      ) "+")
-                        ((string= key "subtract" ) "-")
-                        ((string= key "multiply" ) "*")
-                        ((string= key "divide"   ) "/")
-                        ((string= key "separator") ",")
-                        (t key))))
-      (setf (car args) key))
-    args))
-#+end_src
+Previously, VTerm used ~last-input-event~ instead of ~last-command-event~,
+which does not handle keys translated using ~key-translation-map~ correctly.
+This includes all keys on the keypad. Resolved since [[github:akermu/emacs-libvterm/pull/494][PR #494]].
 
 ** Todo Keywords
 #+begin_src emacs-lisp
