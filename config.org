@@ -2515,11 +2515,9 @@ variables.
 
 The program [[https://github.com/rust-analyzer/rust-analyzer][rust-analyzer]] is an experimental language server and is to become
 the successor to RLS. It supports inlay hints for automatically annotating
-variables with their inferred types.
+variables with their inferred types. It is the default for =rustic-mode=.
 #+begin_src emacs-lisp
-(when (executable-find "rust-analyzer")
-  (setq rustic-lsp-server 'rust-analyzer)
-  (setq lsp-rust-analyzer-server-display-inlay-hints t))
+(setq lsp-rust-analyzer-server-display-inlay-hints t)
 #+end_src
 
 ** Scheme :Lisp:
