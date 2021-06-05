@@ -10,11 +10,12 @@
 
 (defvar org-mode-hook)
 (defvar org-inhibit-startup)
+(defvar org-startup-folded)
+(defvar org-startup-indented)
 (defvar org-babel-pre-tangle-hook)
 (defvar org-babel-tangle-body-hook)
 (defvar org-babel-post-tangle-hook)
 (defvar org-confirm-babel-evaluate)
-
 
 (defun +literate--tangle-lambda (file)
   (lambda ()
@@ -26,6 +27,9 @@
           ;; Speed up org-mode startup.
           (org-mode-hook nil)
           (org-inhibit-startup t)
+          (org-startup-folded nil)
+          (org-startup-indented nil)
+          (vc-handled-backends nil)
           ;; Do not overwrite the original file with `save-buffer'.
           (org-babel-pre-tangle-hook  nil)
           (org-babel-tangle-body-hook nil)
@@ -34,8 +38,6 @@
           ;; abort them otherwise). This is a security hazard, but
           ;; Doom will trust that you know what you're doing!
           (org-confirm-babel-evaluate nil))
-      ;; (require 'ox)
-      ;; (org-export-expand-include-keyword)
       (with-temp-buffer
         (insert-file-contents file 'visit)
         (org-mode)
@@ -105,7 +107,7 @@ Use this function when in interactive mode."
                  (float-time (time-since start)))))
       (unless (or doom-interactive-p (null files))
         (print! (start "Restarting..."))
-        (throw 'exit "__NOTANGLE=1 $@")))))
+        (throw 'exit "__DOOMRESTART=1 __NOTANGLE=1 $@")))))
 
 ;;;###autoload
 (defun +literate-tangle-config-on-save-h ()
