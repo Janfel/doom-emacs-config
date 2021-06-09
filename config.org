@@ -970,6 +970,13 @@ Define =evil-word= and =evil-WORD= as =thingatpt.el= things.
 ;;(setq evil-mouse-word 'evil-word)
 #+end_src
 
+#+begin_src emacs-lisp
+(defadvice! *evil--fix-evil-set-cursor-a (spec)
+  "Fix `evil-set-cursor' breaking when a spec has a function binding."
+  :after #'evil-set-cursor
+  (when (memq spec '(box bar hbar)) (setq cursor-type spec)))
+#+end_src
+
 Fix double-click selection in ~evil-mode~.
 #+begin_src emacs-lisp
 (defadvice! *evil--fix-mouse-start-end-a (orig-fn start end mode)
