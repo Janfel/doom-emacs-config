@@ -2004,11 +2004,11 @@ For consistency, the ~tab-width~ in all Elisp modes is set to eight.
   (interactive
    (list (read--expression "Eval: ") current-prefix-arg))
   (message "Evaluating...")
-  (let ((val (eval expression lexical-binding)))
-    (push val values)
+  (let ((result (eval expression lexical-binding)))
+    (values--store-value result)
     (if (null arg)
-        (pp-display-expression (car values) "*Pp Eval Output*")
-      (princ val (current-buffer))
+        (pp-display-expression result "*Pp Eval Output*")
+      (princ result (current-buffer))
       (message "Inserted into %s buffer" (buffer-name)))))
 #+end_src
 
