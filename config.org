@@ -229,7 +229,7 @@ Rebind some =dash.el= symbols to use native Emacs functions.
   (defalias '-map  #'mapcar)
   (defalias '-some #'seq-some)
   (defalias '-all? #'seq-every-p)
-  (when EMACS27+ (defalias '-flatten #'flatten-tree)))
+  (defalias '-flatten #'flatten-tree))
 #+end_src
 
 * General Configuration
@@ -505,12 +505,11 @@ This variable might be very useful in certain modes.
                  '(+file-templates-fallback-dir)))))
 #+end_src
 
-** Fill Column Indicator :27:
+** Fill Column Indicator
 #+begin_src emacs-lisp
-(when EMACS27+
-  ;; Customize `global-display-fill-column-indicator-modes' to disable
-  ;; `display-fill-column-indicator-mode' in certain modes.
-  (global-display-fill-column-indicator-mode +1))
+;; Customize `global-display-fill-column-indicator-modes' to disable
+;; `display-fill-column-indicator-mode' in certain modes.
+(global-display-fill-column-indicator-mode +1)
 #+end_src
 
 ** Form Feed
@@ -637,13 +636,12 @@ The new =+everywhere= flag has made this unnecessary.
     (push 'org-document-info (alist-get 'org-mode +spell-excluded-faces-alist))))
 #+end_src
 
-** Tab Bar :27:
+** Tab Bar
 For ~tab-line~ configuration, steal from [[https://gitlab.com/andreyorst/dotfiles/-/blob/master/.config/emacs/init.el][andreyorst]].
 
 Wrap everything in a conditional. Disabled because WIP.
 #+begin_src emacs-lisp :tangle no
-(when EMACS27+
-  (after! tab-bar))
+(after! tab-bar)
 #+end_src
 
 #+begin_src emacs-lisp :tangle no
@@ -1365,7 +1363,7 @@ Add ~company-capf~ as a Company backend.
       (when (bound-and-true-p show-smartparens-mode)
         (show-smartparens-mode -1))
       ;; The indicator doesn’t take the visual indentation into account.
-      (when (and EMACS27+ display-fill-column-indicator)
+      (when display-fill-column-indicator
         (display-fill-column-indicator-mode -1)))))
 #+end_src
 
@@ -1593,8 +1591,7 @@ In ~snippet-mode~, whitespace has significant meaning.
 #+end_src
 
 #+begin_src emacs-lisp
-(when EMACS27+
-  (add-hook! 'snippet-mode-hook (display-fill-column-indicator-mode -1)))
+(add-hook! 'snippet-mode-hook (display-fill-column-indicator-mode -1))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -2760,8 +2757,7 @@ Bind a prefix for setting things to values.
 #+begin_src emacs-lisp
 (map! :leader :prefix "t"
       :desc "Whitespace" "<SPC>" #'whitespace-mode
-      (:when EMACS27+
-       :desc "Fill column indicator" "c" #'display-fill-column-indicator-mode)
+      :desc "Fill column indicator" "c" #'display-fill-column-indicator-mode
       (:when (fboundp #'highlight-indent-guides-mode)
        :desc "Indent guides" "G" #'highlight-indent-guides-mode)
       :desc "Variable width fonts" "v" #'variable-pitch-mode
