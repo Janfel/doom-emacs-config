@@ -363,7 +363,7 @@ Deactivate the Hyper modifier on =pgtk=, =pgtk= interprets =mod3= as Hyper,
 which is the same modifier that Neo uses for =ISO_Level5_Shift= aka =Mod4=.
 The fix is taken from [[https://lists.gnu.org/archive/html/bug-gnu-emacs/2021-05/msg00752.html][this mail]] on =bug-gnu-emacs=.
 #+begin_src emacs-lisp
-(when (and EMACS28+ (eq window-system 'pgtk))
+(when (eq window-system 'pgtk)
   (put 'none 'modifier-value 0)
   (setq x-hyper-keysym 'none))
 #+end_src
@@ -2666,24 +2666,6 @@ Translate =C-ä= and =C-ö= for use with the Neo2 layout.
 
 #+begin_src emacs-lisp
 (map! :map local-function-key-map "−" "-")
-#+end_src
-
-** Fixes for =feature/pgtk= :28:
-Un-hyperify my Mod-3 keys on =pgtk=.
-#+begin_src emacs-lisp
-(map! :when (and EMACS28+ (eq window-system 'pgtk))
-      :map input-decode-map
-      "H-<up>"        "<up>"
-      "H-<down>"      "<down>"
-      "H-<left>"      "<left>"
-      "H-<right>"     "<right>"
-      "H-<home>"      "<home>"
-      "H-<end>"       "<end>"
-      "H-<backspace>" "<backspace>"
-      "H-<delete>"    "<delete>"
-      "H-<prior>"     "<prior>"
-      "H-<next>"      "<next>"
-      "H-<escape>"    "<escape>")
 #+end_src
 
 ** Well Known Bindings
