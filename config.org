@@ -340,7 +340,8 @@ the true version of Emacs including any release-candidate specifiers.")
        (nconc
         (list (expand-file-name "../src/emacs/" invocation-directory))
         (when (or IS-BSD IS-LINUX IS-MAC)
-          (list (expand-file-name (directory-name-base source-directory) "/usr/local/src/")
+          (list (expand-file-name (format "emacs-%s-%s" emacs-repository-branch emacs-repository-version) "/usr/local/src/")
+                (expand-file-name (directory-name-base source-directory) "/usr/local/src/"   )
                 (expand-file-name (format "emacs-%s" emacs-version)      "/usr/local/src/")))
         (list source-directory))))
 #+end_src
