@@ -1330,11 +1330,14 @@ Add ~company-capf~ as a Company backend.
 
 #+begin_src emacs-lisp
 (after! smartparens
+  (defun *sp-org-in-src-block-p (_id _action _context)
+    (org-in-src-block-p 'inside))
   (cl-dolist (del '("=" "~"))
     (sp-local-pair 'org-mode del del
                    :unless '(sp-point-before-word-p
                              sp-point-after-word-p
-                             sp-point-before-same-p))))
+                             sp-point-before-same-p
+                             *sp-org-in-src-block-p))))
 #+end_src
 
 #+begin_src emacs-lisp
