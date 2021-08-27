@@ -403,10 +403,10 @@ Disable tab insertion by default. It will be enabled manually for each mode.
 
 These functions have a tendency to insert tabs where they don’t belong.
 #+begin_src emacs-lisp
-(defadvice! *emacs--disable-indent-tabs-mode-a (orig-fn &rest args)
+(defadvice! *emacs--disable-indent-tabs-mode-a (fn &rest args)
   "Let `indent-tabs-mode' be bound to nil."
   :around '(align-areas comment-indent indent-relative)
-  (let (indent-tabs-mode) (apply orig-fn args)))
+  (let (indent-tabs-mode) (apply fn args)))
 #+end_src
 
 *** Indent Guides
@@ -978,7 +978,7 @@ Define =evil-word= and =evil-WORD= as =thingatpt.el= things.
 
 Fix double-click selection in ~evil-mode~.
 #+begin_src emacs-lisp
-(defadvice! *evil--fix-mouse-start-end-a (orig-fn start end mode)
+(defadvice! *evil--fix-mouse-start-end-a (fn start end mode)
   "Make `mouse-start-end' handle the `evil-mode' point/region convention.
 Without this, double-click selection in `evil-mode' extends one
 character too far."
@@ -986,9 +986,9 @@ character too far."
   (if (and (= mode 1)
            (bound-and-true-p evil-local-mode)
            (not (or (evil-insert-state-p) (evil-emacs-state-p))))
-      (cl-destructuring-bind (start end) (funcall orig-fn start end mode)
+      (cl-destructuring-bind (start end) (funcall fn start end mode)
         (list start (1- end)))
-    (funcall orig-fn start end mode)))
+    (funcall fn start end mode)))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1038,10 +1038,10 @@ character too far."
 Workaround for ~evil-buffer-new~ calling ~set-window-buffer~ instead of
 ~switch-to-buffer~. See issue [[doom-repo:issues/4514][#4514]].
 #+begin_src emacs-lisp
-(defadvice! +evil--new-buffer-a (orig-fn count file)
+(defadvice! +evil--new-buffer-a (fn count file)
   :around #'evil-buffer-new
   (if file
-      (funcall orig-fn count file)
+      (funcall fn count file)
     (with-current-buffer (switch-to-buffer (generate-new-buffer "*new*"))
       (funcall (default-value 'major-mode)))))
 #+end_src
@@ -2354,13 +2354,13 @@ Doom Emacs, annoyingly, sets ~moonscript-indent-offset~ to ~tab-width~ by defaul
 This might fix the issue with ~moonscript-indent-line~.
 This should not be used with =Janfel/moonscript-mode=.
 #+begin_src emacs-lisp :tangle no
-(defadvice! *moonscript--run-untabified-a (orig-fn &rest args)
+(defadvice! *moonscript--run-untabified-a (fn &rest args)
   :around '(moonscript-indent-line moonscript-indent-level)
   (if (not indent-tabs-mode)
-      (apply orig-fn args)
+      (apply fn args)
     (let (indent-tabs-mode)
       (untabify (line-beginning-position) (line-end-position))
-      (apply orig-fn args)
+      (apply fn args)
       (tabify (line-beginning-position)
               (save-excursion (back-to-indentation) (point))))))
 #+end_src
@@ -2496,13 +2496,13 @@ This is currently not working because the variable has been removed.
 #+end_src
 
 #+begin_src emacs-lisp
-(defadvice! *rustic--rustfmt-respect-indent-tabs-mode-a (orig-fn &rest args)
+(defadvice! *rustic--rustfmt-respect-indent-tabs-mode-a (fn &rest args)
   "Make `rustic-format-buffer' respect `indent-tabs-mode'."
   :around #'rustic-format-buffer
   (let ((rustic-rustfmt-config-alist
          (cons (cons 'hard_tabs indent-tabs-mode)
                rustic-rustfmt-config-alist)))
-    (apply orig-fn args)))
+    (apply fn args)))
 #+end_src
 
 *** LSP
@@ -2609,9 +2609,9 @@ Fix indentation of =case= statements.
 Make the indentation inside of comments respect ~nxml-child-indent~.
 #+begin_src emacs-lisp
 (defadvice! *nxml--indent-correctly-inside-comments-a
-  (orig-fn pos open-delim close-delim)
+  (fn pos open-delim close-delim)
   :around #'nxml-compute-indent-in-delimited-token
-  (let ((indent (funcall orig-fn pos open-delim close-delim)))
+  (let ((indent (funcall fn pos open-delim close-delim)))
     (when (and (string= "<!--" open-delim) (string= "-->" close-delim)
                (progn (goto-char xmltok-start) (looking-at-p "<!--[[:blank:]]*$"))
                (progn (goto-char pos)

@@ -13,11 +13,11 @@
         :desc "Serial Monitor"    "s" #'arduino-serial-monitor
         :desc "Reset Arduino"     "r" #'arduino-reset)
 
-  (defadvice! +arduino-use-popup-system-a (orig-fn &rest args)
+  (defadvice! +arduino-use-popup-system-a (fn &rest args)
     "Use `display-buffer' instead of `switch-to-buffer'."
     :around #'arduino-serial-monitor
     (cl-letf (((symbol-function #'switch-to-buffer) #'display-buffer))
-      (apply orig-fn args)))
+      (apply fn args)))
 
   (when (featurep! :checkers syntax)
     (add-hook 'arduino-mode-hook #'flycheck-arduino-setup)))
