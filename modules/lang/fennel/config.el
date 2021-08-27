@@ -15,6 +15,12 @@
   (put 'local  'fennel-indent-function 'defun)
   (put 'global 'fennel-indent-function 'defun)
 
+  (setq-hook! 'fennel-mode-hook
+    standard-indent 2
+    tab-width 2
+    ;; Do not treat autoloads or sexp openers as outline headers.
+    outline-regexp "[ \t]*;;;;* [^ \t\r\n]")
+
   (when (featurep! :tools eval)
    (defadvice! +fennel--return-repl-buffer-from-fennel-repl-a (&rest _)
      "Make `fennel-repl' return the buffer it switches to.
@@ -30,6 +36,7 @@ This enables `fennel-repl' to be used with `set-repl-handler!'."
       (fennel-find-definition-go (fennel-find-definition-for (symbol-at-point))))
 
     (set-lookup-handlers! 'fennel-mode
-      :definition #'fennel-find-definition)
+      :definition #'fennel-find-definition
+      :documentation #'fennel-show-documentation)
     ;; Made obsolete by `set-lookup-handlers!'.
     (map! :map fennel-mode-map "M-." nil "M-," nil)))
