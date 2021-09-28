@@ -865,8 +865,11 @@ Also see [[github:sebastiencs/company-box/issues/138][=company-box/#138=]].
   :when (and (featurep! :completion company)
              (not (featurep! :completion company +childframe)))
   :after company
-  :hook (company-mode-hook . company-quickhelp-local-mode)
-  :config (setq company-quickhelp-use-propertized-text nil))
+  :hook (global-company-mode . company-quickhelp-mode)
+  :config
+  ;; (setq company-quickhelp-use-propertized-text nil)
+  (put 'mwheel-scroll 'company-keep t)
+  (advice-add #'company-show-doc-buffer :before #'company-quickhelp--hide))
 #+end_src
 
 ** Embrace
