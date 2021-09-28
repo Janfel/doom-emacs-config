@@ -1,0 +1,3 @@
+[submodule "modules/editor/fmt"]
+	path = modules/editor/fmt
+	url = git@github.com:Janfel/doom-emacs-module-editor-fmt.git
