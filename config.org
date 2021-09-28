@@ -2452,6 +2452,16 @@ This allows me to not load the entire =:lang/php= module.
 #+end_src
 
 #+begin_src emacs-lisp
+(after! flycheck
+  (push "pyproject.toml" flycheck-python-mypy-config))
+#+end_src
+
+#+begin_src emacs-lisp
+(after! projectile
+  (push "pyproject.toml" projectile-project-root-files))
+#+end_src
+
+#+begin_src emacs-lisp
 (after! which-key
   (which-key-add-major-mode-key-based-replacements 'python-mode
     "C-c C-p" "pipenv"
