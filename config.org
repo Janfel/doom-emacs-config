@@ -405,8 +405,19 @@ These functions have a tendency to insert tabs where they don’t belong.
 #+begin_src emacs-lisp
 (defadvice! *emacs--disable-indent-tabs-mode-a (fn &rest args)
   "Let `indent-tabs-mode' be bound to nil."
-  :around '(align-areas comment-indent indent-relative)
+  :around '(align-areas indent-relative)
   (let (indent-tabs-mode) (apply fn args)))
+
+(defadvice! *emacs--maybe-disable-indent-tabs-mode-for-comment-indent-a
+  (fn &rest args)
+  "Disable `indent-tabs-mode' for `comment-indent' if inside a line."
+  :around #'comment-indent
+  (let ((indent-tabs-mode
+         (and indent-tabs-mode
+              (save-excursion
+                (beginning-of-line)
+                (looking-at "[ \t]*\\($\\|\\s<\\)")))))
+    (apply fn args)))
 #+end_src
 
 *** Indent Guides
