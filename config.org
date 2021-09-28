@@ -2557,6 +2557,13 @@ variables with their inferred types. It is the default for =rustic-mode=.
 (setq lsp-rust-analyzer-server-display-inlay-hints t)
 #+end_src
 
+*** Smartparens
+#+begin_src emacs-lisp
+ (after! smartparens
+   (sp-with-modes '(rust-mode rustic-mode)
+     (sp-local-pair "{" nil :post-handlers '(("||\n[i]" "RET") ("| " "SPC")))))
+#+end_src
+
 ** Scheme :Lisp:
 #+begin_src emacs-lisp
 (add-hook 'scheme-mode-hook #'lisp-mode-common-hook)
