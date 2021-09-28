@@ -528,7 +528,7 @@ This variable might be very useful in certain modes.
 This mode displays instances of =^L= (form feed) as horizontal lines.
 #+begin_src emacs-lisp
 (use-package! form-feed
-  :hook ((prog-mode text-mode) . form-feed-mode))
+  :hook (after-init . global-form-feed-mode))
 #+end_src
 
 *** Keybindings
