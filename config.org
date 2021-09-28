@@ -2503,6 +2503,7 @@ Use system =mspyls= for =lsp-python-ms=.
 
 #+begin_src emacs-lisp
 (setq-hook! '(rustic-mode-hook rustic-macro-expansion-mode-hook)
+  fill-column 100
   indent-tabs-mode t)
 #+end_src
 
