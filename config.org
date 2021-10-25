@@ -1714,7 +1714,7 @@ Checking code for =doom doctor=.
 #+end_src
 
 ** C/C++
-*** Code Style
+*** C Mode
 #+begin_src emacs-lisp
 (defvaralias 'c-basic-offset 'standard-indent)
 #+end_src
@@ -1753,19 +1753,19 @@ Checking code for =doom doctor=.
           (other     . "jfl"))))
 #+end_src
 
-*** C Mode
-*** C++ Mode
-*** File Templates
 #+begin_src emacs-lisp
-(set-file-templates!
- '("/main\\.c\\(?:c\\|pp\\)$") '("/win32_\\.c\\(?:c\\|pp\\)$")
- '("\\.c\\(?:c\\|pp\\)$") '("\\.h\\(?:h\\|pp\\|xx\\)$") '("\\.h$") '(c-mode)
- '(c-mode :trigger "__src") '(c++-mode :trigger "__src")
- (list "\\.h\\(?:h\\|pp\\|xx\\|\\+\\+\\)?\\'" :trigger "__hdr_pragma"
-       :when (lambda () (bound-and-true-p *cc-use-pragma-once)))
- '("\\.h\\(?:h\\|pp\\|xx\\|\\+\\+\\)?\\'" :trigger "__hdr")
- '("/main\\.c\\(?:c\\|pp\\|xx\\|\\+\\+\\)?\\'" :trigger "__main")
- '("/win32_main\\.c\\(?:c\\|pp\\)\\'" :trigger "__winmain"))
+(when (featurep! :checkers syntax)
+  (setq-hook! 'c-mode-hook
+    flycheck-gcc-language-standard   "gnu18"
+    flycheck-clang-language-standard "gnu18"))
+#+end_src
+
+*** C++ Mode
+#+begin_src emacs-lisp
+(when (featurep! :checkers syntax)
+  (setq-hook! 'c++-mode-hook
+    flycheck-gcc-language-standard   "gnu++17"
+    flycheck-clang-language-standard "gnu++17"))
 #+end_src
 
 *** Meson Mode
@@ -1792,6 +1792,19 @@ determining the project root directory.
   (push "meson.build" projectile-project-root-files))
 #+end_src
 
+*** File Templates
+#+begin_src emacs-lisp
+(set-file-templates!
+ '("/main\\.c\\(?:c\\|pp\\)$") '("/win32_\\.c\\(?:c\\|pp\\)$")
+ '("\\.c\\(?:c\\|pp\\)$") '("\\.h\\(?:h\\|pp\\|xx\\)$") '("\\.h$") '(c-mode)
+ '(c-mode :trigger "__src") '(c++-mode :trigger "__src")
+ (list "\\.h\\(?:h\\|pp\\|xx\\|\\+\\+\\)?\\'" :trigger "__hdr_pragma"
+       :when (lambda () (bound-and-true-p *cc-use-pragma-once)))
+ '("\\.h\\(?:h\\|pp\\|xx\\|\\+\\+\\)?\\'" :trigger "__hdr")
+ '("/main\\.c\\(?:c\\|pp\\|xx\\|\\+\\+\\)?\\'" :trigger "__main")
+ '("/win32_main\\.c\\(?:c\\|pp\\)\\'" :trigger "__winmain"))
+#+end_src
+
 *** LSP
 Activate the =clang-tidy= integration of =clangd=.
 #+begin_src emacs-lisp
@@ -1799,20 +1812,6 @@ Activate the =clang-tidy= integration of =clangd=.
 #+end_src
 
 *** Flycheck
-#+begin_src emacs-lisp
-(when (featurep! :checkers syntax)
-  (setq-hook! 'c-mode-hook
-    flycheck-gcc-language-standard   "gnu18"
-    flycheck-clang-language-standard "gnu18"))
-#+end_src
-
-#+begin_src emacs-lisp
-(when (featurep! :checkers syntax)
-  (setq-hook! 'c++-mode-hook
-    flycheck-gcc-language-standard   "gnu++17"
-    flycheck-clang-language-standard "gnu++17"))
-#+end_src
-
 #+begin_src emacs-lisp
 (when (featurep! :checkers syntax)
   (defvar *flycheck-gcc-header-warnings '("no-pragma-once-outside-header")
