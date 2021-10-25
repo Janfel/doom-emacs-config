@@ -2461,6 +2461,11 @@ This allows me to not load the entire =:lang/php= module.
 #+end_src
 
 #+begin_src emacs-lisp
+(setq python-indent-def-block-scale 1)
+(setq py-isort-options '("--profile=black" "--combine-as"))
+#+end_src
+
+#+begin_src emacs-lisp
 (when (sys-feature-p 'black/tabs)
   (defadvice! *fmt-black-use-tabs-a (args)
     :filter-return #'+fmt-black-compute-args
