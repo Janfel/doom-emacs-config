@@ -1571,6 +1571,15 @@ one. As the linked issue is resolved, this fix is no longer necessary.
 (setq sp-autodelete-pair nil)
 #+end_src
 
+** Vertico
+#+begin_src emacs-lisp
+(map! :when (featurep! :completion vertico)
+      :after vertico
+      :map vertico-map
+      "C-<up>" #'previous-history-element
+      "C-<down>" #'next-history-element)
+#+end_src
+
 ** Which Key
 Replace =<up>= and =<down>= with Unicode arrows.
 #+begin_src emacs-lisp
