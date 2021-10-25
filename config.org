@@ -1479,6 +1479,48 @@ Add this pair in ~sp-lisp-modes~ for symmetry.
   (and (> (point) (point-min)) (apply fn args)))
 #+end_src
 
+Free =C-<up>= and =C-<down>= for use in history navigation.
+#+begin_src emacs-lisp
+(after! smartparens
+  (setcar (assoc "M-<up>"   sp-paredit-bindings) "C-<up>")
+  (setcar (assoc "M-<down>" sp-paredit-bindings) "C-<down>"))
+#+end_src
+
+This is a function that I have been sorely missing. Using code from
+~sp-show--pair-function~, I can finally use =smartparens= to jump between pairs.
+#+begin_src emacs-lisp
+(defun *sp-jump-item ()
+  "Like `evil-jump-item', but using `sp-pairs'."
+  (interactive)
+  (save-match-data
+    (let (match back)
+      (let* ((pair-list (sp--get-allowed-pair-list))
+             (opening (sp--get-opening-regexp pair-list))
+             (closing (sp--get-closing-regexp pair-list)))
+        (cond ((and (not (*evil-blocky-state-p))
+                    (sp--looking-back closing))
+               (setq match (match-string 0) back t))
+              ((or (and (*evil-blocky-state-p)
+                        (sp--looking-at (sp--get-allowed-regexp)))
+                   (sp--looking-at opening)
+                   (looking-at (sp--get-stringlike-regexp))
+                   (and (memq major-mode sp-navigate-consider-sgml-tags)
+                        (sp--looking-at "<")))
+               (setq match (match-string 0)))
+              ((or (sp--looking-back closing)
+                   (sp--looking-back (sp--get-stringlike-regexp))
+                   (and (memq major-mode sp-navigate-consider-sgml-tags)
+                        (sp--looking-back ">")))
+               (setq match (match-string 0) back t))))
+      (when match
+        (when-let* ((ok (sp-get-thing back)))
+          (sp-get ok
+            (cond ((<  (point) :beg-in) (goto-char :end-in))
+                  ((<= :end-in (point)) (goto-char :beg)))))))))
+#+end_src
+
+*** Keybindings
+
 Bind ~sp-raise-sexp~, which I use quite often.
 #+begin_src emacs-lisp
 (map! :n "z +" #'sp-join-sexp
@@ -1521,45 +1563,6 @@ Bind ~sp-raise-sexp~, which I use quite often.
       :n "w ]" #'sp-wrap-square
       :n "w {" #'sp-wrap-curly
       :n "w }" #'sp-wrap-curly)
-#+end_src
-
-#+begin_src emacs-lisp
-(after! smartparens
-  (setcar (assoc "M-<up>"   sp-paredit-bindings) "C-<up>")
-  (setcar (assoc "M-<down>" sp-paredit-bindings) "C-<down>"))
-#+end_src
-
-This is a function that I have been sorely missing. Using code from
-~sp-show--pair-function~, I can finally use =smartparens= to jump between pairs.
-#+begin_src emacs-lisp
-(defun *sp-jump-item ()
-  "Like `evil-jump-item', but using `sp-pairs'."
-  (interactive)
-  (save-match-data
-    (let (match back)
-      (let* ((pair-list (sp--get-allowed-pair-list))
-             (opening (sp--get-opening-regexp pair-list))
-             (closing (sp--get-closing-regexp pair-list)))
-        (cond ((and (not (*evil-blocky-state-p))
-                    (sp--looking-back closing))
-               (setq match (match-string 0) back t))
-              ((or (and (*evil-blocky-state-p)
-                        (sp--looking-at (sp--get-allowed-regexp)))
-                   (sp--looking-at opening)
-                   (looking-at (sp--get-stringlike-regexp))
-                   (and (memq major-mode sp-navigate-consider-sgml-tags)
-                        (sp--looking-at "<")))
-               (setq match (match-string 0)))
-              ((or (sp--looking-back closing)
-                   (sp--looking-back (sp--get-stringlike-regexp))
-                   (and (memq major-mode sp-navigate-consider-sgml-tags)
-                        (sp--looking-back ">")))
-               (setq match (match-string 0) back t))))
-      (when match
-        (when-let* ((ok (sp-get-thing back)))
-          (sp-get ok
-            (cond ((<  (point) :beg-in) (goto-char :end-in))
-                  ((<= :end-in (point)) (goto-char :beg)))))))))
 #+end_src
 
 *** NOTE Smartparens matching character literals ([[github:Fuco1/smartparens/issues/1045][#1045]])
