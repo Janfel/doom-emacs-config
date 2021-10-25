@@ -2,6 +2,8 @@
 
 ;; The elided SHA1 hashes are caused by `+emacs-lisp-truncate-pin'.
 
+;; Major mode for flex/bison.
+(package! bison-mode)
 ;; Major mode for Meson build files.
 (package! meson-mode)
 ;; My own verson of `moonscript-mode'.

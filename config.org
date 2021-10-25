@@ -1768,6 +1768,7 @@ Checking code for =doom doctor=.
     flycheck-clang-language-standard "gnu++17"))
 #+end_src
 
+*** Bison Mode
 *** Meson Mode
 Major mode for the [[https://mesonbuild.com][Meson Build System]].
 
