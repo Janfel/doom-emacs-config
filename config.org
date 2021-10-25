@@ -2380,6 +2380,48 @@ The advice ~+default--delete-backward-char-a~ to ~backward-delete-char~ behaves
 weirdly when deleting line comments inside of a multiline comment. I have not
 yet found a fix for this.
 
+** Markdown
+
+*** WAIT Fontified ~<hr />~ elements wrap into the next line ([[github:jrblevin/markdown-mode/issues/670][#670]])
+This issue breaks =company-quickhelp= in ~python-mode~ because the wrapping line
+fills up most of the =pos-tip=, pushing the actual content out of frame.
+The solution is modeled after ~form-feed-mode~, which has no such issues.
+
+This is the way ~markdown-mode~ renders a line.
+#+begin_quote
+There are text properties here:
+  display              [Show]
+  face                 markdown-hr-face
+  font-lock-multiline  t
+  fontified            t
+  markdown-hr          (8 11 8 11 #<buffer *new*>)
+#+end_quote
+
+This is the way ~form-feed-mode~ renders a line.
+#+begin_quote
+There are text properties here:
+  display              (space :width text)
+  face                 form-feed-line
+  fontified            t
+#+end_quote
+
+#+begin_src emacs-lisp
+(defface *markdown-hr-face
+  '((default :inherit markdown-hr-face)
+    (((type graphic)) :strike-through t)
+    (((type tty)) :underline t))
+  "Face for form-feed-mode-like hr fontification.")
+
+(defadvice! *markdown--fontify-hrs-like-form-feed-mode-a (last)
+  :override #'markdown-fontify-hrs
+  (when (markdown-match-hr last)
+    (add-text-properties
+     (match-beginning 0) (match-end 0)
+     (if markdown-hide-markup
+         '(face *markdown-hr-face font-lock-multiline t display (space :width text))
+       '(face markdown-hr-face font-lock-multiline t)))))
+#+end_src
+
 ** MoonScript :Lua:
 Consolidate indentation.
 #+begin_src emacs-lisp
