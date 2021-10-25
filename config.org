@@ -1453,6 +1453,14 @@ Add this pair in ~sp-lisp-modes~ for symmetry.
                    :when '(:add sp-in-string-p))))
 #+end_src
 
+#+begin_src emacs-lisp
+(defadvice! *smartparens--fix-sp-char-escaped-p-on-beginning-of-buffer-a
+  (fn &rest args)
+  "Advise `sp-char-escaped-p' to not crash when `point' at `point-min'."
+  :around #'sp-char-escaped-p
+  (and (> (point) (point-min)) (apply fn args)))
+#+end_src
+
 Bind ~sp-raise-sexp~, which I use quite often.
 #+begin_src emacs-lisp
 (map! :n "z +" #'sp-join-sexp
