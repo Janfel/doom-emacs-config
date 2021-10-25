@@ -2476,7 +2476,8 @@ This allows me to not load the entire =:lang/php= module.
 
 #+begin_src emacs-lisp
 (setq-hook! 'python-mode-hook
-  indent-tabs-mode nil)
+  indent-tabs-mode nil
+  *flycheck-lsp-next-checkers '(python-pycompile python-pylint python-mypy))
 #+end_src
 
 #+begin_src emacs-lisp
