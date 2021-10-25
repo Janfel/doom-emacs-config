@@ -1251,6 +1251,24 @@ Close the conditional opened in the preamble.
 #+end_src
 
 ** Flycheck
+
+#+begin_src emacs-lisp
+(defvar-local *flycheck-lsp-next-checkers nil)
+#+end_src
+
+#+begin_src emacs-lisp
+(when (featurep! :tools lsp)
+  (after! flycheck
+    (defadvice! *flycheck--buffer-local-followers-for-lsp-checker-h (fn checker)
+      :around #'flycheck-get-next-checker-for-buffer
+      (if (eq checker 'lsp)
+          (let ((pred (lambda (x) (and (not (eq x 'lsp)) (flycheck-may-use-next-checker x)))))
+            (when-let (next (or (seq-find pred *flycheck-lsp-next-checkers)
+                                (seq-find pred flycheck--automatically-enabled-checkers)))
+              (if (symbolp next) next (cdr next))))
+        (funcall fn checker)))))
+#+end_src
+
 #+begin_src emacs-lisp
 (map! :when (featurep! :checkers syntax)
       :after flycheck
