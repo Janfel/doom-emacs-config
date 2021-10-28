@@ -1128,9 +1128,10 @@ character too far."
       "g]"     #'forward-page)
 #+end_src
 
+**** DONE Issues with ~evil-buffer-new~ disregarding window hooks ([[doom-repo:issues/4514][#4514]])
 Workaround for ~evil-buffer-new~ calling ~set-window-buffer~ instead of
-~switch-to-buffer~. See issue [[doom-repo:issues/4514][#4514]].
-#+begin_src emacs-lisp
+~switch-to-buffer~.
+#+begin_src emacs-lisp :tangle no
 (defadvice! +evil--new-buffer-a (fn count file)
   :around #'evil-buffer-new
   (if file
