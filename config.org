@@ -558,6 +558,74 @@ it’s own cleanup mechanism with ~helpful-max-buffers~ anyway.
 (set-popup-rule! "^\\*helpful " :size 0.35 :ttl nil :select t)
 #+end_src
 
+Experimental next/previous system for =helpful= buffers.
+#+begin_src emacs-lisp
+(defvar *helpful-buffer-ring-size 5
+  "How many buffers are stored for use with `*helpful-next'.")
+
+(defvar *helpful--buffer-ring (make-ring *helpful-buffer-ring-size)
+  "Ring that stores the current Helpful buffer history.")
+
+(defun *helpful--buffer-index (&optional buffer)
+  "If BUFFER is a Helpful buffer, return it’s index in the buffer ring."
+  (let ((buf (or buffer (current-buffer))))
+    (and (eq (buffer-local-value 'major-mode buf) 'helpful-mode)
+         (seq-position (ring-elements *helpful--buffer-ring) buf #'eq))))
+
+(defadvice! *helpful--new-buffer-a (help-buf)
+  "Update the buffer ring according to the current buffer and HELP-BUF."
+  :filter-return #'helpful--buffer
+  (let ((buf-ring *helpful--buffer-ring))
+    (let ((newer-buffers (or (*helpful--buffer-index) 0)))
+      (dotimes (_ newer-buffers) (ring-remove buf-ring 0)))
+    (when (/= (ring-size buf-ring) *helpful-buffer-ring-size)
+      (ring-resize buf-ring *helpful-buffer-ring-size))
+    (ring-insert buf-ring help-buf)))
+
+(defun *helpful--next (&optional buffer)
+  "Return the next live Helpful buffer relative to BUFFER."
+  (let ((buf-ring *helpful--buffer-ring)
+        (index (or (*helpful--buffer-index buffer) -1)))
+    (cl-block nil
+      (while (> index 0)
+        (cl-decf index)
+        (let ((buf (ring-ref buf-ring index)))
+          (if (buffer-live-p buf) (cl-return buf)))
+        (ring-remove buf-ring index)))))
+
+(defun *helpful--previous (&optional buffer)
+  "Return the previous live Helpful buffer relative to BUFFER."
+  (let ((buf-ring *helpful--buffer-ring)
+        (index (1+ (or (*helpful--buffer-index buffer) -1))))
+    (cl-block nil
+      (while (< index (ring-length buf-ring))
+        (let ((buf (ring-ref buf-ring index)))
+          (if (buffer-live-p buf) (cl-return buf)))
+        (ring-remove buf-ring index)))))
+
+(defun *helpful-next ()
+  "Go to the next Helpful buffer."
+  (interactive)
+  (when-let (buf (*helpful--next))
+    (funcall helpful-switch-buffer-function buf)))
+
+(defun *helpful-previous ()
+  "Go to the previous Helpful buffer."
+  (interactive)
+  (when-let (buf (*helpful--previous))
+    (funcall helpful-switch-buffer-function buf)))
+
+(map! :map helpful-mode-map
+      "<XF86Forward>" #'*helpful-next
+      "<XF86Back>"    #'*helpful-previous
+      "C-c C-f"       #'*helpful-next
+      "C-c C-b"       #'*helpful-previous
+      "M-n"           #'*helpful-next
+      "M-p"           #'*helpful-previous
+      :n ">"          #'*helpful-next
+      :n "<"          #'*helpful-previous)
+#+end_src
+
 ** LSP
 *** Code Lens
 Enable code lenses, which are those “Run | Debug” buttons that appear over
