@@ -1550,14 +1550,6 @@ Add this pair in ~sp-lisp-modes~ for symmetry.
                    :when '(:add sp-in-string-p))))
 #+end_src
 
-#+begin_src emacs-lisp
-(defadvice! *smartparens--fix-sp-char-escaped-p-on-beginning-of-buffer-a
-  (fn &rest args)
-  "Advise `sp-char-escaped-p' to not crash when `point' at `point-min'."
-  :around #'sp-char-escaped-p
-  (and (> (point) (point-min)) (apply fn args)))
-#+end_src
-
 Free =C-<up>= and =C-<down>= for use in history navigation.
 #+begin_src emacs-lisp
 (after! smartparens
@@ -1642,6 +1634,15 @@ Bind ~sp-raise-sexp~, which I use quite often.
       :n "w ]" #'sp-wrap-square
       :n "w {" #'sp-wrap-curly
       :n "w }" #'sp-wrap-curly)
+#+end_src
+
+*** WAIT Error when point at point-min ([[https://github.com/Fuco1/smartparens/issues/1111][#1111]])
+#+begin_src emacs-lisp
+(defadvice! *smartparens--fix-sp-char-escaped-p-on-beginning-of-buffer-a
+  (fn &rest args)
+  "Advise `sp-char-escaped-p' to not crash when `point' at `point-min'."
+  :around #'sp-char-escaped-p
+  (and (> (point) (point-min)) (apply fn args)))
 #+end_src
 
 *** NOTE Smartparens matching character literals ([[github:Fuco1/smartparens/issues/1045][#1045]])
