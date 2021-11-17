@@ -1570,8 +1570,11 @@ These values have to be set before ~org-mode~ is loaded.
 #+end_src
 
 #+begin_src emacs-lisp
-(after! org-src
-  (setf (cdr (assq 'vslot (cdr (assoc "^\\*Org Src" display-buffer-alist)))) -1))
+(when (featurep! :ui popup)
+  (advice-add
+   #'+org-init-popup-rules-h :after
+   (lambda (&rest _)
+     (setf (cdr (assq 'vslot (cdr (assoc "^\\*Org Src" display-buffer-alist)))) -1))))
 #+end_src
 
 
