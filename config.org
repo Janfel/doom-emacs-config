@@ -551,6 +551,17 @@ to be eight spaces wide.
 (setq helpful-max-buffers 8)
 #+end_src
 
+*** WAIT Advised native-compiled functions are mistaken for primitives. ([[github:Wilfred/helpful/issues/277][#277]])
+#+begin_src emacs-lisp
+(defadvice! *helpful--fix-primitive-p-for-advised-compiled-functions-a (args)
+  "Fix false positive on advised compiled functions."
+  :filter-args #'helpful--primitive-p
+  (let ((sym (car args)) (callable-p (cadr args)))
+    (cons (if (and callable-p (helpful--advised-p sym))
+              (helpful--without-advice sym) sym)
+          (cdr args))))
+#+end_src
+
 *** Buffer Ring System
 Set ~:ttl~ to ~nil~, so the buffers are not automatically removed. We still need
 them around if we want to access them through the buffer ring, and =helpful= has
