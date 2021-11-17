@@ -653,6 +653,14 @@ it is easiest to just remove this hook.
 (remove-hook 'lsp-lens-mode-hook #'ccls-code-lens-mode)
 #+end_src
 
+*** UI Doc
+This feature shows documentation in a tooltip when hovering over a symbol.
+#+begin_src emacs-lisp
+(setq lsp-ui-doc-enable t
+      lsp-ui-doc-show-with-cursor nil
+      lsp-ui-doc-show-with-mouse t)
+#+end_src
+
 *** TODO Try semantic highlighting.
 #+begin_src emacs-lisp :tangle no
 (setq lsp-enable-semantic-highlighting t)
