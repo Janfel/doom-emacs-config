@@ -1304,6 +1304,26 @@ the lines 973 to 1026.
        :i "C-S-h" nil :i "C-S-j" nil :i "C-S-k" nil :i "C-S-l" nil))
 #+end_src
 
+*** Evil Windows
+#+begin_src emacs-lisp
+(defvar *evil-window-transient-map (make-sparse-keymap))
+(map! :map *evil-window-transient-map
+      "+" #'evil-window-increase-height
+      "-" #'evil-window-decrease-height
+      ">" #'evil-window-increase-width
+      "<" #'evil-window-decrease-width
+      "=" #'balance-windows)
+#+end_src
+
+#+begin_src emacs-lisp
+(defadvice! *evil-window--transient-map-on-resize-a (&rest _)
+  :after '(evil-window-increase-height
+           evil-window-decrease-height
+           evil-window-increase-width
+           evil-window-decrease-width)
+  (set-transient-map *evil-window-transient-map))
+#+end_src
+
 *** Operators
 This operator capitalizes a region similar to ~evil-upcase~ and ~evil-downcase~.
 #+begin_src emacs-lisp
