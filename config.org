@@ -551,11 +551,12 @@ to be eight spaces wide.
 (setq helpful-max-buffers 8)
 #+end_src
 
+*** Buffer Ring System
 Set ~:ttl~ to ~nil~, so the buffers are not automatically removed. We still need
 them around if we want to access them through the buffer ring, and =helpful= has
 it’s own cleanup mechanism with ~helpful-max-buffers~ anyway.
 #+begin_src emacs-lisp
-(set-popup-rule! "^\\*helpful " :size 0.35 :ttl nil :select t)
+(set-popup-rule! "^\\*helpful " :size 0.35 :ttl nil :select t :vslot 1)
 #+end_src
 
 Experimental next/previous system for =helpful= buffers.
