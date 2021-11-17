@@ -823,6 +823,7 @@ This includes all keys on the keypad. Resolved since [[github:akermu/emacs-libvt
   (push! hl-todo-keyword-faces
          '("CONF" success bold)
          '("MAYBE" font-lock-keyword-face bold)
+         '("SAFETY" font-lock-warning-face bold)
          '("WIP" font-lock-constant-face bold)))
 #+end_src
 
