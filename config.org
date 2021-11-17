@@ -2714,6 +2714,32 @@ Use system =mspyls= for =lsp-python-ms=.
     +fmt-formatter #'rustic-format-buffer))
 #+end_src
 
+#+begin_src emacs-lisp
+(after! highlight-numbers
+  (defconst *rust-number-regexp
+    (rx-let ((bdigit (any "0-1"))
+             (odigit (any "0-7"))
+             (mix (main extra) (and (*? extra) main (* (or main extra))))
+             (dec-literal (and digit (* (or digit "_"))))
+             (dec-suffix (and (or "i" "u") (or "8" "16" "32" "64" "128" "size")))
+             (float-exp (and (or "e" "E") (? (or "+" "-")) (mix digit "_")))
+             (float-suffix (or "f32" "f64")))
+      (rx symbol-start
+          (or (and "0" ;; Binary/Octal/Hex literals.
+                   (or (and "b" (mix bdigit "_"))
+                       (and "o" (mix odigit "_"))
+                       (and "x" (mix xdigit "_")))
+                   (? dec-suffix))
+              (and dec-literal ;; Decimal integers and floats.
+                   (or (and (? "." dec-literal) (? float-exp) (? float-suffix))
+                       dec-suffix ".")))
+          symbol-end))
+    "Match number literals in Rust source code.")
+
+  (dolist (mode '(rust-mode rustic-mode))
+    (puthash mode *rust-number-regexp highlight-numbers-modelist)))
+#+end_src
+
 This is currently not working because the variable has been removed.
 #+begin_src emacs-lisp :tangle no
 (after! rustic
