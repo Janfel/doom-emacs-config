@@ -1252,7 +1252,9 @@ The best of all aforementioned worlds, so jumping just works™."
 (map! :when (featurep! :editor multiple-cursors)
       :after evil-mc
       :nv "g z <up>"   #'evil-mc-make-cursor-move-prev-line
-      :nv "g z <down>" #'evil-mc-make-cursor-move-next-line)
+      :nv "g z <down>" #'evil-mc-make-cursor-move-next-line
+      "M-S-<up>"       #'evil-mc-make-cursor-move-prev-line
+      "M-S-<down>"     #'evil-mc-make-cursor-move-next-line)
 #+end_src
 
 *** Evil Numbers
