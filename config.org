@@ -2068,6 +2068,14 @@ The file extension =.cl= is sometimes used.
 #+end_src
 
 #+begin_src emacs-lisp
+(setq sly-command-switch-to-existing-lisp 'always)
+(when (featurep! :ui popup)
+  (after! sly
+    (setq display-buffer-alist (assoc-delete-all "^\\*sly-mrepl" display-buffer-alist))
+    (set-popup-rule! "^\\*sly-mrepl" :vslot 2 :size 0.3 :quit t :ttl nil)))
+#+end_src
+
+#+begin_src emacs-lisp
 (map! :after sly
       :map lisp-mode-map
       :localleader
