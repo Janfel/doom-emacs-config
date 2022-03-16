@@ -2764,6 +2764,14 @@ Use system =mspyls= for =lsp-python-ms=.
     (puthash mode *rust-number-regexp highlight-numbers-modelist)))
 #+end_src
 
+#+begin_src emacs-lisp
+(after! rustic
+  ;; MAYBE: Add a remap for `projectile-compile-project'.
+  (map! :map rustic-mode-map
+        [remap compile] #'rustic-compile
+        [remap recompile] #'rustic-recompile))
+#+end_src
+
 This is currently not working because the variable has been removed.
 #+begin_src emacs-lisp :tangle no
 (after! rustic
