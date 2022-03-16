@@ -1460,8 +1460,7 @@ experiment a bit with the current system.
 
 ** Magit
 #+begin_src emacs-lisp
-(add-hook   'git-commit-setup-hook #'turn-off-flyspell)
-(setq-hook! 'git-commit-setup-hook fill-column 50)
+(add-hook 'git-commit-setup-hook #'turn-off-flyspell)
 #+end_src
 
 This fixes an issue where Magit doesn’t unfold the headings in ~org-mode~.
