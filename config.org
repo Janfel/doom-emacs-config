@@ -1958,7 +1958,8 @@ Specify where to find the Meson documentation, if installed.
 #+end_src
 
 Add the =meson.build= file to the files that projectile looks for when
-determining the project root directory.
+determining the project root directory. This might not be necessary, because
+there already is a =meson= project type registered in ~projectile-project-types~.
 #+begin_src emacs-lisp
 (after! projectile
   (push "meson.build" projectile-project-root-files))
@@ -2694,6 +2695,8 @@ This allows me to not load the entire =:lang/php= module.
     :filter-return #'+fmt-black-compute-args
     (if indent-tabs-mode (cons "--use-tabs" args) args)))
 #+end_src
+
+TODO: Define =python-flit= as a project type for =projectile=.
 
 #+begin_src emacs-lisp
 (after! flycheck
