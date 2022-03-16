@@ -1654,6 +1654,7 @@ Bind ~sp-raise-sexp~, which I use quite often.
 
 #+begin_src emacs-lisp
 (map! :prefix ("ß" . "smartparens")
+      :n "(" #'sp-backward-slurp-sexp
       :n ")" #'sp-forward-slurp-sexp
       :n "C-)" #'sp-slurp-hybrid-sexp
       :n "<" #'sp-backward-barf-sexp
