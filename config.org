@@ -1687,8 +1687,8 @@ Bind ~sp-raise-sexp~, which I use quite often.
       :n "w }" #'sp-wrap-curly)
 #+end_src
 
-*** WAIT Error when point at point-min ([[https://github.com/Fuco1/smartparens/issues/1111][#1111]])
-#+begin_src emacs-lisp
+*** DONE Error when point at point-min ([[https://github.com/Fuco1/smartparens/issues/1111][#1111]])
+#+begin_src emacs-lisp :tangle no
 (defadvice! *smartparens--fix-sp-char-escaped-p-on-beginning-of-buffer-a
   (fn &rest args)
   "Advise `sp-char-escaped-p' to not crash when `point' at `point-min'."
