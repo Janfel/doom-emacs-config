@@ -665,8 +665,8 @@ function definitions.
 
 For some reason, Doom hooks ~ccls-code-lens-mode~ onto ~lsp-lens-mode-hook~,
 causing a second “Run | Debug” button to appear. Until I know why this is done,
-it is easiest to just remove this hook.
-#+begin_src emacs-lisp
+it is easiest to just remove this hook. Fixed upstream.
+#+begin_src emacs-lisp :tangle no
 (remove-hook 'lsp-lens-mode-hook #'ccls-code-lens-mode)
 #+end_src
 
