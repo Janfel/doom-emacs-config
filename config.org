@@ -1962,7 +1962,7 @@ determining the project root directory.
 *** LSP
 Activate the =clang-tidy= integration of =clangd=.
 #+begin_src emacs-lisp
-(setq lsp-clients-clangd-args '("--clang-tidy"))
+(setq lsp-clients-clangd-args '("--clang-tidy" "--header-insertion-decorators=0"))
 #+end_src
 
 *** Flycheck
