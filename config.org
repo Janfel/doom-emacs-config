@@ -670,6 +670,14 @@ it is easiest to just remove this hook. Fixed upstream.
 (remove-hook 'lsp-lens-mode-hook #'ccls-code-lens-mode)
 #+end_src
 
+*** Indentation
+Please stop formatting my code when I call ~indent-region~. This is very
+annoying when editing a file that is formatted differently than the formatter
+expects. Especially when editing other people’s code.
+#+begin_src emacs-lisp
+(setq lsp-enable-indentation nil)
+#+end_src
+
 *** UI Doc
 This feature shows documentation in a tooltip when hovering over a symbol.
 #+begin_src emacs-lisp
