@@ -286,6 +286,11 @@ Don’t untabify when deleting a tab character.
 (setq backward-delete-char-untabify-method nil)
 #+end_src
 
+Assume that error messages treat '\t' as a single character.
+#+begin_src emacs-lisp
+(setq compilation-error-screen-columns nil)
+#+end_src
+
 Move files to trash instead of deleting them.
 #+begin_src emacs-lisp
 (setq delete-by-moving-to-trash t)
