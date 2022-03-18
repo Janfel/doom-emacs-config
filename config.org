@@ -1130,6 +1130,17 @@ character too far."
 #+end_src
 
 #+begin_src emacs-lisp
+;; TODO: Document
+(defadvice! *evil--coarse-undo-on-repeated-insert-a (orig-fn &rest args)
+  :around #'evil-cleanup-insert-state
+  (if (and evil-want-fine-undo
+           (or (and evil-insert-count  (> evil-insert-count  1))
+               (and evil-insert-vcount (> (nth 2 evil-insert-vcount) 1))))
+      (evil-with-single-undo (apply orig-fn args))
+    (apply orig-fn args)))
+#+end_src
+
+#+begin_src emacs-lisp
 (map! :after evil
       ;; Use the default `mouse-drag-region'.
       :m "<mouse-down-1>" #'mouse-drag-region
