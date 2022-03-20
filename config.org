@@ -1129,6 +1129,80 @@ character too far."
     (funcall fn start end mode)))
 #+end_src
 
+Reimplement Evil’s block-mode insertion operators using ~string-rectangle~,
+because it has a nice preview overlay and can be canceled using =C-g=. This also
+fixes the coarse undo problem for these operators.
+#+begin_src emacs-lisp
+(defun *evil-visual-change ()
+  "Reimplement `evil-change' in visual-block-mode using `string-rectangle'."
+  (interactive)
+  (call-interactively
+   (if (and (evil-visual-state-p) (eq evil-visual-selection 'block))
+       #'string-rectangle #'evil-change)))
+
+(defun *evil-visual-change-line ()
+  "Reimplement `evil-change-line' in visual-block-mode using `string-rectangle'."
+  (interactive)
+  (if (and (evil-visual-state-p) (eq evil-visual-selection 'block))
+      (let ((block-beg evil-visual-beginning)
+            (block-end evil-visual-end)
+            (point (point))
+            (not-vis-mode (not (and evil-respect-visual-line-mode visual-line-mode)))
+            (suffices nil)
+            (ok nil))
+        (evil-apply-on-block
+         (lambda (beg end)
+           (let ((line-end (if not-vis-mode (point-at-eol)
+                             (goto-char beg) (end-of-visual-line) (point))))
+             (push (buffer-substring beg line-end) suffices)
+             (delete-region beg line-end)))
+         block-beg block-end nil)
+        (unwind-protect (progn (*evil-visual-append) (setq ok t))
+          (unless ok
+            (setq suffices (nreverse suffices))
+            (evil-apply-on-block
+             (lambda (beg end) (goto-char beg) (insert (pop suffices)))
+             block-beg block-end nil)
+            (goto-char point))))
+    (call-interactively #'evil-change-line)))
+
+(defun *evil-visual-insert ()
+  "Reimplement `evil-insert' in visual-block-mode using `string-rectangle'."
+  (interactive)
+  (if (and (evil-visual-state-p) (eq evil-visual-selection 'block))
+      (let ((column (min (evil-column evil-visual-beginning)
+                         (evil-column evil-visual-end))))
+        (evil-visual-highlight -1)
+        (goto-char
+         (save-mark-and-excursion
+           (move-to-column column t)
+           (set-mark (save-excursion (goto-char (mark)) (move-to-column column t) (point)))
+           (call-interactively #'string-rectangle)
+           (point))))
+    (call-interactively #'evil-insert)))
+
+(defun *evil-visual-append ()
+  "Reimplement `evil-append' in visual-block-mode using `string-rectangle'."
+  (interactive)
+  (if (and (evil-visual-state-p) (eq evil-visual-selection 'block))
+      (let ((column (max (evil-column evil-visual-beginning)
+                         (evil-column evil-visual-end))))
+        (evil-visual-highlight -1)
+        (goto-char
+         (save-mark-and-excursion
+           (move-to-column column t)
+           (set-mark (save-excursion (goto-char (mark)) (move-to-column column t) (point)))
+           (call-interactively #'string-rectangle)
+           (point))))
+    (call-interactively #'evil-append)))
+
+(map! :after evil
+      :v "c" #'*evil-visual-change
+      :v "C" #'*evil-visual-change-line
+      :v "I" #'*evil-visual-insert
+      :v "A" #'*evil-visual-append)
+#+end_src
+
 #+begin_src emacs-lisp
 ;; TODO: Document
 (defadvice! *evil--coarse-undo-on-repeated-insert-a (orig-fn &rest args)
