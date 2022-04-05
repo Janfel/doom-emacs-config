@@ -2788,16 +2788,12 @@ This allows me to not load the entire =:lang/php= module.
     (if indent-tabs-mode (cons "--use-tabs" args) args)))
 #+end_src
 
-TODO: Define =python-flit= as a project type for =projectile=.
+MAYBE: Define =python-flit= as a project type for =projectile=. Might not be
+needed when [[github:pypa/build][=python-build=]] / [[github:pypa/installer][=python-installer=]] become the standard.
 
 #+begin_src emacs-lisp
 (after! flycheck
-  (push "pyproject.toml" flycheck-python-mypy-config))
-#+end_src
-
-#+begin_src emacs-lisp
-(after! projectile
-  (push "pyproject.toml" projectile-project-root-files))
+  (pushnew! flycheck-python-mypy-config "pyproject.toml"))
 #+end_src
 
 #+begin_src emacs-lisp
