@@ -410,7 +410,7 @@ Disable tab insertion by default. It will be enabled manually for each mode.
 These functions have a tendency to insert tabs where they don’t belong.
 #+begin_src emacs-lisp
 (defadvice! *emacs--disable-indent-tabs-mode-a (fn &rest args)
-  "Let `indent-tabs-mode' be bound to nil."
+  "Call original function with `indent-tabs-mode' bound to nil."
   :around 'align-areas
   (let (indent-tabs-mode) (apply fn args)))
 
