@@ -2071,6 +2071,15 @@ when the region only contains part of a single line."
 #+end_src
 
 *** Bison Mode
+These C++-like extensions for Lex/Yacc files are recognized by the GNU tools as
+containing C++ code. While =bison-mode= only supports C, that is still better
+than having no support at all.
+#+begin_src emacs-lisp
+(push! auto-mode-alist
+       '("\\.l\\(l\\|pp\\|xx\\|\\+\\+\\)\\'" . flex-mode)
+       '("\\.y\\(y\\|pp\\|xx\\|\\+\\+\\)\\'" . bison-mode))
+#+end_src
+
 *** Meson Mode
 Major mode for the [[https://mesonbuild.com][Meson Build System]].
 
