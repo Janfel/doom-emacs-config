@@ -125,7 +125,7 @@
 
        :lang
        ;;agda                           ; types of types of types of types...
-       (:if IS-PHANTOM arduino)         ; JFL Arduino Mode
+       ;;(:if IS-PHANTOM arduino)         ; JFL Arduino Mode
        (:if IS-PHANTOM basic)           ; JFL Basic Mode
        ;;beancount                      ; mind the GAAP
        (:if (or IS-PHANTOM IS-TESLA) (cc +lsp)) ; C > C++ == 1
@@ -143,7 +143,7 @@
        ;;ess                            ; emacs speaks statistics
        ;;factor                         ;
        ;;faust                          ; dsp, but you get to keep your soul
-       (:if IS-PHANTOM fennel)          ; JFL Fennel Mode
+       ;;(:if IS-PHANTOM fennel)          ; JFL Fennel Mode
        ;;fsharp                         ; ML stands for Microsoft's Language
        ;;fstar                          ; (dependent) types and (monadic) effects and Z3
        ;;gdscript                       ; the language you waited for
