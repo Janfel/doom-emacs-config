@@ -2018,7 +2018,8 @@ Checking code for =doom doctor=.
       (substatement-label . 0)
       (case-label         . 0)
       (access-label       . -)
-      (label              . 0))))
+      (label              . 0)
+      (arglist-close      . 0))))
 
   (setq c-default-style
         '((awk-mode  . "awk")
