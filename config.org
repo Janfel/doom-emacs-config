@@ -1993,6 +1993,27 @@ Checking code for =doom doctor=.
 #+end_src
 
 ** C/C++
+When commenting out part of a line in C/C++, for example the name of a function
+argument, this comment function intelligently switches to block comment mode.
+Maybe I should generalize this?
+#+begin_src emacs-lisp
+(defun *c-comment-region (beg end &optional arg)
+  "Comment from BEG to END using C-style comments for short regions.
+Like `comment-region-default', but uses `c-block-comment-starter' etc
+when the region only contains part of a single line."
+  (goto-char beg)
+  (if (and (<= (line-beginning-position) beg)
+           (< end (line-end-position))
+           c-block-comment-starter (not c-block-comment-flag))
+      (let ((comment-start (concat c-block-comment-starter " "))
+            (comment-end   (concat " " c-block-comment-ender)))
+        (comment-region-default beg end arg))
+      (comment-region-default beg end arg)))
+
+(setq-hook! 'c-mode-common-hook
+  comment-region-function #'*c-comment-region)
+#+end_src
+
 *** C Mode
 #+begin_src emacs-lisp
 (defvaralias 'c-basic-offset 'standard-indent)
