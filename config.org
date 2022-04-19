@@ -1696,12 +1696,13 @@ These values have to be set before ~org-mode~ is loaded.
          '("zsh"  . sh)))
 #+end_src
 
+Change =vslot= of =Org Src= popup, so it is not replaced by =helpful= popups.
 #+begin_src emacs-lisp
 (when (featurep! :ui popup)
   (advice-add
    #'+org-init-popup-rules-h :after
    (lambda (&rest _)
-     (setf (cdr (assq 'vslot (cdr (assoc "^\\*Org Src" display-buffer-alist)))) -1))))
+     (setf (cdr (assq 'vslot (cdr (assoc "^\\*Org Src" +popup--display-buffer-alist)))) -1))))
 #+end_src
 
 
