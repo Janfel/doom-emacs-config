@@ -437,6 +437,12 @@ These functions have a tendency to insert tabs where they don’t belong.
     (funcall fn first-only unindented-ok)))
 #+end_src
 
+Sometimes Emacs should just tab to the next tab stop.
+#+begin_src emacs-lisp
+(map! "S-<tab>"   #'tab-to-tab-stop
+      "<backtab>" #'tab-to-tab-stop)
+#+end_src
+
 *** Indent Guides
 The package [[https://github.com/DarthFennec/highlight-indent-guides][highlight-indent-guides]] draws a line for each indentation level.
 This should however not be the default, as it is rather resource heavy.
