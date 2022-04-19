@@ -2163,6 +2163,13 @@ The file extension =.cl= is sometimes used.
   original)
 #+end_src
 
+Many Common Lisp projects follow the convention to have a single =packages.lisp=
+file in the project root containing the definition of the project’s packages.
+#+begin_src emacs-lisp
+(after! projectile
+  (push "packages.lisp" projectile-project-root-files))
+#+end_src
+
 *** Sly
 #+begin_src emacs-lisp
 (setq sly-default-lisp 'sbcl
