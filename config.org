@@ -1143,9 +1143,9 @@ fixes the coarse undo problem for these operators.
 (defun *evil-visual-change-line ()
   "Reimplement `evil-change-line' in visual-block-mode using `string-rectangle'."
   (interactive)
-  (if (and (evil-visual-state-p) (eq evil-visual-selection 'block))
+  (if (and (evil-visual-state-p) (memq evil-visual-selection '(line block)))
       (let ((block-beg evil-visual-beginning)
-            (block-end evil-visual-end)
+            (block-end (if (eq evil-visual-selection 'line) (1- evil-visual-end) evil-visual-end))
             (point (point))
             (not-vis-mode (not (and evil-respect-visual-line-mode visual-line-mode)))
             (suffices nil)
@@ -1157,7 +1157,7 @@ fixes the coarse undo problem for these operators.
              (push (buffer-substring beg line-end) suffices)
              (delete-region beg line-end)))
          block-beg block-end nil)
-        (unwind-protect (progn (*evil-visual-append) (setq ok t))
+        (unwind-protect (progn (*evil-visual-insert) (setq ok t))
           (unless ok
             (setq suffices (nreverse suffices))
             (evil-apply-on-block
@@ -1169,17 +1169,27 @@ fixes the coarse undo problem for these operators.
 (defun *evil-visual-insert ()
   "Reimplement `evil-insert' in visual-block-mode using `string-rectangle'."
   (interactive)
-  (if (and (evil-visual-state-p) (eq evil-visual-selection 'block))
-      (let ((column (min (evil-column evil-visual-beginning)
-                         (evil-column evil-visual-end))))
-        (evil-visual-highlight -1)
-        (goto-char
+  (cond ((not (evil-visual-state-p)) (call-interactively #'evil-insert))
+        ((eq evil-visual-selection 'line)
+         (evil-visual-highlight -1)
+         (rectangle-mark-mode +1)
          (save-mark-and-excursion
-           (move-to-column column t)
-           (set-mark (save-excursion (goto-char (mark)) (move-to-column column t) (point)))
-           (call-interactively #'string-rectangle)
-           (point))))
-    (call-interactively #'evil-insert)))
+           (set-mark evil-visual-beginning)
+           (goto-char evil-visual-end)
+           (forward-line -1)
+           (unwind-protect (call-interactively #'string-rectangle)
+             (rectangle-mark-mode -1))))
+        ((eq evil-visual-selection 'block)
+         (let ((column (min (evil-column evil-visual-beginning)
+                            (evil-column evil-visual-end))))
+           (evil-visual-highlight -1)
+           (goto-char
+            (save-mark-and-excursion
+              (move-to-column column t)
+              (set-mark (save-excursion (goto-char (mark)) (move-to-column column t) (point)))
+              (call-interactively #'string-rectangle)
+              (point)))))
+        ((call-interactively #'evil-insert))))
 
 (defun *evil-visual-append ()
   "Reimplement `evil-append' in visual-block-mode using `string-rectangle'."
