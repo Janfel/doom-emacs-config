@@ -2156,6 +2156,7 @@ Add automatic bracket spacing in ~sp-c-modes~, which is removed in =smartparens-
 In accordance with the [[https://lisp-lang.org/style-guide/][Common Lisp Style Guide]].
 #+begin_src emacs-lisp
 (setq-hook! 'lisp-mode-hook
+  comment-multi-line t ;; Fix block comments.
   fill-column 100)
 #+end_src
 
