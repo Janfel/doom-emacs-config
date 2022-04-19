@@ -2631,6 +2631,22 @@ Improve the comment insertion of ~comment-dwim~.
     +fmt-formatter #'indent-region))
 #+end_src
 
+*** Highlight Quoted
+Redefine the regexes used by =highlight-quoted= to not trigger on escaped
+quotation characters.
+#+begin_src emacs-lisp
+(after! highlight-quoted
+  (defconst highlight-quoted--quote-only-keywords
+    `((,(rx (or bol (not (syntax escape))) (group (or "`" "'" "#'")))
+       (1 'highlight-quoted-quote))))
+  (defconst highlight-quoted--full-keywords
+    `((,(rx (or bol (not (syntax escape)))
+            (group (or "`" "'" "#'"))
+            (? (* whitespace) (group (+ (or (syntax word) (syntax symbol))))))
+       (1 'highlight-quoted-quote)
+       (2 'highlight-quoted-symbol nil t)))))
+#+end_src
+
 ** Lua
 Doom has already set a value for ~lua-indent-level~, so we have to unset it.
 #+begin_src emacs-lisp
